@@ -15,15 +15,19 @@ In the double-stranded DNA helix, nucleotides form hydrogen bonds between specif
 ## Mathematical Mapping
 
 Let $S$ be a sequence of length $n$. The complementary sequence $S_c$ is defined as:
-$$S_c[i] = f(S[i]) \quad \forall \ 0 \le i < n$$
+$$
+S_c[i] = f(S[i]) \quad \forall \ 0 \le i < n
+$$
 
 Where the mapping function $f(c)$ is:
-$$f(c) = \begin{cases} 
+$$
+f(c) = \begin{cases} 
 T & \text{if } c = A \\
 A & \text{if } c = T \\
 G & \text{if } c = C \\
 C & \text{if } c = G
-\end{cases}$$
+\end{cases}
+$$
 
 ---
 

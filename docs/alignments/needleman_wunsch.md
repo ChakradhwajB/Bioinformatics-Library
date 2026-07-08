@@ -20,25 +20,35 @@ Let:
 We define the DP matrix cell $E_{i,j}$ as the optimal global alignment score between prefix $S_1[0 \dots i-1]$ and prefix $S_2[0 \dots j-1]$.
 
 ### Base Cases
-$$E_{i, 0} = i \times \text{gap} \quad \forall \ 0 \le i \le n$$
-$$E_{0, j} = j \times \text{gap} \quad \forall \ 0 \le j \le m$$
+$$
+E_{i, 0} = i \times \text{gap} \quad \forall \ 0 \le i \le n
+$$
+$$
+E_{0, j} = j \times \text{gap} \quad \forall \ 0 \le j \le m
+$$
 
 ### Transition Formula
 For $1 \le i \le n$ and $1 \le j \le m$, the value is computed as:
-$$E_{i, j} = \max \begin{cases} 
+$$
+E_{i, j} = \max \begin{cases} 
 E_{i-1, j-1} + S(S_1[i-1], S_2[j-1]) & \text{(Match / Mismatch)} \\
 E_{i-1, j} + \text{gap} & \text{(Deletion from } S_1\text{)} \\
 E_{i, j-1} + \text{gap} & \text{(Insertion into } S_1\text{)}
-\end{cases}$$
+\end{cases}
+$$
 
 Where the similarity function $S(a, b)$ is:
-$$S(a, b) = \begin{cases} 
+$$
+S(a, b) = \begin{cases} 
 \text{match} & \text{if } a = b \\
 \text{mismatch} & \text{if } a \neq b
-\end{cases}$$
+\end{cases}
+$$
 
 The optimal alignment score is stored in:
-$$\text{Score} = E_{n, m}$$
+$$
+\text{Score} = E_{n, m}
+$$
 
 ---
 

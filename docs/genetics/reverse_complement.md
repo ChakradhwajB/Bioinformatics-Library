@@ -15,15 +15,19 @@ DNA double-stranded structures are antiparallel. To obtain the standard represen
 ## Mathematical Formulation
 
 Let $S$ be a sequence of length $n$. The reverse complement sequence $S_{rc}$ is formulated as:
-$$S_{rc}[i] = f(S[n - 1 - i]) \quad \forall \ 0 \le i < n$$
+$$
+S_{rc}[i] = f(S[n - 1 - i]) \quad \forall \ 0 \le i < n
+$$
 
 Where the complement mapping function $f(c)$ is defined as:
-$$f(c) = \begin{cases} 
+$$
+f(c) = \begin{cases} 
 T & \text{if } c = A \\
 A & \text{if } c = T \\
 G & \text{if } c = C \\
 C & \text{if } c = G
-\end{cases}$$
+\end{cases}
+$$
 
 ---
 

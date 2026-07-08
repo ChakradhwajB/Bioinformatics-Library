@@ -20,22 +20,30 @@ We define the DP cell $D_{i,j}$ as the minimum edit operations required to trans
 
 ### Base Cases
 Transforming a sequence to/from an empty sequence requires deleting/inserting all characters:
-$$D_{i, 0} = i \quad \forall \ 0 \le i \le n$$
-$$D_{0, j} = j \quad \forall \ 0 \le j \le m$$
+$$
+D_{i, 0} = i \quad \forall \ 0 \le i \le n
+$$
+$$
+D_{0, j} = j \quad \forall \ 0 \le j \le m
+$$
 
 ### Transition Formula
 For $1 \le i \le n$ and $1 \le j \le m$:
-$$D_{i, j} = \begin{cases} 
+$$
+D_{i, j} = \begin{cases} 
 D_{i-1, j-1} & \text{if } S_1[i-1] = S_2[j-1] \quad \text{(No operation)} \\
 \min \begin{cases} 
 D_{i-1, j} + 1 & \text{(Deletion)} \\
 D_{i, j-1} + 1 & \text{(Insertion)} \\
 D_{i-1, j-1} + 1 & \text{(Substitution)}
 \end{cases} & \text{otherwise}
-\end{cases}$$
+\end{cases}
+$$
 
 The final minimum edit distance value is stored in:
-$$\text{Distance} = D_{n, m}$$
+$$
+\text{Distance} = D_{n, m}
+$$
 
 ---
 

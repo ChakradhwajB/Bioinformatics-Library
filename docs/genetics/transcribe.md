@@ -13,13 +13,17 @@ Transcription is the first step of the Central Dogma, converting a double-strand
 ## Mathematical Mapping
 
 Let $S$ be a DNA sequence of length $n$. The mRNA sequence $S_{rna}$ is formulated as:
-$$S_{rna}[i] = g(S[i]) \quad \forall \ 0 \le i < n$$
+$$
+S_{rna}[i] = g(S[i]) \quad \forall \ 0 \le i < n
+$$
 
 Where the substitution function $g(c)$ is:
-$$g(c) = \begin{cases} 
+$$
+g(c) = \begin{cases} 
 U & \text{if } c = T \\
 c & \text{otherwise}
-\end{cases}$$
+\end{cases}
+$$
 
 ---
 

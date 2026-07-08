@@ -7,20 +7,26 @@ Given two sequences $S_1$ and $S_2$, count the number of positions at which the 
 ## Overview
 
 The Hamming distance measures point mutations (substitutions) between two aligned sequences of equal length. In bioinformatics, it represents mutation differences without gap insertions or deletions. The calculation is capped at the length of the shorter sequence:
-$$L = \min(|S_1|, |S_2|)$$
+$$
+L = \min(|S_1|, |S_2|)
+$$
 
 ---
 
 ## Mathematical Formulation
 
 For two sequences $S_1$ and $S_2$ comparing up to length $L = \min(|S_1|, |S_2|)$, the Hamming distance $d_H(S_1, S_2)$ is defined as:
-$$d_H(S_1, S_2) = \sum_{i=0}^{L-1} \delta(S_1[i], S_2[i])$$
+$$
+d_H(S_1, S_2) = \sum_{i=0}^{L-1} \delta(S_1[i], S_2[i])
+$$
 
 Where the indicator function $\delta(a, b)$ is:
-$$\delta(a, b) = \begin{cases} 
+$$
+\delta(a, b) = \begin{cases} 
 0 & \text{if } a = b \\
 1 & \text{if } a \neq b
-\end{cases}$$
+\end{cases}
+$$
 
 ---
 
