@@ -1,5 +1,5 @@
 from typing import Dict, Iterable
-
+import json
 
 def ValidateInput(data: Iterable[str]) -> bool:
     """
@@ -47,3 +47,17 @@ def FastaParse(data: Iterable[str]) -> Dict[str, str]:
     if currHeader:
         record[currHeader] = "".join(currSequence)
     return record
+
+def FastaWrite(record: Dict[str, str], OutputFile: str) -> None:
+    """Writes a dictionary of genetic sequences to a JSON-formatted file.
+
+    Args:
+        record (Dict[str, str]): A dictionary where keys are sequence headers
+          and values are the sequences.
+        OutputFile (str): The path to the output JSON file.
+
+    Returns:
+        None
+    """
+    with open(OutputFile, "w") as f:
+        json.dump(record, f, indent=4)

@@ -1,4 +1,20 @@
-from core_lib.alignments import NeedlemanWunsch,SmithWaterman
+from core_lib.alignments import HammingDistance,LevenshteinDistance,NeedlemanWunsch,SmithWaterman
+
+def test_levenshtein_distance_different():
+    """Test standard case: 3 edits (replace k->s, e->i, add g)."""
+    result = LevenshteinDistance("kitten", "sitting")
+    assert result == 3
+
+def test_levenshtein_distance_identical():
+    """Test edge case: identical strings require 0 edits."""
+    result = LevenshteinDistance("hello", "hello")
+    assert result == 0
+
+def test_hamming_distance_identical():
+    assert HammingDistance("AAGC", "AAGC") == 0
+
+def test_hamming_distance_different():
+    assert HammingDistance("AGCT", "AAAG") == 3
 
 def test_needleman_wunsch_identical():
     score, a1, a2 = NeedlemanWunsch("ATGC", "ATGC", match=1, mismatch=-1, gap=-1)
@@ -37,6 +53,10 @@ def test_smith_waterman_no_match():
     assert a2 == ""
 
 if __name__ == "__main__":
+    test_hamming_distance_identical()
+    test_hamming_distance_different()
+    test_levenshtein_distance_different()
+    test_levenshtein_distance_identical()
     test_needleman_wunsch_identical()
     test_needleman_wunsch_gaps()
     test_needleman_wunsch_mismatch()

@@ -1,12 +1,12 @@
 """
 Core Bioinformatics Library
-An algorithmic library for genetic sequence parsing and analysis.
+
 """
 
 __version__ = "0.1.0"
 __author__ = "Chakradhwaj Bathineni"
 
-from .parsers import (
+from .io import (
     ValidateInput,
     FastaParse,
 )

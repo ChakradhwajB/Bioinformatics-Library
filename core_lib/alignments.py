@@ -1,5 +1,55 @@
 from typing import Tuple
 
+def HammingDistance(seq1: str, seq2: str,) -> int:
+    """
+    Calculates the Hamming Distance between two sequences.
+    
+    Args:
+        seq1 (str): First genetic sequence.
+        seq2 (str): Second genetic sequence.
+        
+    Returns:
+        int: The Hamming Distance between the two sequences.
+    """
+    distance = 0
+    for char1, char2 in zip(seq1, seq2):
+        if char1 != char2:
+            distance += 1
+    return distance
+
+def LevenshteinDistance(seq1: str, seq2: str) -> int:
+    """
+    Calculates the Levenshtein Distance(edit distance) between two sequences.
+    
+    Args:
+        seq1 (str): First genetic sequence.
+        seq2 (str): Second genetic sequence.
+        
+    Returns:
+        int: The Levenshtein Distance between the two sequences.
+    """
+    n, m = len(seq1), len(seq2)
+    
+    dp = [[0] * (m + 1) for _ in range(n + 1)]
+    
+    for i in range(n + 1):
+        dp[i][0] = i
+    for j in range(m + 1):
+        dp[0][j] = j
+        
+    for i in range(1, n + 1):
+        for j in range(1, m + 1):
+            if seq1[i - 1] == seq2[j - 1]:
+                dp[i][j] = dp[i - 1][j - 1]
+            else:
+                deletion = dp[i - 1][j] + 1
+                insertion = dp[i][j - 1] + 1
+                substitution = dp[i - 1][j - 1] + 1
+                
+                dp[i][j] = min(deletion, insertion, substitution)
+                
+    return dp[n][m]
+
 def NeedlemanWunsch(seq1: str, seq2: str, match: int = 1, mismatch: int = -1, gap: int = -1) -> Tuple[int, str, str]:
     """
     Performs global sequence alignment using the Needleman-Wunsch algorithm.
