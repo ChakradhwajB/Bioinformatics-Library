@@ -9,6 +9,7 @@ __author__ = "Chakradhwaj Bathineni"
 from .io import (
     ValidateInput,
     FastaParse,
+    FastaWrite,
 )
 
 from .genetics import (
@@ -20,6 +21,8 @@ from .genetics import (
 )
 
 from .alignments import (
+    HammingDistance,
+    LevenshteinDistance,
     NeedlemanWunsch, 
     SmithWaterman
 )
@@ -27,11 +30,14 @@ from .alignments import (
 __all__ = [
     "ValidateInput",
     "FastaParse",
+    "FastaWrite",
     "Complement",
     "ReverseComplement",
     "Transcribe",
     "Translate",
     "FindMotif",
+    "HammingDistance",
+    "LevenshteinDistance",
     "NeedlemanWunsch", 
     "SmithWaterman",
 ]

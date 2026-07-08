@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from server.endpoints import sequence_router
+from server.endpoints import alignments, genetics, io
 
 app = FastAPI(
     title="Bioinformatics Platform API",
@@ -18,8 +18,10 @@ app.add_middleware(
 )
 
 
-app.include_router(sequence_router.router, prefix="/api/v1")
+app.include_router(alignments.router, prefix="/api/v1/alignments", tags=["alignments"])
+app.include_router(genetics.router, prefix="/api/v1/genetics", tags=["genetics"])
+app.include_router(io.router, prefix="/api/v1/io", tags=["io"])
 
 @app.get("/")
 def health_check():
-    return {"status": "online", "message": "Bioinformatics API is running."}
+    return {"status": "online", "message": "Bioinformatics API is running."}
