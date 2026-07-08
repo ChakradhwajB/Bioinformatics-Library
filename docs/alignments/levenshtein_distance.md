@@ -1,73 +1,49 @@
-# Levenshtein Distance
+# Levenshtein Distance (Edit Distance)
 
-## Problem
+## Problem Statement
 
-Given two genetic sequences, calculate the minimum number of single-character edits (insertions, deletions, or substitutions) required to transform one sequence into the other.
+Given two sequences $S_1$ and $S_2$, calculate the minimum number of single-character edit operations (insertions, deletions, or substitutions) required to transform $S_1$ into $S_2$.
 
 ## Overview
 
-The Levenshtein distance (also known as Edit Distance) is a dynamic programming algorithm that measures sequence dissimilarity. Unlike Hamming distance, it handles insertions and deletions, making it suitable for aligning sequences of differing lengths.
+The Levenshtein distance measures the edit dissimilarity between two sequences. Unlike the Hamming distance, which only allows substitutions, Levenshtein distance handles alignments of different lengths by incorporating gap insertions ($\text{ins}$) and deletions ($\text{del}$).
 
 ---
 
-## Algorithm
+## Recurrence Relation & Dynamic Programming Formulation
 
-Let `seq1` of length `n` and `seq2` of length `m` be the two input sequences.
+Let:
+- $S_1$ be of length $n$
+- $S_2$ be of length $m$
 
-Define `dp[i][j]` as the edit distance between the prefixes `seq1[:i]` and `seq2[:j]`.
+We define the DP cell $D_{i,j}$ as the minimum edit operations required to transform prefix $S_1[0 \dots i-1]$ into prefix $S_2[0 \dots j-1]$.
 
-Base cases:
-- `dp[i][0] = i` for all `0 <= i <= n`
-- `dp[0][j] = j` for all `0 <= j <= m`
+### Base Cases
+Transforming a sequence to/from an empty sequence requires deleting/inserting all characters:
+$$D_{i, 0} = i \quad \forall \ 0 \le i \le n$$
+$$D_{0, j} = j \quad \forall \ 0 \le j \le m$$
 
-Transition:
-- If `seq1[i - 1] == seq2[j - 1]`:
-  `dp[i][j] = dp[i - 1][j - 1]`
-- Otherwise, `dp[i][j]` is the minimum of:
-  - Deletion: `dp[i - 1][j] + 1`
-  - Insertion: `dp[i][j - 1] + 1`
-  - Substitution: `dp[i - 1][j - 1] + 1`
+### Transition Formula
+For $1 \le i \le n$ and $1 \le j \le m$:
+$$D_{i, j} = \begin{cases} 
+D_{i-1, j-1} & \text{if } S_1[i-1] = S_2[j-1] \quad \text{(No operation)} \\
+\min \begin{cases} 
+D_{i-1, j} + 1 & \text{(Deletion)} \\
+D_{i, j-1} + 1 & \text{(Insertion)} \\
+D_{i-1, j-1} + 1 & \text{(Substitution)}
+\end{cases} & \text{otherwise}
+\end{cases}$$
 
-The final result is stored in `dp[n][m]`.
-
----
-
-## Complexity
-
-Time Complexity:
-
-O(nm)
-
-Space Complexity:
-
-O(nm)
-
-where:
-
-n = len(seq1)
-m = len(seq2)
+The final minimum edit distance value is stored in:
+$$\text{Distance} = D_{n, m}$$
 
 ---
 
-## Example
+## Algorithmic Complexity
 
-Input:
+- **Time Complexity**: $\mathcal{O}(n \cdot m)$ since every cell in the $n \times m$ grid is computed in constant time $\mathcal{O}(1)$.
+- **Space Complexity**: $\mathcal{O}(n \cdot m)$ to store the dynamic programming distance matrix.
 
-```python
-distance = LevenshteinDistance(
-    "AGTACG",
-    "ATGACG"
-)
-```
-
-Output:
-
-```text
-Distance: 1
-```
-
----
-
-## Implementation Notes
-
-The implementation builds an `(n + 1) x (m + 1)` table to store subproblem solutions. It handles empty inputs by using the length of the other string as the default distance.
+Where:
+- $n = |S_1|$
+- $m = |S_2|$

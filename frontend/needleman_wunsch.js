@@ -185,6 +185,32 @@ function renderDPMatrix(seq1, seq2, match, mismatch, gap) {
             pathCell.style.color = "#ffffff";
           }
         });
+
+        // Dynamic Programming Transition Step Tooltip
+        const inspector = document.getElementById("dp-inspector");
+        if (inspector) {
+          if (i === 0 && j === 0) {
+            inspector.innerHTML = "<strong>E(0,0) = 0</strong> | Origin baseline";
+          } else if (i === 0) {
+            inspector.innerHTML = `<strong>E(0,${j}) = E(0,${j-1}) + gap</strong> = ${dp[0][j-1]} + (${gap}) = <strong>${val}</strong> | Insertion base case`;
+          } else if (j === 0) {
+            inspector.innerHTML = `<strong>E(${i},0) = E(${i-1},0) + gap</strong> = ${dp[i-1][0]} + (${gap}) = <strong>${val}</strong> | Deletion base case`;
+          } else {
+            const isCharMatch = seq1[i-1] === seq2[j-1];
+            const matchScore = isCharMatch ? match : mismatch;
+            const matchLabel = isCharMatch ? "match" : "mismatch";
+
+            const dVal = dp[i-1][j-1];
+            const tVal = dp[i-1][j];
+            const lVal = dp[i][j-1];
+
+            const dSum = dVal + matchScore;
+            const tSum = tVal + gap;
+            const lSum = lVal + gap;
+
+            inspector.innerHTML = `<strong>E(${i},${j})</strong> = max(Diag: ${dVal} + ${matchScore} (${matchLabel}) = ${dSum}, Top: ${tVal} + (${gap}) = ${tSum}, Left: ${lVal} + (${gap}) = ${lSum}) = <strong>${val}</strong>`;
+          }
+        }
       });
 
       cell.addEventListener("mouseleave", () => {
@@ -200,6 +226,11 @@ function renderDPMatrix(seq1, seq2, match, mismatch, gap) {
             pathCell.style.color = "#334155";
           }
         });
+
+        const inspector = document.getElementById("dp-inspector");
+        if (inspector) {
+          inspector.innerHTML = "Hover over cells to inspect DP calculations.";
+        }
       });
 
       row.appendChild(cell);

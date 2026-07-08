@@ -1,59 +1,30 @@
 # Hamming Distance
 
-## Problem
+## Problem Statement
 
-Given two genetic sequences, count the number of positions at which the corresponding characters differ.
+Given two sequences $S_1$ and $S_2$, count the number of positions at which the corresponding characters differ.
 
 ## Overview
 
-The Hamming distance measures the minimum number of point mutations (substitutions) required to change one sequence into another. 
+The Hamming distance measures point mutations (substitutions) between two aligned sequences of equal length. In bioinformatics, it represents mutation differences without gap insertions or deletions. The calculation is capped at the length of the shorter sequence:
+$$L = \min(|S_1|, |S_2|)$$
 
 ---
 
-## Method
+## Mathematical Formulation
 
-For two sequences `seq1` and `seq2`, the distance is calculated by comparing characters at each position:
+For two sequences $S_1$ and $S_2$ comparing up to length $L = \min(|S_1|, |S_2|)$, the Hamming distance $d_H(S_1, S_2)$ is defined as:
+$$d_H(S_1, S_2) = \sum_{i=0}^{L-1} \delta(S_1[i], S_2[i])$$
 
-- Compare characters at each index `i` from `0` to `min(len(seq1), len(seq2)) - 1`.
-- If `seq1[i] != seq2[i]`, increment the distance counter.
-
----
-
-## Complexity
-
-Time Complexity:
-
-O(n)
-
-Space Complexity:
-
-O(1)
-
-where:
-
-n = min(len(seq1), len(seq2))
+Where the indicator function $\delta(a, b)$ is:
+$$\delta(a, b) = \begin{cases} 
+0 & \text{if } a = b \\
+1 & \text{if } a \neq b
+\end{cases}$$
 
 ---
 
-## Example
+## Algorithmic Complexity
 
-Input:
-
-```python
-distance = HammingDistance(
-    "GGCCG",
-    "GGTCG"
-)
-```
-
-Output:
-
-```text
-Distance: 1
-```
-
----
-
-## Implementation Notes
-
-The implementation uses Python's built-in `zip` function to pair characters from both sequences. It compares characters up to the length of the shorter sequence.
+- **Time Complexity**: $\mathcal{O}(L)$ where $L = \min(|S_1|, |S_2|)$ since characters are compared sequentially in a single pass.
+- **Space Complexity**: $\mathcal{O}(1)$ auxiliary space.

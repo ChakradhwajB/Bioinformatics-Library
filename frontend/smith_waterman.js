@@ -196,6 +196,28 @@ function renderDPMatrix(seq1, seq2, match, mismatch, gap) {
             pathCell.style.color = "#ffffff";
           }
         });
+
+        // Dynamic Programming Local Alignment Inspector
+        const inspector = document.getElementById("dp-inspector");
+        if (inspector) {
+          if (i === 0 || j === 0) {
+            inspector.innerHTML = `<strong>H(${i},${j}) = 0</strong> | Local alignment boundary initialization`;
+          } else {
+            const isCharMatch = seq1[i-1] === seq2[j-1];
+            const matchScore = isCharMatch ? match : mismatch;
+            const matchLabel = isCharMatch ? "match" : "mismatch";
+
+            const dVal = dp[i-1][j-1];
+            const tVal = dp[i-1][j];
+            const lVal = dp[i][j-1];
+
+            const dSum = dVal + matchScore;
+            const tSum = tVal + gap;
+            const lSum = lVal + gap;
+
+            inspector.innerHTML = `<strong>H(${i},${j})</strong> = max(0, Diag: ${dVal} + ${matchScore} (${matchLabel}) = ${dSum}, Top: ${tVal} + (${gap}) = ${tSum}, Left: ${lVal} + (${gap}) = ${lSum}) = <strong>${score}</strong>`;
+          }
+        }
       });
 
       cell.addEventListener("mouseleave", () => {
@@ -211,6 +233,11 @@ function renderDPMatrix(seq1, seq2, match, mismatch, gap) {
             pathCell.style.color = "#334155";
           }
         });
+
+        const inspector = document.getElementById("dp-inspector");
+        if (inspector) {
+          inspector.innerHTML = "Hover over cells to inspect DP calculations.";
+        }
       });
 
       row.appendChild(cell);

@@ -1,62 +1,62 @@
 # Smith-Waterman Algorithm
 
-## Problem
+## Problem Statement
 
-Given two sequences `seq1` and `seq2`, find the most similar subsequences (local alignment) hidden within them, optimized through a scoring function.
+Given two sequences $S_1$ and $S_2$, find the region of highest similarity (local sequence alignment) between subsequences of $S_1$ and $S_2$, maximizing a similarity scoring function.
 
 ## Overview
 
-The Smith-Waterman algorithm is a dynamic programming algorithm used for local sequence alignment.
-
-Unlike global alignment, local alignment does not force the entire sequence to align from end to end. It zeroes out negative scoring paths, allowing the algorithm to find highly conserved regions or matching subsequences within massive, otherwise unrelated genomes.
+The Smith-Waterman algorithm is a classic dynamic programming algorithm used for local sequence alignment. Unlike global alignment, it isolates local regions of high homology without forcing alignment across flanking, dissimilar regions. This is done by preventing negative scores from propagating through the matrix (capping score minimums at $0$).
 
 ---
 
-## Algorithm
+## Recurrence Relation & Dynamic Programming Formulation
 
 Let:
+- $\text{match}$: Reward score for matching characters.
+- $\text{mismatch}$: Penalty score for mismatching characters.
+- $\text{gap}$: Penalty score for introducing a gap.
 
-- `match` = reward for matching characters
-- `mismatch` = penalty for differing characters
-- `gap` = penalty for inserting a gap
+We define the DP matrix cell $H_{i,j}$ as the optimal local alignment score ending at prefix $S_1[0 \dots i-1]$ and prefix $S_2[0 \dots j-1]$.
 
-Define:
-`dp[i][j]`
-as the optimal local alignment score ending at:
-`seq1[i-1]` and `seq2[j-1]`
+### Base Cases
+All edges are initialized to $0$ since local alignments can start at any offset:
+$$H_{i, 0} = 0 \quad \forall \ 0 \le i \le n$$
+$$H_{0, j} = 0 \quad \forall \ 0 \le j \le m$$
 
-Transition:
-if `seq1[i-1] == seq2[j-1]`:
-`dp[i][j] = max(0, dp[i-1][j-1] + match, dp[i-1][j] + gap, dp[i][j-1] + gap)`
+### Transition Formula
+For $1 \le i \le n$ and $1 \le j \le m$, the value is computed as:
+$$H_{i, j} = \max \begin{cases} 
+0 & \text{(Terminate alignment)} \\
+H_{i-1, j-1} + S(S_1[i-1], S_2[j-1]) & \text{(Match / Mismatch)} \\
+H_{i-1, j} + \text{gap} & \text{(Deletion from } S_1\text{)} \\
+H_{i, j-1} + \text{gap} & \text{(Insertion into } S_1\text{)}
+\end{cases}$$
 
-otherwise:
-`dp[i][j] = max(0, dp[i-1][j-1] + mismatch, dp[i-1][j] + gap, dp[i][j-1] + gap)`
+Where the similarity function $S(a, b)$ is:
+$$S(a, b) = \begin{cases} 
+\text{match} & \text{if } a = b \\
+\text{mismatch} & \text{if } a \neq b
+\end{cases}$$
 
-The optimal score is not fixed at the bottom right. It is the maximum value found anywhere in the entire grid:
-`max(dp)`
-
----
-
-## Complexity
-
-Time Complexity:
-O(nm)
-
-Space Complexity:
-O(nm)
-
-where:
-n = len(seq1)
-m = len(seq2)
+The optimal local alignment score is the maximum value found anywhere in the entire grid:
+$$\text{Score} = \max_{0 \le i \le n, 0 \le j \le m} H_{i, j}$$
 
 ---
 
-## Implementation Notes
+## Algorithmic Complexity
 
-After matrix construction:
+- **Time Complexity**: $\mathcal{O}(n \cdot m)$ since every cell in the $n \times m$ grid is computed in constant time $\mathcal{O}(1)$.
+- **Space Complexity**: $\mathcal{O}(n \cdot m)$ to store the dynamic programming matrix for traceback.
 
-1. Locate the highest-scoring cell.
-2. Begin traceback from that cell.
-3. Stop when a cell with score 0 is reached.
+Where:
+- $n = |S_1|$ (length of Sequence 1)
+- $m = |S_2|$ (length of Sequence 2)
 
-This extracts the optimal local alignment.
+---
+
+## Traceback Procedure
+
+The traceback starts at the maximum value cell $H_{i_{\max}, j_{\max}}$ in the matrix and moves backwards:
+- Reconstruct the path using the same transition rules.
+- Terminate the traceback immediately when a cell with a score of $0$ ($H_{i, j} = 0$) is reached, marking the start of the matching subsequence.

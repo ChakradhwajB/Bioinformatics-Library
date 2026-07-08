@@ -4,10 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Motif Spotlight Finder</title>
-  <link rel="stylesheet" href="./dist/output.css">
+  <link class="border" rel="stylesheet" href="./dist/output.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- KaTeX Math Rendering -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
   <style>
     body {
       font-family: 'Inter', sans-serif;
@@ -28,10 +32,10 @@
         </svg>
         <span class="text-xs font-semibold">Dashboard</span>
       </a>
-      <span class="text-slate-300">/</span>
+      <span class="text-slate-355">/</span>
       <span class="text-sm font-bold tracking-tight text-slate-800">Motif Spotlight Finder</span>
     </div>
-    <div class="flex items-center bg-slate-50 px-2.5 py-1 rounded border border-slate-200">
+    <div class="flex items-center bg-slate-50 px-2.5 py-1 rounded-sm border border-slate-200">
       <span id="server-status-dot" class="h-2 w-2 rounded-full bg-slate-400 mr-2"></span>
       <span id="server-status-text" class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Checking...</span>
     </div>
@@ -41,26 +45,26 @@
   <div class="flex-grow flex h-[calc(100vh-45px)] overflow-hidden">
     
     <!-- Left Sidebar (Inputs & Controls) -->
-    <aside class="w-80 bg-slate-50 border-r border-slate-200 p-4 flex flex-col justify-between overflow-y-auto select-none">
+    <aside class="w-80 bg-slate-55 border-r border-slate-200 p-4 flex flex-col justify-between overflow-y-auto select-none">
       <div class="space-y-4">
         
         <!-- Tool Navigation list -->
         <div>
           <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Modules List</span>
           <nav class="space-y-0.5">
-            <a href="./needleman_wunsch.html" class="block px-2.5 py-1.5 text-[11px] font-medium rounded text-slate-600 hover:bg-slate-200 transition-colors">
+            <a href="./needleman_wunsch.html" class="block px-2.5 py-1.5 text-[11px] font-medium rounded-sm text-slate-600 hover:bg-slate-200 transition-colors">
               Needleman-Wunsch Global
             </a>
-            <a href="./smith_waterman.html" class="block px-2.5 py-1.5 text-[11px] font-medium rounded text-slate-600 hover:bg-slate-200 transition-colors">
+            <a href="./smith_waterman.html" class="block px-2.5 py-1.5 text-[11px] font-medium rounded-sm text-slate-600 hover:bg-slate-200 transition-colors">
               Smith-Waterman Local
             </a>
-            <a href="./distances.html" class="block px-2.5 py-1.5 text-[11px] font-medium rounded text-slate-600 hover:bg-slate-200 transition-colors">
+            <a href="./distances.html" class="block px-2.5 py-1.5 text-[11px] font-medium rounded-sm text-slate-600 hover:bg-slate-200 transition-colors">
               Sequence Distances
             </a>
-            <a href="./genetics.html" class="block px-2.5 py-1.5 text-[11px] font-medium rounded text-slate-600 hover:bg-slate-200 transition-colors">
+            <a href="./genetics.html" class="block px-2.5 py-1.5 text-[11px] font-medium rounded-sm text-slate-600 hover:bg-slate-200 transition-colors">
               Genetics Workbench
             </a>
-            <a href="./io.html" class="block px-2.5 py-1.5 text-[11px] font-medium rounded text-slate-600 hover:bg-slate-200 transition-colors">
+            <a href="./io.html" class="block px-2.5 py-1.5 text-[11px] font-medium rounded-sm text-slate-600 hover:bg-slate-200 transition-colors">
               FASTA File IO
             </a>
           </nav>
@@ -68,28 +72,34 @@
 
         <div class="border-t border-slate-200 pt-3">
           <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Genome Sequence</label>
-          <textarea id="sequence" rows="4" class="w-full font-mono text-xs px-2.5 py-1.5 border border-slate-250 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 bg-white uppercase resize-none" placeholder="e.g. GATATATGCATATACTT">GATATATGCATATACTT</textarea>
+          <textarea id="sequence" rows="3" class="w-full font-mono text-xs px-2.5 py-1.5 border border-slate-200 rounded-sm focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 bg-white uppercase resize-none" placeholder="e.g. GATATATGCATATACTT">GATATATGCATATACTT</textarea>
         </div>
 
         <div>
           <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Target Motif</label>
-          <input type="text" id="motif" value="ATAT" class="w-full font-mono text-xs px-2.5 py-1.5 border border-slate-250 rounded-md focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 bg-white uppercase" placeholder="e.g. ATAT">
+          <input type="text" id="motif" value="ATAT" class="w-full font-mono text-xs px-2.5 py-1.5 border border-slate-200 rounded-sm focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 bg-white uppercase" placeholder="e.g. ATAT">
+        </div>
+
+        <!-- Reference & Complexity Panel -->
+        <div class="border-t border-slate-200 pt-3 space-y-1 text-[10px]">
+          <span class="block font-bold text-slate-400 uppercase tracking-wider mb-1">Complexity Reference</span>
+          <div><span class="font-semibold text-slate-500">Search Time:</span> $\mathcal{O}(n \cdot m)$ | Space: $\mathcal{O}(n)$</div>
         </div>
 
       </div>
 
       <div class="pt-4 border-t border-slate-200">
-        <button id="find-btn" class="w-full py-2.5 bg-slate-800 hover:bg-slate-900 text-white font-semibold rounded-md text-xs transition-colors tracking-wide select-none">
+        <button id="find-btn" class="w-full py-2.5 bg-slate-800 hover:bg-slate-900 text-white font-semibold rounded-sm text-xs transition-colors tracking-wide select-none">
           Find Motifs
         </button>
       </div>
     </aside>
 
-    <!-- Right Panels (Data Views & Visualizations) -->
-    <main class="flex-grow flex flex-col overflow-hidden bg-slate-100">
+    <!-- Right Panels (Scrollable Workspace) -->
+    <main class="flex-grow overflow-y-auto bg-slate-100 p-5 space-y-5">
       
       <!-- Top Section: Console overview -->
-      <section class="h-2/5 min-h-[220px] bg-white border-b border-slate-200 p-5 flex flex-col justify-between overflow-y-auto">
+      <section class="bg-white border border-slate-200 p-5 rounded-sm shadow-sm">
         <div class="flex justify-between items-center mb-3 select-none">
           <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Motif Search Console</span>
           <div class="flex items-center space-x-2 text-[10px] font-semibold text-slate-500">
@@ -98,21 +108,21 @@
         </div>
 
         <!-- High-density Monospace console block -->
-        <div class="flex-grow bg-slate-50 border border-slate-200 rounded p-4 overflow-auto custom-scrollbar flex flex-col justify-start">
-          <div id="position-badges" class="w-full font-mono-seq text-xs leading-normal select-all bg-slate-900 text-slate-300 p-4 border border-slate-950 rounded flex flex-wrap gap-2">
+        <div class="bg-slate-50 border border-slate-200 rounded-sm p-4 flex flex-col justify-start">
+          <div id="position-badges" class="w-full font-mono-seq text-xs leading-normal select-all bg-slate-900 text-slate-300 p-4 border border-slate-950 rounded-sm flex flex-wrap gap-2">
             Motif results indices render here.
           </div>
         </div>
       </section>
 
       <!-- Bottom Section: Spotlight Heatmap Visualizer -->
-      <section class="flex-grow bg-white p-5 flex flex-col overflow-hidden">
+      <section class="bg-white p-5 border border-slate-200 rounded-sm shadow-sm flex flex-col">
         <div class="flex justify-between items-center mb-3 select-none">
           <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Spotlight Sequence Heatmap</span>
           <span class="text-[9px] font-semibold text-slate-400 bg-slate-50 px-2 py-0.5 rounded border border-slate-200">Density Track Scrollbar</span>
         </div>
 
-        <div id="visualizer-container" class="flex-grow border border-slate-200 rounded overflow-hidden bg-slate-950 p-4 relative grid grid-cols-12 gap-4 h-full">
+        <div id="visualizer-container" class="border border-slate-200 rounded-sm overflow-hidden bg-slate-950 p-4 relative grid grid-cols-12 gap-4 h-[250px] min-h-[250px]">
           <!-- Injected Spotlight Viewers -->
           <div id="spotlight-viewer" class="col-span-11 h-full overflow-y-auto custom-scrollbar font-mono-seq text-[11px] tracking-widest text-slate-300 whitespace-pre-wrap break-all leading-normal select-all">
             Execute motif query to spotlight strand.
@@ -122,6 +132,32 @@
             <div id="heatmap-track" class="w-full flex-grow relative cursor-pointer"></div>
             <div class="text-[8px] font-bold text-slate-500 py-1">100%</div>
           </div>
+        </div>
+      </section>
+
+      <!-- Educational Article -->
+      <section class="bg-white p-6 border border-slate-200 rounded-sm shadow-sm space-y-4">
+        <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Educational Guide: Motif Finding & Spotlight Vectors</h3>
+        
+        <div class="text-xs leading-relaxed space-y-3 text-slate-800">
+          <p>
+            In bioinformatics, locating specific sequence motifs within larger genomic sequences is a crucial task for understanding transcriptional regulation, gene expression, and DNA-protein binding interactions.
+          </p>
+          
+          <h4 class="font-bold text-slate-900 text-xs">1. Sequence Pattern Matching</h4>
+          <p>
+            A sequence motif is a short, recurring pattern of nucleotides or amino acids that has biological significance. The motif finder performs a linear search over a genome sequence $S$ of length $n$ to identify all occurrences of a target motif sequence $M$ of length $m$. Matches are highlighted in red.
+          </p>
+
+          <h4 class="font-bold text-slate-900 text-xs">2. Density Track & Relative Mapping</h4>
+          <p>
+            The density sidebar provides a spatial heatmap of motif density across the sequence length. Selecting any marker within this sidebar track scrolls the main viewer directly to the corresponding match position.
+          </p>
+
+          <h4 class="font-bold text-slate-900 text-xs">3. Algorithmic Complexity Analysis</h4>
+          <p>
+            The naive search operates in $\mathcal{O}(n \cdot m)$ worst-case time complexity, checking character matches at each sliding window offset. The space complexity is $\mathcal{O}(n)$ to hold the visual highlights and coordinate maps.
+          </p>
         </div>
       </section>
     </main>
