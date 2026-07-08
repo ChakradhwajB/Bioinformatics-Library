@@ -6,7 +6,7 @@ Given two sequences $S_1$ and $S_2$, calculate the minimum number of single-char
 
 ## Overview
 
-The Levenshtein distance measures the edit dissimilarity between two sequences. Unlike the Hamming distance, which only allows substitutions, Levenshtein distance handles alignments of different lengths by incorporating gap insertions ($\text{ins}$) and deletions ($\text{del}$).
+The Levenshtein distance measures the edit dissimilarity between two sequences. Unlike the Hamming distance, which only allows substitutions, Levenshtein distance handles alignments of different lengths by incorporating gap insertions and deletions.
 
 ---
 
@@ -28,15 +28,20 @@ D_{0, j} = j \quad \forall \ 0 \le j \le m
 $$
 
 ### Transition Formula
-For $1 \le i \le n$ and $1 \le j \le m$:
+For $1 \le i \le n$ and $1 \le j \le m$, the edit distance cell is computed as the minimum of three transition paths:
 $$
-D_{i, j} = \begin{cases} 
-D_{i-1, j-1} & \text{if } S_1[i-1] = S_2[j-1] \quad \text{(No operation)} \\
-\min \begin{cases} 
+D_{i, j} = \min \begin{cases} 
+D_{i-1, j-1} + \text{cost} & \text{(Match / Substitution)} \\
 D_{i-1, j} + 1 & \text{(Deletion)} \\
-D_{i, j-1} + 1 & \text{(Insertion)} \\
-D_{i-1, j-1} + 1 & \text{(Substitution)}
-\end{cases} & \text{otherwise}
+D_{i, j-1} + 1 & \text{(Insertion)}
+\end{cases}
+$$
+
+Where the step-wise operation cost is defined as:
+$$
+\text{cost} = \begin{cases} 
+0 & \text{if } S_1[i-1] = S_2[j-1] \\
+1 & \text{if } S_1[i-1] \neq S_2[j-1]
 \end{cases}
 $$
 
