@@ -1,58 +1,32 @@
-# Translate
+# Translation
 
-## Problem
+## Problem Statement
 
-Given an RNA sequence, translate it into the corresponding amino acid (protein) sequence.
+Given an RNA sequence $S_{rna}$, translate it into its corresponding amino acid peptide sequence $P$ by reading consecutive, non-overlapping nucleotide triplets (codons).
 
 ## Overview
 
-Translation converts an mRNA sequence into a peptide chain. Ribosomes read mRNA in triplets of nucleotides, known as codons. Each codon corresponds to a specific amino acid or a translation stop signal.
+Translation represents the final stage of the Central Dogma, where genetic blueprints carried by messenger RNA (mRNA) are decoded by ribosomes to synthesize protein polypeptide chains.
 
 ---
 
-## Method
+## Mathematical Formulation
 
-1. The input RNA sequence is converted to uppercase.
-2. The sequence is scanned in consecutive, non-overlapping triplets (codons) from index `0` to `len(rna_sequence) - 3`.
-3. Each codon is matched against the standard genetic codon chart:
-   - If a stop codon is matched (`UAA`, `UAG`, `UGA`), translation halts.
-   - If a codon is not recognized in the chart, it is translated as `X` (unknown).
-   - Otherwise, the corresponding amino acid letter is appended to the protein sequence.
+Let $S_{rna}$ be an RNA sequence of length $n$. The peptide chain $P$ is represented as a sequence of amino acid residues:
+$$P[k] = \text{Ribosome}(S_{rna}[3k \dots 3k+2]) \quad \text{for } 0 \le k < \lfloor n/3 \rfloor$$
 
----
+Where the mapping function $\text{Ribosome}(c_1 c_2 c_3)$ assigns a single-letter amino acid code to each codon triplet:
+$$\text{Ribosome}(c_1 c_2 c_3) = \text{Amino Acid Letter}$$
 
-## Complexity
+### Termination Condition
+Translation terminates immediately at step $k_{stop}$ if a stop codon is encountered:
+$$\text{Ribosome}(S_{rna}[3k_{stop} \dots 3k_{stop}+2]) \in \{\text{Stop}\} = \{UAA, UAG, UGA\}$$
 
-Time Complexity:
-
-O(n)
-
-Space Complexity:
-
-O(n)
-
-where:
-
-n = len(rna_sequence)
+Any remaining codons after the stop signal or incomplete codons (fewer than 3 nucleotides) at the end of the sequence are excluded from the output.
 
 ---
 
-## Example
+## Complexity Analysis
 
-Input:
-
-```python
-protein = Translate("AUGGCCAUGGCGCCCUAG")
-```
-
-Output:
-
-```text
-"MAMAP"
-```
-
----
-
-## Implementation Notes
-
-The implementation uses a static dictionary (`_CODON_CHART`) mapping codons to single-letter amino acid codes. It terminates early when it encounters a stop codon (`*`). Incomplete codons at the end of the sequence (fewer than 3 nucleotides) are ignored.
+- **Time Complexity**: $\mathcal{O}(n)$ since the sequence is scanned linearly in steps of 3.
+- **Space Complexity**: $\mathcal{O}(n)$ to store the translated peptide sequence.

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dot Plot Visualizer</title>
+  <link rel="stylesheet" href="./dist/output.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- KaTeX Math Rendering -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .font-mono-seq {
+      font-family: 'Fira Code', monospace;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-900 min-h-screen h-screen flex flex-col overflow-hidden">
+  
+  <!-- Header Bar -->
+  <header class="bg-white border-b border-slate-200 py-3 px-6 flex justify-between items-center select-none z-50">
+    <div class="flex items-center space-x-3">
+      <a href="./index.html" class="flex items-center space-x-2 text-slate-500 hover:text-slate-800 transition-colors">
+        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        <span class="text-xs font-semibold">Dashboard</span>
+      </a>
+      <span class="text-slate-350">/</span>
+      <span class="text-sm font-bold tracking-tight text-slate-800">Dot Plot Visualizer</span>
+    </div>
+    <div class="flex items-center bg-slate-50 px-2.5 py-1 rounded-sm border border-slate-200">
+      <span id="server-status-dot" class="h-2 w-2 rounded-full bg-slate-400 mr-2"></span>
+      <span id="server-status-text" class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Checking...</span>
+    </div>
+  </header>
+
+  <!-- Workspace Shell -->
+  <div class="flex-grow flex h-[calc(100vh-45px)] overflow-hidden">
+    
+    <!-- Left Sidebar (Inputs & Controls) -->
+    <aside class="w-80 bg-slate-55 border-r border-slate-200 p-4 flex flex-col justify-between overflow-y-auto select-none">
+      <div class="space-y-4">
+        
+        <!-- Tool Navigation list -->
+        <div>
+          <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Modules List</span>
+          <nav class="space-y-0.5">
+            <a href="./needleman_wunsch.html" class="block px-2.5 py-1.5 text-[11px] font-medium rounded-sm text-slate-600 hover:bg-slate-200 transition-colors">
+              Needleman-Wunsch Global
+            </a>
+            <a href="./smith_waterman.html" class="block px-2.5 py-1.5 text-[11px] font-medium rounded-sm text-slate-600 hover:bg-slate-200 transition-colors">
+              Smith-Waterman Local
+            </a>
+            <a href="./distances.html" class="block px-2.5 py-1.5 text-[11px] font-medium rounded-sm text-slate-600 hover:bg-slate-200 transition-colors">
+              Sequence Distances
+            </a>
+            <a href="./genetics.html" class="block px-2.5 py-1.5 text-[11px] font-medium rounded-sm text-slate-600 hover:bg-slate-200 transition-colors">
+              Genetics Workbench
+            </a>
+            <a href="./find_motif.html" class="block px-2.5 py-1.5 text-[11px] font-medium rounded-sm text-slate-600 hover:bg-slate-200 transition-colors">
+              Motif Finder
+            </a>
+            <a href="./io.html" class="block px-2.5 py-1.5 text-[11px] font-medium rounded-sm text-slate-600 hover:bg-slate-200 transition-colors">
+              FASTA File IO
+            </a>
+          </nav>
+        </div>
+
+        <div class="border-t border-slate-200 pt-3">
+          <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Sequence 1 (Vertical)</label>
+          <textarea id="seq1" rows="2" class="w-full font-mono text-xs px-2.5 py-1.5 border border-slate-200 rounded-sm focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 bg-white uppercase resize-none" placeholder="e.g. ACGTACGT">ACGTACGT</textarea>
+        </div>
+
+        <div>
+          <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Sequence 2 (Horizontal)</label>
+          <textarea id="seq2" rows="2" class="w-full font-mono text-xs px-2.5 py-1.5 border border-slate-200 rounded-sm focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400 bg-white uppercase resize-none" placeholder="e.g. ACGTCGT">ACGTCGT</textarea>
+        </div>
+
+        <!-- Sliding Window Settings -->
+        <div class="space-y-3 pt-3 border-t border-slate-200">
+          <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Dot Plot Parameters</span>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[9px] font-semibold text-slate-500 mb-0.5">Window Size</label>
+              <input type="number" id="window-size" value="1" min="1" max="15" class="w-full text-xs px-2 py-1 border border-slate-200 rounded-sm bg-white">
+            </div>
+            <div>
+              <label class="block text-[9px] font-semibold text-slate-500 mb-0.5">Min Matches</label>
+              <input type="number" id="min-matches" value="1" min="1" max="15" class="w-full text-xs px-2 py-1 border border-slate-200 rounded-sm bg-white">
+            </div>
+          </div>
+        </div>
+
+        <!-- Reference & Complexity Panel -->
+        <div class="border-t border-slate-200 pt-3 space-y-1 text-[10px]">
+          <span class="block font-bold text-slate-400 uppercase tracking-wider mb-1">Complexity Reference</span>
+          <div><span class="font-semibold text-slate-500">Operation:</span> Dot Comparison Grid</div>
+          <div><span class="font-semibold text-slate-500">Time Complexity:</span> $\mathcal{O}(n \cdot m \cdot w)$</div>
+          <div><span class="font-semibold text-slate-500">Space Complexity:</span> $\mathcal{O}(n \cdot m)$</div>
+        </div>
+
+      </div>
+
+      <div class="pt-4 border-t border-slate-200">
+        <button id="plot-btn" class="w-full py-2.5 bg-slate-800 hover:bg-slate-955 hover:shadow-md active:bg-slate-900 text-white font-semibold rounded-sm text-xs transition-all duration-150 tracking-wide select-none cursor-pointer">
+          Generate Dot Plot
+        </button>
+      </div>
+    </aside>
+
+    <!-- Right Panels (Scrollable Workspace) -->
+    <main class="flex-grow overflow-y-auto bg-slate-100 p-5 space-y-5">
+      
+      <!-- Top Section: Plot Metrics -->
+      <section class="bg-white border border-slate-200 p-5 rounded-sm shadow-sm">
+        <div class="flex justify-between items-center select-none">
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Plot Coordinates</span>
+          <div class="flex items-center space-x-2 text-[10px] font-semibold text-slate-500">
+            <span>Plotted Dots: <span id="dot-count" class="font-bold text-slate-900">-</span></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Bottom Section: Dot Plot Grid -->
+      <section class="bg-white p-5 border border-slate-200 rounded-sm shadow-sm flex flex-col">
+        <div class="flex justify-between items-center mb-3 select-none">
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">2D Sequence Dot Matrix</span>
+          <span id="dot-inspector" class="text-[10px] font-mono text-slate-500 bg-slate-50 px-2 py-0.5 rounded-sm border border-slate-200">Hover over cells to inspect positions.</span>
+        </div>
+
+        <div id="plot-container" class="border border-slate-200 rounded-sm overflow-x-auto bg-slate-50 flex items-center justify-center p-4 min-h-[350px]">
+          <div class="text-slate-400 text-xs font-semibold">
+            Press Generate Dot Plot to draw comparative mapping.
+          </div>
+        </div>
+      </section>
+
+      <!-- Educational Article -->
+      <section class="bg-white p-6 border border-slate-200 rounded-sm shadow-sm space-y-4">
+        <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Educational Guide: Dot Plot Matrices</h3>
+        
+        <div class="text-xs leading-relaxed space-y-3 text-slate-800">
+          <p>
+            A <strong>Dot Plot</strong> is a simple graphical method for comparing two biological sequences. It is a visual representation of the similarity between two sequences, where one sequence is written on the horizontal axis and the other on the vertical axis.
+          </p>
+          
+          <h4 class="font-bold text-slate-900 text-xs">1. Matrix Generation & Rules</h4>
+          <p>
+            The matrix compares all characters of sequence $S_1$ (rows) with sequence $S_2$ (columns). In its simplest form, a dot is plotted at cell $(i, j)$ if:
+            $$S_1[i] = S_2[j]$$
+            To reduce background noise in long sequences, a sliding window size $w$ and a match threshold $t$ can be specified. A dot is only plotted if there are at least $t$ character matches within the sliding windows starting at $i$ and $j$.
+          </p>
+
+          <h4 class="font-bold text-slate-900 text-xs">2. Interpreting Dot Plot Patterns</h4>
+          <ul class="list-disc pl-5 space-y-1.5">
+            <li><strong>Diagonals (Top-Left to Bottom-Right):</strong> Represent segments of matching sequences. The main diagonal represents a perfect match (identity).</li>
+            <li><strong>Offset Diagonals:</strong> Represent insertions or deletions (indels) between the two sequences.</li>
+            <li><strong>Reverse Diagonals (Top-Right to Bottom-Left):</strong> Represent regions of complementarity, palindromes, or inversions.</li>
+            <li><strong>Horizontal/Vertical Lines:</strong> Represent highly repetitive sequences (e.g. microsatellites or homopolymeric tracts).</li>
+          </ul>
+
+          <h4 class="font-bold text-slate-900 text-xs">3. Complexity</h4>
+          <p>
+            The algorithm runs in $\mathcal{O}(n \cdot m \cdot w)$ time, where $n = |S_1|$, $m = |S_2|$, and $w$ is the window size. It requires $\mathcal{O}(n \cdot m)$ space to render the DOM matrix visualization elements.
+          </p>
+        </div>
+      </section>
+    </main>
+
+  </div>
+
+  <script src="./app.js"></script>
+  <script src="./dot_plot.js"></script>
+</body>
+</html>

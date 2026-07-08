@@ -1,53 +1,29 @@
-# Transcribe
+# Transcription
 
-## Problem
+## Problem Statement
 
-Given a DNA sequence, transcribe it into its corresponding RNA sequence.
+Given a DNA sequence $S$, transcribe it into its corresponding RNA sequence $S_{rna}$ by substituting Thymine ($T$) bases with Uracil ($U$) bases.
 
 ## Overview
 
-Transcription is the biological process where DNA is used as a template to generate RNA. The key chemical difference is that RNA uses Uracil (U) instead of Thymine (T).
+Transcription is the first step of the Central Dogma, converting a double-stranded DNA template into a single-stranded messenger RNA (mRNA). Uracil ($U$) replaces Thymine ($T$) in RNA structures.
 
 ---
 
-## Method
+## Mathematical Mapping
 
-All occurrences of Thymine (`T` or `t`) in the DNA sequence are replaced with Uracil (`U` or `u`).
+Let $S$ be a DNA sequence of length $n$. The mRNA sequence $S_{rna}$ is formulated as:
+$$S_{rna}[i] = g(S[i]) \quad \forall \ 0 \le i < n$$
 
----
-
-## Complexity
-
-Time Complexity:
-
-O(n)
-
-Space Complexity:
-
-O(n)
-
-where:
-
-n = len(sequence)
+Where the substitution function $g(c)$ is:
+$$g(c) = \begin{cases} 
+U & \text{if } c = T \\
+c & \text{otherwise}
+\end{cases}$$
 
 ---
 
-## Example
+## Complexity Analysis
 
-Input:
-
-```python
-rna_seq = Transcribe("GATTACA")
-```
-
-Output:
-
-```text
-"GAUUACA"
-```
-
----
-
-## Implementation Notes
-
-The transcription process is implemented using `str.translate` with a mapping of `T` $\rightarrow$ `U` (and `t` $\rightarrow$ `u`).
+- **Time Complexity**: $\mathcal{O}(n)$ since base replacement is performed linearly.
+- **Space Complexity**: $\mathcal{O}(n)$ to store the transcribed RNA sequence.

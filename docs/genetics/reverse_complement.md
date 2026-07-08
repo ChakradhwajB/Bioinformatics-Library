@@ -1,55 +1,33 @@
 # Reverse Complement
 
-## Problem
+## Problem Statement
 
-Given a DNA sequence, find the reverse complement of that sequence.
+Given a DNA sequence $S$, calculate its reverse complementary sequence $S_{rc}$ to represent the antiparallel strand in the standard $5' \rightarrow 3'$ direction.
 
 ## Overview
 
-DNA double-stranded molecules are antiparallel. Therefore, the complementary strand runs in the opposite direction. To represent the complementary strand in the standard 5' to 3' direction, we reverse the sequence after taking the complement.
+DNA double-stranded structures are antiparallel. To obtain the standard representation of the opposite strand, we must:
+1. Translate each nucleotide base to its complement ($A \leftrightarrow T$, $C \leftrightarrow G$).
+2. Reverse the order of the resulting strand.
 
 ---
 
-## Method
+## Mathematical Formulation
 
-The reverse complement is generated in two steps:
-1. Translate each character to its complement (A $\leftrightarrow$ T, C $\leftrightarrow$ G).
-2. Reverse the entire sequence.
+Let $S$ be a sequence of length $n$. The reverse complement sequence $S_{rc}$ is formulated as:
+$$S_{rc}[i] = f(S[n - 1 - i]) \quad \forall \ 0 \le i < n$$
 
----
-
-## Complexity
-
-Time Complexity:
-
-O(n)
-
-Space Complexity:
-
-O(n)
-
-where:
-
-n = len(sequence)
+Where the complement mapping function $f(c)$ is defined as:
+$$f(c) = \begin{cases} 
+T & \text{if } c = A \\
+A & \text{if } c = T \\
+G & \text{if } c = C \\
+C & \text{if } c = G
+\end{cases}$$
 
 ---
 
-## Example
+## Complexity Analysis
 
-Input:
-
-```python
-rev_comp = ReverseComplement("AAAACCCGGT")
-```
-
-Output:
-
-```text
-"ACCGGGTTTT"
-```
-
----
-
-## Implementation Notes
-
-The implementation maps the characters using `str.translate` and reverses the resulting string using Python's slicing notation `[::-1]`.
+- **Time Complexity**: $\mathcal{O}(n)$ since sequence translation and reversal are performed in linear passes.
+- **Space Complexity**: $\mathcal{O}(n)$ to store the output reverse complement sequence.

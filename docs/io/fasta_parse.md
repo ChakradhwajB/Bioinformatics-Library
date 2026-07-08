@@ -1,12 +1,12 @@
-# FASTA Parse
+# FASTA Parsing
 
-## Problem
+## Problem Statement
 
-Parse an iterable of FASTA-formatted lines (e.g., from a file or list of strings) into a dictionary structure mapping header labels to their concatenated genetic sequences.
+Parse an iterable of FASTA-formatted lines (e.g., from a file or list of strings) into a key-value mapping of header labels to their concatenated genetic sequences.
 
 ## Overview
 
-FASTA is a common format where sequence descriptions are prefixed with `>` and the sequence itself spans one or more subsequent lines. The parser handles empty lines and concatenates multi-line sequences under their corresponding headers.
+FASTA is a common text-based format where sequence descriptions are prefixed with `>` and the sequence itself spans one or more subsequent lines. The parser handles blank lines and concatenates multi-line sequences under their corresponding headers.
 
 ---
 
@@ -14,7 +14,7 @@ FASTA is a common format where sequence descriptions are prefixed with `>` and t
 
 1. Initialize a dictionary `record`, a string `currHeader`, and a list `currSequence`.
 2. Iterate through each line in the input:
-   - Strip whitespace.
+   - Strip leading/trailing whitespace.
    - If the line is empty, skip it.
    - If the line starts with `>`:
      - If `currHeader` is already set, save the joined `currSequence` to `record[currHeader]`.
@@ -25,47 +25,7 @@ FASTA is a common format where sequence descriptions are prefixed with `>` and t
 
 ---
 
-## Complexity
+## Complexity Analysis
 
-Time Complexity:
-
-O(N)
-
-Space Complexity:
-
-O(N)
-
-where:
-
-N = total number of characters in the input sequence data
-
----
-
-## Example
-
-Input:
-
-```python
-parsed = FastaParse([
-    ">Seq1",
-    "ATCG",
-    "GATC",
-    ">Seq2",
-    "TATA"
-])
-```
-
-Output:
-
-```python
-{
-    "Seq1": "ATCGGATC",
-    "Seq2": "TATA"
-}
-```
-
----
-
-## Implementation Notes
-
-The parser collects sequence segments in a list (`currSequence`) instead of performing direct string concatenation (`+=`), which is an $O(N^2)$ operation in Python. Joining list elements at the end runs in $O(N)$ time.
+- **Time Complexity**: $\mathcal{O}(N)$ where $N$ is the total number of characters in the input sequence data.
+- **Space Complexity**: $\mathcal{O}(N)$ to store the parsed records in memory.

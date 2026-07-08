@@ -177,6 +177,8 @@ function renderDPMatrix(seq1, seq2, match, mismatch, gap) {
         : `rgba(241, 245, 249, 1)`;
 
       cell.addEventListener("mouseenter", () => {
+        if (window.tracebackPlayerPlaying) return;
+
         const path = tracebackPaths[`${i}-${j}`];
         path.forEach(coord => {
           const pathCell = table.querySelector(`#cell-${coord}`);
@@ -214,6 +216,13 @@ function renderDPMatrix(seq1, seq2, match, mismatch, gap) {
       });
 
       cell.addEventListener("mouseleave", () => {
+        if (window.tracebackPlayerPlaying) return;
+
+        if (window.tracebackPlayerActiveStep !== undefined && typeof window.tracebackPlayerRenderStep === "function") {
+          window.tracebackPlayerRenderStep(window.tracebackPlayerActiveStep);
+          return;
+        }
+
         const path = tracebackPaths[`${i}-${j}`];
         path.forEach(coord => {
           const pathCell = table.querySelector(`#cell-${coord}`);
@@ -241,13 +250,203 @@ function renderDPMatrix(seq1, seq2, match, mismatch, gap) {
   tableWrapper.appendChild(table);
   container.appendChild(tableWrapper);
 
+  // Traceback Path Player Integration
   const optimalPath = tracebackPaths[`${n}-${m}`];
+  
+  // Set default ring class to show optimal path initially
   optimalPath.forEach(coord => {
     const optimalCell = table.querySelector(`#cell-${coord}`);
     if (optimalCell) {
       optimalCell.classList.add("ring-2", "ring-slate-400", "z-10");
     }
   });
+
+  const playerPanel = document.getElementById("player-controls");
+  if (playerPanel) {
+    playerPanel.classList.remove("hidden");
+    
+    // Clear previous intervals if any
+    if (window.tracebackPlayerInterval) {
+      clearInterval(window.tracebackPlayerInterval);
+      window.tracebackPlayerInterval = null;
+    }
+    
+    let currentStep = 0;
+    const steps = optimalPath; // path from (n,m) to (0,0)
+    let isPlaying = false;
+
+    window.tracebackPlayerActiveStep = currentStep;
+    window.tracebackPlayerPlaying = isPlaying;
+    window.tracebackPlayerRenderStep = renderStep;
+
+    const playBtn = document.getElementById("player-play");
+    const nextBtn = document.getElementById("player-next");
+    const prevBtn = document.getElementById("player-prev");
+    const resetBtn = document.getElementById("player-reset");
+
+    // Reset button states
+    playBtn.textContent = "Play";
+    playBtn.className = "px-2.5 py-1 text-[10px] bg-slate-800 text-white hover:bg-slate-900 rounded-sm font-bold cursor-pointer";
+
+    function resetCellStyles() {
+      // Restore all cells to their original background/color states
+      for (let i = 0; i <= n; i++) {
+        for (let j = 0; j <= m; j++) {
+          const c = table.querySelector(`#cell-${i}-${j}`);
+          if (c) {
+            c.style.backgroundColor = "";
+            c.style.color = "";
+            c.className = "border border-slate-200 p-2.5 font-bold text-slate-700 transition-colors duration-150 cursor-pointer";
+            
+            const originalVal = dp[i][j];
+            const origAlpha = originalVal > 0 ? Math.min(0.04 + originalVal * 0.08, 0.45) : 0;
+            c.style.backgroundColor = originalVal > 0 
+              ? `rgba(99, 102, 241, ${origAlpha})` 
+              : `rgba(241, 245, 249, 1)`;
+            c.style.color = "#334155";
+          }
+        }
+      }
+      
+      // Re-add baseline optimal ring
+      optimalPath.forEach(coord => {
+        const optimalCell = table.querySelector(`#cell-${coord}`);
+        if (optimalCell) {
+          optimalCell.classList.add("ring-2", "ring-slate-400", "z-10");
+        }
+      });
+    }
+
+    function renderStep(index) {
+      currentStep = index;
+      window.tracebackPlayerActiveStep = index;
+      resetCellStyles();
+      
+      // Highlight path up to current index
+      for (let s = 0; s <= index; s++) {
+        const coord = steps[s];
+        const pathCell = table.querySelector(`#cell-${coord}`);
+        if (pathCell) {
+          pathCell.style.backgroundColor = "#475569";
+          pathCell.style.color = "#ffffff";
+        }
+      }
+
+      // Highlight active cell uniquely
+      const activeCoord = steps[index];
+      const activeCell = table.querySelector(`#cell-${activeCoord}`);
+      if (activeCell) {
+        activeCell.style.backgroundColor = "#10b981"; // Emerald bg
+        activeCell.style.color = "#ffffff";
+        activeCell.classList.remove("ring-slate-400");
+        activeCell.classList.add("ring-4", "ring-emerald-400", "z-20");
+        
+        // Scroll into view
+        activeCell.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+      }
+
+      // Update inspector details
+      const [currI, currJ] = activeCoord.split("-").map(Number);
+      const inspector = document.getElementById("dp-inspector");
+      const val = dp[currI][currJ];
+
+      if (inspector) {
+        if (currI === 0 && currJ === 0) {
+          inspector.innerHTML = `<strong>E(0,0) = 0</strong> | Origin baseline reached`;
+        } else if (currI === 0) {
+          inspector.innerHTML = `<strong>E(0,${currJ}) = E(0,${currJ-1}) + gap</strong> = ${dp[0][currJ-1]} + (${gap}) = <strong>${val}</strong> | Insertion`;
+        } else if (currJ === 0) {
+          inspector.innerHTML = `<strong>E(${currI},0) = E(${currI-1},0) + gap</strong> = ${dp[currI-1][0]} + (${gap}) = <strong>${val}</strong> | Deletion`;
+        } else {
+          const isCharMatch = seq1[currI-1] === seq2[currJ-1];
+          const matchScore = isCharMatch ? match : mismatch;
+          const matchLabel = isCharMatch ? "match" : "mismatch";
+
+          const dVal = dp[currI-1][currJ-1];
+          const tVal = dp[currI-1][currJ];
+          const lVal = dp[currI][currJ-1];
+
+          const dSum = dVal + matchScore;
+          const tSum = tVal + gap;
+          const lSum = lVal + gap;
+
+          inspector.innerHTML = `<strong>Step ${index + 1}: E(${currI},${currJ})</strong> = max(Diag: ${dVal} + ${matchScore} = ${dSum}, Top: ${tVal} + (${gap}) = ${tSum}, Left: ${lVal} + (${gap}) = ${lSum}) = <strong>${val}</strong>`;
+        }
+      }
+    }
+
+    function pause() {
+      isPlaying = false;
+      window.tracebackPlayerPlaying = false;
+      clearInterval(window.tracebackPlayerInterval);
+      window.tracebackPlayerInterval = null;
+      playBtn.textContent = "Play";
+      playBtn.className = "px-2.5 py-1 text-[10px] bg-slate-800 text-white hover:bg-slate-900 rounded-sm font-bold cursor-pointer";
+    }
+
+    function play() {
+      isPlaying = true;
+      window.tracebackPlayerPlaying = true;
+      playBtn.textContent = "Pause";
+      playBtn.className = "px-2.5 py-1 text-[10px] bg-rose-600 text-white hover:bg-rose-700 rounded-sm font-bold cursor-pointer";
+      
+      window.tracebackPlayerInterval = setInterval(() => {
+        if (currentStep < steps.length - 1) {
+          currentStep++;
+          renderStep(currentStep);
+        } else {
+          pause();
+        }
+      }, 700);
+    }
+
+    // Button Event Listeners
+    const newPlayBtn = playBtn.cloneNode(true);
+    const newNextBtn = nextBtn.cloneNode(true);
+    const newPrevBtn = prevBtn.cloneNode(true);
+    const newResetBtn = resetBtn.cloneNode(true);
+
+    playBtn.parentNode.replaceChild(newPlayBtn, playBtn);
+    nextBtn.parentNode.replaceChild(newNextBtn, nextBtn);
+    prevBtn.parentNode.replaceChild(newPrevBtn, prevBtn);
+    resetBtn.parentNode.replaceChild(newResetBtn, resetBtn);
+
+    newPlayBtn.addEventListener("click", () => {
+      if (isPlaying) pause();
+      else {
+        if (currentStep >= steps.length - 1) {
+          currentStep = 0;
+          renderStep(0);
+        }
+        play();
+      }
+    });
+
+    newNextBtn.addEventListener("click", () => {
+      pause();
+      if (currentStep < steps.length - 1) {
+        currentStep++;
+        renderStep(currentStep);
+      }
+    });
+
+    newPrevBtn.addEventListener("click", () => {
+      pause();
+      if (currentStep > 0) {
+        currentStep--;
+        renderStep(currentStep);
+      }
+    });
+
+    newResetBtn.addEventListener("click", () => {
+      pause();
+      currentStep = 0;
+      renderStep(0);
+    });
+
+    // Start on first step
+    renderStep(0);
+  }
 }
 
 function createHeaderCell(text, className = "bg-slate-100 text-slate-500") {
