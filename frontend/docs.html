@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentation - Bioinformatics Library</title>
+  <!-- Tailwind CSS -->
+  <link rel="stylesheet" href="./dist/output.css">
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  <!-- Marked.js -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    /* Clean custom markdown styling */
+    .markdown-body h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin-top: 1.5rem;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 0.5rem;
+    }
+    .markdown-body h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-top: 1.5rem;
+      margin-bottom: 0.75rem;
+      border-bottom: 1px solid #f1f5f9;
+      padding-bottom: 0.25rem;
+    }
+    .markdown-body h3 {
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: #334155;
+      margin-top: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+    .markdown-body p {
+      font-size: 0.75rem;
+      color: #475569;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+    .markdown-body ul {
+      list-style-type: disc;
+      padding-left: 1.25rem;
+      margin-bottom: 1rem;
+      font-size: 0.75rem;
+      color: #475569;
+    }
+    .markdown-body ul li {
+      margin-bottom: 0.375rem;
+    }
+    .markdown-body ol {
+      list-style-type: decimal;
+      padding-left: 1.25rem;
+      margin-bottom: 1rem;
+      font-size: 0.75rem;
+      color: #475569;
+    }
+    .markdown-body ol li {
+      margin-bottom: 0.375rem;
+    }
+    .markdown-body pre {
+      background-color: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: 0.875rem;
+      border-radius: 0.125rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 10px;
+      color: #334155;
+      overflow-x: auto;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+    .markdown-body code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 10px;
+      background-color: #f1f5f9;
+      padding: 0.125rem 0.25rem;
+      border-radius: 0.125rem;
+      color: #0f172a;
+    }
+    .markdown-body pre code {
+      background-color: transparent;
+      padding: 0;
+      border-radius: 0;
+      color: inherit;
+    }
+    .markdown-body table {
+      width: 100%;
+      text-align: left;
+      border-collapse: collapse;
+      font-size: 0.75rem;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+      border: 1px solid #e2e8f0;
+    }
+    .markdown-body th {
+      background-color: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 0.5rem 0.75rem;
+      font-size: 9px;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .markdown-body td {
+      border-bottom: 1px solid #e2e8f0;
+      padding: 0.5rem 0.75rem;
+      color: #475569;
+    }
+    .markdown-body blockquote {
+      border-left: 4px solid #cbd5e1;
+      padding-left: 1rem;
+      font-style: italic;
+      color: #64748b;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+    
+    /* GitHub specific code block math hide markers */
+    .markdown-body pre code.language-math {
+      display: block;
+      padding: 0.5rem;
+      text-align: center;
+      background: #fafafa;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 font-sans text-slate-700 flex h-screen overflow-hidden">
+
+  <!-- Left Sidebar (Navigation) -->
+  <aside class="w-64 bg-slate-55 border-r border-slate-200 flex flex-col justify-between select-none">
+    <div class="p-5 flex flex-col flex-grow overflow-y-auto">
+      
+      <!-- App Branding Title -->
+      <div class="flex items-center space-x-2.5 mb-6">
+        <div class="h-6 w-6 rounded-sm bg-slate-800 flex items-center justify-center font-bold text-white text-xs select-none">B</div>
+        <a href="./index.html" class="font-bold text-slate-800 text-xs tracking-wider uppercase hover:text-slate-900 transition-colors">Bioinformatics Library</a>
+      </div>
+
+      <!-- Navigation Sections -->
+      <nav class="space-y-5 flex-grow">
+        <!-- Section: Alignments -->
+        <div class="space-y-1">
+          <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider px-2">Alignments</span>
+          <div class="space-y-0.5">
+            <button onclick="loadDoc('alignments/needleman_wunsch.md', this)" class="w-full text-left px-2 py-1 text-[11px] rounded-sm hover:bg-slate-200 text-slate-650 hover:text-slate-800 font-semibold cursor-pointer">Needleman-Wunsch</button>
+            <button onclick="loadDoc('alignments/smith_waterman.md', this)" class="w-full text-left px-2 py-1 text-[11px] rounded-sm hover:bg-slate-200 text-slate-650 hover:text-slate-800 font-semibold cursor-pointer">Smith-Waterman</button>
+            <button onclick="loadDoc('alignments/levenshtein_distance.md', this)" class="w-full text-left px-2 py-1 text-[11px] rounded-sm hover:bg-slate-200 text-slate-650 hover:text-slate-800 font-semibold cursor-pointer">Levenshtein Distance</button>
+            <button onclick="loadDoc('alignments/hamming_distance.md', this)" class="w-full text-left px-2 py-1 text-[11px] rounded-sm hover:bg-slate-200 text-slate-650 hover:text-slate-800 font-semibold cursor-pointer">Hamming Distance</button>
+            <button onclick="loadDoc('alignments/dot_plot.md', this)" class="w-full text-left px-2 py-1 text-[11px] rounded-sm hover:bg-slate-200 text-slate-650 hover:text-slate-800 font-semibold cursor-pointer">Dot Plot Visualizer</button>
+          </div>
+        </div>
+
+        <!-- Section: Genetics -->
+        <div class="space-y-1">
+          <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider px-2">Genetics</span>
+          <div class="space-y-0.5">
+            <button onclick="loadDoc('genetics/complement.md', this)" class="w-full text-left px-2 py-1 text-[11px] rounded-sm hover:bg-slate-200 text-slate-650 hover:text-slate-800 font-semibold cursor-pointer">Complement Mapping</button>
+            <button onclick="loadDoc('genetics/reverse_complement.md', this)" class="w-full text-left px-2 py-1 text-[11px] rounded-sm hover:bg-slate-200 text-slate-650 hover:text-slate-800 font-semibold cursor-pointer">Reverse Complement</button>
+            <button onclick="loadDoc('genetics/transcribe.md', this)" class="w-full text-left px-2 py-1 text-[11px] rounded-sm hover:bg-slate-200 text-slate-650 hover:text-slate-800 font-semibold cursor-pointer">Transcription</button>
+            <button onclick="loadDoc('genetics/translate.md', this)" class="w-full text-left px-2 py-1 text-[11px] rounded-sm hover:bg-slate-200 text-slate-650 hover:text-slate-800 font-semibold cursor-pointer">Translation</button>
+            <button onclick="loadDoc('genetics/find_motif.md', this)" class="w-full text-left px-2 py-1 text-[11px] rounded-sm hover:bg-slate-200 text-slate-650 hover:text-slate-800 font-semibold cursor-pointer">Motif Finding</button>
+          </div>
+        </div>
+
+        <!-- Section: File IO -->
+        <div class="space-y-1">
+          <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider px-2">File Data IO</span>
+          <div class="space-y-0.5">
+            <button onclick="loadDoc('io/fasta_parse.md', this)" class="w-full text-left px-2 py-1 text-[11px] rounded-sm hover:bg-slate-200 text-slate-650 hover:text-slate-800 font-semibold cursor-pointer">FASTA Parse</button>
+            <button onclick="loadDoc('io/fasta_write.md', this)" class="w-full text-left px-2 py-1 text-[11px] rounded-sm hover:bg-slate-200 text-slate-650 hover:text-slate-800 font-semibold cursor-pointer">FASTA Export</button>
+            <button onclick="loadDoc('io/validate_input.md', this)" class="w-full text-left px-2 py-1 text-[11px] rounded-sm hover:bg-slate-200 text-slate-650 hover:text-slate-800 font-semibold cursor-pointer">Input Validation</button>
+          </div>
+        </div>
+
+        <!-- Section: API -->
+        <div class="space-y-1">
+          <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider px-2">API Reference</span>
+          <div class="space-y-0.5">
+            <button onclick="loadDoc('api.md', this)" class="w-full text-left px-2 py-1 text-[11px] rounded-sm hover:bg-slate-200 text-slate-650 hover:text-slate-800 font-semibold cursor-pointer">Developer API</button>
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <!-- Sidebar footer status -->
+    <div class="p-4 border-t border-slate-200 bg-slate-50 flex items-center justify-between text-[10px]">
+      <a href="./index.html" class="font-bold text-slate-600 hover:text-slate-800 cursor-pointer">&larr; Back to Home</a>
+      <div class="flex items-center">
+        <span id="server-status-dot" class="h-2 w-2 rounded-full bg-slate-300 mr-2"></span>
+        <span id="server-status-text" class="text-[9px] font-bold text-slate-500 uppercase tracking-wider">Checking...</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Right Panel (Content area) -->
+  <main class="flex-grow overflow-y-auto bg-slate-100 p-6 flex justify-center">
+    <div class="w-full max-w-3xl bg-white border border-slate-200 rounded-sm shadow-sm p-8 markdown-body min-h-[90%]">
+      <!-- Injected Document Content -->
+      <div id="doc-content">
+        <div class="flex justify-center items-center h-64 text-slate-400 text-xs font-semibold">
+          Loading documentation...
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="./app.js"></script>
+  <script>
+    // Keep sidebar link highlighting up-to-date
+    function highlightActiveLink(btn) {
+      document.querySelectorAll('aside nav button').forEach(b => {
+        b.classList.remove('bg-slate-800', 'text-white', 'hover:bg-slate-900');
+        b.classList.add('text-slate-650', 'hover:bg-slate-200', 'hover:text-slate-800');
+      });
+      if (btn) {
+        btn.classList.remove('text-slate-650', 'hover:bg-slate-200', 'hover:text-slate-800');
+        btn.classList.add('bg-slate-800', 'text-white', 'hover:bg-slate-900');
+      }
+    }
+
+    async function loadDoc(docPath, btnElement) {
+      const contentContainer = document.getElementById("doc-content");
+      contentContainer.innerHTML = '<div class="flex justify-center items-center h-64 text-slate-400 text-xs font-semibold">Loading documentation...</div>';
+      
+      highlightActiveLink(btnElement);
+      
+      // Update hash in URL
+      window.location.hash = docPath;
+      
+      try {
+        const response = await fetch(`./docs/${docPath}`);
+        if (!response.ok) throw new Error("Document not found");
+        
+        let markdownText = await response.ok ? await response.text() : "";
+        
+        // Custom parser extension for GitHub ```math code blocks
+        // Convert ```math code blocks into standard LaTeX block format $$ so KaTeX auto-render can pick it up
+        markdownText = markdownText.replace(/```math([\s\S]*?)```/g, function(match, formula) {
+          return `$$\n${formula.trim()}\n$$`;
+        });
+        
+        // Parse markdown to HTML using marked
+        const html = marked.parse(markdownText);
+        contentContainer.innerHTML = html;
+        
+        // Run KaTeX equations rendering
+        renderMathInElement(contentContainer, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false}
+          ],
+          throwOnError: false
+        });
+        
+      } catch (error) {
+        contentContainer.innerHTML = `
+          <div class="p-5 bg-rose-50 border border-rose-200 text-rose-700 text-xs rounded-sm">
+            <strong>Error:</strong> Could not load documentation for <code>${docPath}</code>. Make sure the file exists and is accessible.
+          </div>
+        `;
+      }
+    }
+
+    // Initialize document selection on page load
+    window.addEventListener("DOMContentLoaded", () => {
+      // Initialize active server indicator check
+      if (typeof window.checkServerStatus === "function") {
+        window.checkServerStatus();
+      }
+      
+      // Read initial path from URL hash or default to Needleman-Wunsch
+      const hashPath = window.location.hash.substring(1);
+      if (hashPath) {
+        // Find matching sidebar button
+        const btn = Array.from(document.querySelectorAll('aside nav button')).find(b => {
+          return b.getAttribute('onclick') && b.getAttribute('onclick').includes(hashPath);
+        });
+        loadDoc(hashPath, btn);
+      } else {
+        const defaultBtn = document.querySelector('aside nav button');
+        loadDoc('alignments/needleman_wunsch.md', defaultBtn);
+      }
+    });
+  </script>
+</body>
+</html>
