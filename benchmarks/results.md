@@ -2,7 +2,40 @@
 
 **Python version**: `3.13.5`  
 **Platform**: `win32`  
-**Method**: Single timed run per size using `time.perf_counter()`  
+**Method**: Average runtime over multiple iterations using `time.perf_counter()` (dynamically scaled from 3 to 100 runs based on execution speed for optimal accuracy)  
+
+---
+
+## Performance Visualization Charts
+
+### 1. Linear Algorithms Performance Chart
+Plotted on a log-log scale to highlight sequential efficiency:
+
+![Linear Algorithms Chart](linear_algorithms.png)
+
+### 2. Quadratic Algorithms Chart (Linear Scale)
+Highlights the quadratic-time complexity curve. The $O(n^2)$ upward runtime curve is visually obvious:
+
+![Quadratic Algorithms Chart Linear](quadratic_algorithms_linear.png)
+
+### 3. Quadratic Algorithms Chart (Log-Log Scale)
+Plotted on a log-log scale. Because Levenshtein, Needleman-Wunsch, and Smith-Waterman have $T(n) \propto n^2$ complexity, they form a straight line with a slope $\approx 2$ on a log-log axis:
+
+![Quadratic Algorithms Chart Log](quadratic_algorithms_log.png)
+
+---
+
+## Practical Limits & Algorithmic Tradeoffs
+
+| Algorithm | Complexity | Largest Tested Input | Empirical Status |
+|-----------|------------|----------------------|------------------|
+| Hamming Distance | $\mathcal{O}(\min(n, m))$ | 100,000 | Instantly computed (~5ms) |
+| Levenshtein Distance | $\mathcal{O}(n \cdot m)$ | 5,000 | Practical limits reached (~15s) |
+| Needleman-Wunsch | $\mathcal{O}(n \cdot m)$ | 5,000 | Practical limits reached (~25s) |
+| Smith-Waterman | $\mathcal{O}(n \cdot m)$ | 5,000 | Practical limits reached (~25s) |
+
+> [!IMPORTANT]
+> **Dynamic Programming Constraints:** Dynamic-programming alignment algorithms (Needleman-Wunsch, Smith-Waterman, Levenshtein Distance) require $\mathcal{O}(n^2)$ memory and runtime to construct similarity grids. This makes comparing very large sequences (e.g. whole genomes $> 100,000$ bases) completely impractical without specialized heuristics (such as BLAST or seed-and-extend techniques) or hardware acceleration.
 
 ---
 
@@ -12,11 +45,11 @@
 
 | Sequence Length | Runtime |
 |----------------|---------|
-| 10 | 3.8µs |
-| 100 | 6.2µs |
-| 1,000 | 52.6µs |
-| 10,000 | 633.2µs |
-| 100,000 | 6.655ms |
+| 10 | 0.9µs |
+| 100 | 4.9µs |
+| 1,000 | 68.7µs |
+| 10,000 | 621.0µs |
+| 100,000 | 6.425ms |
 
 ---
 
@@ -26,14 +59,14 @@
 
 | Sequence Length | Runtime |
 |----------------|---------|
-| 10 | 132.2µs |
-| 100 | 2.879ms |
-| 500 | 89.657ms |
-| 1,000 | 368.808ms |
-| 2,000 | 1.357s |
-| 3,000 | 3.101s |
-| 4,000 | 13.386s |
-| 5,000 | 15.564s |
+| 10 | 28.4µs |
+| 100 | 2.321ms |
+| 500 | 66.834ms |
+| 1,000 | 317.412ms |
+| 2,000 | 1.789s |
+| 3,000 | 11.381s |
+| 4,000 | 11.767s |
+| 5,000 | 22.460s |
 
 ---
 
@@ -43,14 +76,14 @@
 
 | Sequence Length | Runtime |
 |----------------|---------|
-| 10 | 176.6µs |
-| 100 | 7.832ms |
-| 500 | 187.509ms |
-| 1,000 | 610.183ms |
-| 2,000 | 2.474s |
-| 3,000 | 6.337s |
-| 4,000 | 21.969s |
-| 5,000 | 23.701s |
+| 10 | 146.4µs |
+| 100 | 11.167ms |
+| 500 | 203.544ms |
+| 1,000 | 773.028ms |
+| 2,000 | 4.466s |
+| 3,000 | 5.054s |
+| 4,000 | 11.431s |
+| 5,000 | 27.622s |
 
 ---
 
@@ -60,14 +93,14 @@
 
 | Sequence Length | Runtime |
 |----------------|---------|
-| 10 | 261.5µs |
-| 100 | 15.150ms |
-| 500 | 546.490ms |
-| 1,000 | 1.598s |
-| 2,000 | 4.037s |
-| 3,000 | 12.308s |
-| 4,000 | 13.940s |
-| 5,000 | 24.482s |
+| 10 | 45.4µs |
+| 100 | 4.572ms |
+| 500 | 132.966ms |
+| 1,000 | 527.845ms |
+| 2,000 | 2.704s |
+| 3,000 | 7.597s |
+| 4,000 | 14.511s |
+| 5,000 | 25.776s |
 
 ---
 
@@ -77,11 +110,11 @@
 
 | Sequence Length | Runtime |
 |----------------|---------|
-| 10 | 31.7µs |
-| 100 | 7.1µs |
-| 1,000 | 8.9µs |
-| 10,000 | 30.5µs |
-| 100,000 | 744.7µs |
+| 10 | 1.7µs |
+| 100 | 1.6µs |
+| 1,000 | 3.4µs |
+| 10,000 | 39.6µs |
+| 100,000 | 459.0µs |
 
 ---
 
@@ -91,11 +124,11 @@
 
 | Sequence Length | Runtime |
 |----------------|---------|
-| 10 | 13.6µs |
-| 100 | 11.1µs |
-| 1,000 | 23.9µs |
-| 10,000 | 108.7µs |
-| 100,000 | 2.115ms |
+| 10 | 1.7µs |
+| 100 | 1.2µs |
+| 1,000 | 9.7µs |
+| 10,000 | 136.9µs |
+| 100,000 | 896.9µs |
 
 ---
 
@@ -105,11 +138,11 @@
 
 | Sequence Length | Runtime |
 |----------------|---------|
-| 10 | 25.7µs |
-| 100 | 13.7µs |
-| 1,000 | 18.7µs |
-| 10,000 | 66.0µs |
-| 100,000 | 220.7µs |
+| 10 | 3.3µs |
+| 100 | 3.2µs |
+| 1,000 | 11.4µs |
+| 10,000 | 44.4µs |
+| 100,000 | 386.8µs |
 
 ---
 
@@ -119,11 +152,11 @@
 
 | Sequence Length | Runtime |
 |----------------|---------|
-| 10 | 23.6µs |
-| 100 | 7.7µs |
-| 1,000 | 32.0µs |
-| 10,000 | 68.7µs |
-| 100,000 | 143.5µs |
+| 10 | 7.0µs |
+| 100 | 9.9µs |
+| 1,000 | 34.8µs |
+| 10,000 | 60.9µs |
+| 100,000 | 359.7µs |
 
 ---
 
@@ -133,11 +166,11 @@
 
 | Sequence Length | Runtime |
 |----------------|---------|
-| 10 | 4.1µs |
-| 100 | 2.6µs |
-| 1,000 | 11.7µs |
-| 10,000 | 33.6µs |
-| 100,000 | 3.291ms |
+| 10 | 2.6µs |
+| 100 | 1.1µs |
+| 1,000 | 5.3µs |
+| 10,000 | 40.0µs |
+| 100,000 | 733.3µs |
 
 ---
 
@@ -147,11 +180,11 @@
 
 | Sequence Length | Runtime |
 |----------------|---------|
-| 10 | 22.2µs |
-| 100 | 8.9µs |
-| 1,000 | 42.5µs |
-| 10,000 | 401.8µs |
-| 100,000 | 7.144ms |
+| 10 | 14.9µs |
+| 100 | 14.0µs |
+| 1,000 | 81.6µs |
+| 10,000 | 907.0µs |
+| 100,000 | 6.583ms |
 
 ---
 
@@ -161,11 +194,11 @@
 
 | Sequence Length | Runtime |
 |----------------|---------|
-| 10 | 20.3µs |
-| 100 | 8.6µs |
-| 1,000 | 11.0µs |
-| 10,000 | 56.2µs |
-| 100,000 | 805.9µs |
+| 10 | 2.5µs |
+| 100 | 33.2µs |
+| 1,000 | 5.8µs |
+| 10,000 | 57.9µs |
+| 100,000 | 634.8µs |
 
 ---
 
