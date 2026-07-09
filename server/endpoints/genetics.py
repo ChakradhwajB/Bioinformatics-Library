@@ -2,43 +2,45 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import List
 
-from core_lib import (
-    Complement,
-    ReverseComplement,
-    Transcribe,
-    Translate,
-    FindMotif
-)
+from core_lib import Complement, ReverseComplement, Transcribe, Translate, FindMotif
 
 router = APIRouter()
 
 # --- Request/Response Models ---
 
+
 class SequenceRequest(BaseModel):
     sequence: str
+
 
 class ComplementResponse(BaseModel):
     status: str
     complement: str
 
+
 class ReverseComplementResponse(BaseModel):
     status: str
     reverse_complement: str
+
 
 class TranscribeResponse(BaseModel):
     status: str
     transcribed_sequence: str
 
+
 class TranslateRequest(BaseModel):
     rna_sequence: str
+
 
 class TranslateResponse(BaseModel):
     status: str
     protein: str
 
+
 class FindMotifRequest(BaseModel):
     sequence: str
     motif: str
+
 
 class FindMotifResponse(BaseModel):
     status: str
@@ -46,6 +48,7 @@ class FindMotifResponse(BaseModel):
 
 
 # --- Endpoints ---
+
 
 @router.post("/complement", response_model=ComplementResponse)
 def get_complement(request: SequenceRequest):

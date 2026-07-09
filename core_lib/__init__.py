@@ -12,19 +12,13 @@ from .io import (
     FastaWrite,
 )
 
-from .genetics import (
-    Complement, 
-    ReverseComplement, 
-    Transcribe, 
-    Translate, 
-    FindMotif
-)
+from .genetics import Complement, ReverseComplement, Transcribe, Translate, FindMotif
 
 from .alignments import (
     HammingDistance,
     LevenshteinDistance,
-    NeedlemanWunsch, 
-    SmithWaterman
+    NeedlemanWunsch,
+    SmithWaterman,
 )
 
 __all__ = [
@@ -38,6 +32,6 @@ __all__ = [
     "FindMotif",
     "HammingDistance",
     "LevenshteinDistance",
-    "NeedlemanWunsch", 
+    "NeedlemanWunsch",
     "SmithWaterman",
 ]

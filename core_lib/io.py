@@ -1,6 +1,7 @@
 from typing import Dict, Iterable
 import json
 
+
 def ValidateInput(data: Iterable[str]) -> bool:
     """
     Validates if an input is in FASTA format
@@ -47,6 +48,7 @@ def FastaParse(data: Iterable[str]) -> Dict[str, str]:
     if currHeader:
         record[currHeader] = "".join(currSequence)
     return record
+
 
 def FastaWrite(record: Dict[str, str], OutputFile: str) -> None:
     """Writes a dictionary of genetic sequences to a JSON-formatted file.

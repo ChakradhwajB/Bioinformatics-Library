@@ -5,13 +5,13 @@ from server.endpoints import alignments, genetics, io
 app = FastAPI(
     title="Bioinformatics Platform API",
     description="Backend for genetic sequence analysis.",
-    version="0.1.0"
+    version="0.1.0",
 )
 
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], 
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -22,6 +22,7 @@ app.include_router(alignments.router, prefix="/api/v1/alignments", tags=["alignm
 app.include_router(genetics.router, prefix="/api/v1/genetics", tags=["genetics"])
 app.include_router(io.router, prefix="/api/v1/io", tags=["io"])
 
+
 @app.get("/")
 def health_check():
-    return {"status": "online", "message": "Bioinformatics API is running."}
+    return {"status": "online", "message": "Bioinformatics API is running."}
