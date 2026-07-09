@@ -1,3 +1,5 @@
+import os
+import tempfile
 from fastapi import APIRouter, UploadFile, File, HTTPException
 from pydantic import BaseModel
 from typing import Dict, List
@@ -7,7 +9,6 @@ from core_lib import ValidateInput, FastaParse, FastaWrite
 router = APIRouter()
 
 # --- Request/Response Models ---
-
 
 class ValidateRequest(BaseModel):
     data: List[str]
@@ -45,7 +46,6 @@ class FastaWriteResponse(BaseModel):
 
 # --- Endpoints ---
 
-
 @router.post("/validate", response_model=ValidateResponse)
 def validate_fasta_lines(request: ValidateRequest):
     """Validates if the provided list of lines conforms to FASTA sequence contents."""
@@ -58,50 +58,85 @@ def validate_fasta_lines(request: ValidateRequest):
 
 @router.post("/parse-fasta-text", response_model=ParseFastaResponse)
 def parse_fasta_text(request: FastaTextRequest):
-    """Accepts a raw FASTA text string, parses it, and returns the sequence list."""
-    lines = request.fasta_text.strip().split("\n")
-
-    if not ValidateInput(lines):
-        raise HTTPException(
-            status_code=400,
-            detail="Invalid FASTA format. Only A, C, G, T, N (case-insensitive) allowed in sequences.",
-        )
-
-    parsed_records = FastaParse(lines)
-
-    data_list = [
-        FastaRecord(header=header, sequence=seq, length=len(seq))
-        for header, seq in parsed_records.items()
-    ]
-    return ParseFastaResponse(status="success", data=data_list)
+    """Accepts a raw FASTA text string, caches it to disk, and parses it lazily to avoid memory spikes."""
+    temp_dir = tempfile.gettempdir()
+    temp_path = os.path.join(temp_dir, f"text_{os.urandom(8).hex()}.fasta")
+    
+    try:
+        with open(temp_path, "w", encoding="utf-8") as f:
+            f.write(request.fasta_text)
+            
+        with open(temp_path, "r", encoding="utf-8") as f:
+            if not ValidateInput(f):
+                raise HTTPException(
+                    status_code=400,
+                    detail="Invalid FASTA format. Only A, C, G, T, N (case-insensitive) allowed in sequences.",
+                )
+                
+        with open(temp_path, "r", encoding="utf-8") as f:
+            parsed_records = FastaParse(f)
+            
+        data_list = [
+            FastaRecord(header=header, sequence=seq, length=len(seq))
+            for header, seq in parsed_records.items()
+        ]
+        return ParseFastaResponse(status="success", data=data_list)
+        
+    except HTTPException as he:
+        raise he
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to process text: {str(e)}")
+    finally:
+        if os.path.exists(temp_path):
+            try:
+                os.remove(temp_path)
+            except Exception:
+                pass
 
 
 @router.post("/parse-fasta", response_model=ParseFastaResponse)
 async def parse_fasta_file(file: UploadFile = File(...)):
-    """Accepts an uploaded FASTA file, parses it, and returns the sequence list."""
+    """Accepts an uploaded FASTA file, streams it to disk in chunks, and parses it lazily (O(1) memory)."""
+    temp_dir = tempfile.gettempdir()
+    temp_path = os.path.join(temp_dir, f"upload_{os.urandom(8).hex()}.fasta")
+    
     try:
-        content = await file.read()
-        text_data = content.decode("utf-8")
+        with open(temp_path, "wb") as buffer:
+            while True:
+                chunk = await file.read(10240)  # Read 10 KB chunks
+                if not chunk:
+                    break
+                buffer.write(chunk)
+                
+
+        with open(temp_path, "r", encoding="utf-8") as f:
+            if not ValidateInput(f):
+                raise HTTPException(
+                    status_code=400,
+                    detail="Invalid FASTA format. Only A, C, G, T, N (case-insensitive) allowed in sequences.",
+                )
+                
+
+        with open(temp_path, "r", encoding="utf-8") as f:
+            parsed_records = FastaParse(f)
+            
+        data_list = [
+            FastaRecord(header=header, sequence=seq, length=len(seq))
+            for header, seq in parsed_records.items()
+        ]
+        return ParseFastaResponse(status="success", data=data_list)
+        
+    except HTTPException as he:
+        raise he
     except Exception as e:
-        raise HTTPException(
-            status_code=400, detail=f"Failed to read or decode file: {str(e)}"
-        )
-
-    lines = text_data.strip().split("\n")
-
-    if not ValidateInput(lines):
-        raise HTTPException(
-            status_code=400,
-            detail="Invalid FASTA format. Only A, C, G, T, N (case-insensitive) allowed in sequences.",
-        )
-
-    parsed_records = FastaParse(lines)
-
-    data_list = [
-        FastaRecord(header=header, sequence=seq, length=len(seq))
-        for header, seq in parsed_records.items()
-    ]
-    return ParseFastaResponse(status="success", data=data_list)
+        raise HTTPException(status_code=400, detail=f"Failed to process file: {str(e)}")
+    finally:
+        # Strict resource cleanup
+        if os.path.exists(temp_path):
+            try:
+                os.remove(temp_path)
+            except Exception:
+                pass
 
 
 @router.post("/write-fasta", response_model=FastaWriteResponse)
