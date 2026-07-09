@@ -143,96 +143,128 @@
     }
   </style>
 </head>
-<body class="bg-slate-100 font-sans text-slate-700 flex h-screen overflow-hidden">
+<body class="bg-slate-100 text-slate-900 min-h-screen h-screen flex flex-col overflow-hidden">
+  
+  <!-- Header Bar -->
+  <header class="bg-white border-b border-slate-200 py-3 px-6 flex justify-between items-center select-none z-50">
+    <div class="flex items-center space-x-3">
+      <a href="./index.html" class="flex items-center space-x-2 text-slate-500 hover:text-slate-800 transition-colors">
+        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        <span class="text-xs font-semibold">Dashboard</span>
+      </a>
+      <span class="text-slate-350">/</span>
+      <span class="text-sm font-bold tracking-tight text-slate-800">Documentation & Reference Docs</span>
+    </div>
+    <div class="flex items-center bg-slate-50 px-2.5 py-1 rounded-sm border border-slate-200">
+      <span id="server-status-dot" class="h-2 w-2 rounded-full bg-slate-400 mr-2"></span>
+      <span id="server-status-text" class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Checking...</span>
+    </div>
+  </header>
 
-  <!-- Left Sidebar (Navigation) -->
-  <aside class="w-64 bg-slate-55 border-r border-slate-200 flex flex-col justify-between select-none">
-    <div class="p-5 flex flex-col flex-grow overflow-y-auto">
-      
-      <!-- App Branding Title -->
-      <div class="flex items-center space-x-2.5 mb-6">
-        <div class="h-6 w-6 rounded-sm bg-slate-800 flex items-center justify-center font-bold text-white text-xs select-none">B</div>
-        <a href="./index.html" class="font-bold text-slate-800 text-xs tracking-wider uppercase hover:text-slate-900 transition-colors">Bioinformatics Library</a>
+  <!-- Workspace Shell -->
+  <div class="flex-grow flex h-[calc(100vh-45px)] overflow-hidden">
+    
+    <!-- Left Sidebar (Navigation) -->
+    <aside class="w-80 bg-slate-55 border-r border-slate-200 p-4 flex flex-col justify-between overflow-y-auto select-none">
+      <div class="space-y-6">
+        
+        <!-- Search bar -->
+        <div>
+          <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Search Documentation</label>
+          <input type="text" id="doc-search-input" class="w-full bg-white border border-slate-200 rounded-sm text-xs px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-slate-400 text-slate-850" placeholder="Filter topics..." />
+        </div>
+
+        <!-- Navigation Sections -->
+        <nav class="space-y-5">
+          <!-- Section: Alignments -->
+          <div class="space-y-1">
+            <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider px-2">Alignments</span>
+            <div class="space-y-0.5">
+              <button onclick="loadDoc('alignments/needleman_wunsch.md', this)" class="w-full text-left px-2.5 py-1.5 text-xs font-semibold rounded-sm hover:bg-slate-200 text-slate-600 hover:text-slate-850 cursor-pointer transition-colors">Needleman-Wunsch</button>
+              <button onclick="loadDoc('alignments/smith_waterman.md', this)" class="w-full text-left px-2.5 py-1.5 text-xs font-semibold rounded-sm hover:bg-slate-200 text-slate-600 hover:text-slate-850 cursor-pointer transition-colors">Smith-Waterman</button>
+              <button onclick="loadDoc('alignments/levenshtein_distance.md', this)" class="w-full text-left px-2.5 py-1.5 text-xs font-semibold rounded-sm hover:bg-slate-200 text-slate-600 hover:text-slate-850 cursor-pointer transition-colors">Levenshtein Distance</button>
+              <button onclick="loadDoc('alignments/hamming_distance.md', this)" class="w-full text-left px-2.5 py-1.5 text-xs font-semibold rounded-sm hover:bg-slate-200 text-slate-600 hover:text-slate-850 cursor-pointer transition-colors">Hamming Distance</button>
+              <button onclick="loadDoc('alignments/dot_plot.md', this)" class="w-full text-left px-2.5 py-1.5 text-xs font-semibold rounded-sm hover:bg-slate-200 text-slate-600 hover:text-slate-850 cursor-pointer transition-colors">Dot Plot Visualizer</button>
+            </div>
+          </div>
+
+          <!-- Section: Genetics -->
+          <div class="space-y-1">
+            <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider px-2">Genetics</span>
+            <div class="space-y-0.5">
+              <button onclick="loadDoc('genetics/complement.md', this)" class="w-full text-left px-2.5 py-1.5 text-xs font-semibold rounded-sm hover:bg-slate-200 text-slate-600 hover:text-slate-850 cursor-pointer transition-colors">Complement Mapping</button>
+              <button onclick="loadDoc('genetics/reverse_complement.md', this)" class="w-full text-left px-2.5 py-1.5 text-xs font-semibold rounded-sm hover:bg-slate-200 text-slate-600 hover:text-slate-850 cursor-pointer transition-colors">Reverse Complement</button>
+              <button onclick="loadDoc('genetics/transcribe.md', this)" class="w-full text-left px-2.5 py-1.5 text-xs font-semibold rounded-sm hover:bg-slate-200 text-slate-600 hover:text-slate-850 cursor-pointer transition-colors">Transcription</button>
+              <button onclick="loadDoc('genetics/translate.md', this)" class="w-full text-left px-2.5 py-1.5 text-xs font-semibold rounded-sm hover:bg-slate-200 text-slate-600 hover:text-slate-850 cursor-pointer transition-colors">Translation</button>
+              <button onclick="loadDoc('genetics/find_motif.md', this)" class="w-full text-left px-2.5 py-1.5 text-xs font-semibold rounded-sm hover:bg-slate-200 text-slate-600 hover:text-slate-850 cursor-pointer transition-colors">Motif Finding</button>
+            </div>
+          </div>
+
+          <!-- Section: File IO -->
+          <div class="space-y-1">
+            <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider px-2">File Data IO</span>
+            <div class="space-y-0.5">
+              <button onclick="loadDoc('io/fasta_parse.md', this)" class="w-full text-left px-2.5 py-1.5 text-xs font-semibold rounded-sm hover:bg-slate-200 text-slate-600 hover:text-slate-850 cursor-pointer transition-colors">FASTA Parse</button>
+              <button onclick="loadDoc('io/fasta_write.md', this)" class="w-full text-left px-2.5 py-1.5 text-xs font-semibold rounded-sm hover:bg-slate-200 text-slate-600 hover:text-slate-850 cursor-pointer transition-colors">FASTA Export</button>
+              <button onclick="loadDoc('io/validate_input.md', this)" class="w-full text-left px-2.5 py-1.5 text-xs font-semibold rounded-sm hover:bg-slate-200 text-slate-600 hover:text-slate-850 cursor-pointer transition-colors">Input Validation</button>
+            </div>
+          </div>
+
+          <!-- Section: API -->
+          <div class="space-y-1">
+            <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider px-2">API Reference</span>
+            <div class="space-y-0.5">
+              <button onclick="loadDoc('api.md', this)" class="w-full text-left px-2.5 py-1.5 text-xs font-semibold rounded-sm hover:bg-slate-200 text-slate-600 hover:text-slate-850 cursor-pointer transition-colors">Developer API</button>
+            </div>
+          </div>
+        </nav>
       </div>
 
-      <!-- Navigation Sections -->
-      <nav class="space-y-5 flex-grow">
-        <!-- Section: Alignments -->
-        <div class="space-y-1">
-          <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider px-2">Alignments</span>
-          <div class="space-y-0.5">
-            <button onclick="loadDoc('alignments/needleman_wunsch.md', this)" class="w-full text-left px-2 py-1 text-[11px] rounded-sm hover:bg-slate-200 text-slate-650 hover:text-slate-800 font-semibold cursor-pointer">Needleman-Wunsch</button>
-            <button onclick="loadDoc('alignments/smith_waterman.md', this)" class="w-full text-left px-2 py-1 text-[11px] rounded-sm hover:bg-slate-200 text-slate-650 hover:text-slate-800 font-semibold cursor-pointer">Smith-Waterman</button>
-            <button onclick="loadDoc('alignments/levenshtein_distance.md', this)" class="w-full text-left px-2 py-1 text-[11px] rounded-sm hover:bg-slate-200 text-slate-650 hover:text-slate-800 font-semibold cursor-pointer">Levenshtein Distance</button>
-            <button onclick="loadDoc('alignments/hamming_distance.md', this)" class="w-full text-left px-2 py-1 text-[11px] rounded-sm hover:bg-slate-200 text-slate-650 hover:text-slate-800 font-semibold cursor-pointer">Hamming Distance</button>
-            <button onclick="loadDoc('alignments/dot_plot.md', this)" class="w-full text-left px-2 py-1 text-[11px] rounded-sm hover:bg-slate-200 text-slate-650 hover:text-slate-800 font-semibold cursor-pointer">Dot Plot Visualizer</button>
-          </div>
-        </div>
-
-        <!-- Section: Genetics -->
-        <div class="space-y-1">
-          <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider px-2">Genetics</span>
-          <div class="space-y-0.5">
-            <button onclick="loadDoc('genetics/complement.md', this)" class="w-full text-left px-2 py-1 text-[11px] rounded-sm hover:bg-slate-200 text-slate-650 hover:text-slate-800 font-semibold cursor-pointer">Complement Mapping</button>
-            <button onclick="loadDoc('genetics/reverse_complement.md', this)" class="w-full text-left px-2 py-1 text-[11px] rounded-sm hover:bg-slate-200 text-slate-650 hover:text-slate-800 font-semibold cursor-pointer">Reverse Complement</button>
-            <button onclick="loadDoc('genetics/transcribe.md', this)" class="w-full text-left px-2 py-1 text-[11px] rounded-sm hover:bg-slate-200 text-slate-650 hover:text-slate-800 font-semibold cursor-pointer">Transcription</button>
-            <button onclick="loadDoc('genetics/translate.md', this)" class="w-full text-left px-2 py-1 text-[11px] rounded-sm hover:bg-slate-200 text-slate-650 hover:text-slate-800 font-semibold cursor-pointer">Translation</button>
-            <button onclick="loadDoc('genetics/find_motif.md', this)" class="w-full text-left px-2 py-1 text-[11px] rounded-sm hover:bg-slate-200 text-slate-650 hover:text-slate-800 font-semibold cursor-pointer">Motif Finding</button>
-          </div>
-        </div>
-
-        <!-- Section: File IO -->
-        <div class="space-y-1">
-          <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider px-2">File Data IO</span>
-          <div class="space-y-0.5">
-            <button onclick="loadDoc('io/fasta_parse.md', this)" class="w-full text-left px-2 py-1 text-[11px] rounded-sm hover:bg-slate-200 text-slate-650 hover:text-slate-800 font-semibold cursor-pointer">FASTA Parse</button>
-            <button onclick="loadDoc('io/fasta_write.md', this)" class="w-full text-left px-2 py-1 text-[11px] rounded-sm hover:bg-slate-200 text-slate-650 hover:text-slate-800 font-semibold cursor-pointer">FASTA Export</button>
-            <button onclick="loadDoc('io/validate_input.md', this)" class="w-full text-left px-2 py-1 text-[11px] rounded-sm hover:bg-slate-200 text-slate-650 hover:text-slate-800 font-semibold cursor-pointer">Input Validation</button>
-          </div>
-        </div>
-
-        <!-- Section: API -->
-        <div class="space-y-1">
-          <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider px-2">API Reference</span>
-          <div class="space-y-0.5">
-            <button onclick="loadDoc('api.md', this)" class="w-full text-left px-2 py-1 text-[11px] rounded-sm hover:bg-slate-200 text-slate-650 hover:text-slate-800 font-semibold cursor-pointer">Developer API</button>
-          </div>
-        </div>
-      </nav>
-    </div>
-
-    <!-- Sidebar footer status -->
-    <div class="p-4 border-t border-slate-200 bg-slate-50 flex items-center justify-between text-[10px]">
-      <a href="./index.html" class="font-bold text-slate-600 hover:text-slate-800 cursor-pointer">&larr; Back to Home</a>
-      <div class="flex items-center">
-        <span id="server-status-dot" class="h-2 w-2 rounded-full bg-slate-300 mr-2"></span>
-        <span id="server-status-text" class="text-[9px] font-bold text-slate-500 uppercase tracking-wider">Checking...</span>
+      <!-- Sidebar footer status -->
+      <div class="border-t border-slate-200 pt-3 text-[10px]">
+        <a href="./index.html" class="font-bold text-slate-600 hover:text-slate-800 cursor-pointer">&larr; Back to Dashboard</a>
       </div>
-    </div>
-  </aside>
+    </aside>
 
-  <!-- Right Panel (Content area) -->
-  <main class="flex-grow overflow-y-auto bg-slate-100 p-6 flex justify-center">
-    <div class="w-full max-w-3xl bg-white border border-slate-200 rounded-sm shadow-sm p-8 markdown-body min-h-[90%]">
-      <!-- Injected Document Content -->
-      <div id="doc-content">
-        <div class="flex justify-center items-center h-64 text-slate-400 text-xs font-semibold">
-          Loading documentation...
+    <!-- Right Panel (Content area) -->
+    <main class="flex-grow overflow-y-auto bg-slate-100 p-6">
+      <div class="bg-white border border-slate-200 rounded-sm shadow-sm p-8 markdown-body min-h-[90%] w-full max-w-4xl mx-auto">
+        <!-- Injected Document Content -->
+        <div id="doc-content">
+          <div class="flex justify-center items-center h-64 text-slate-400 text-xs font-semibold">
+            Loading documentation...
+          </div>
         </div>
       </div>
-    </div>
-  </main>
+    </main>
+
+  </div>
 
   <script src="./app.js"></script>
   <script>
+    // Document Search Filtering
+    document.getElementById("doc-search-input").addEventListener("input", (e) => {
+      const query = e.target.value.toLowerCase().trim();
+      document.querySelectorAll("aside nav button").forEach(btn => {
+        const text = btn.textContent.toLowerCase();
+        if (text.includes(query)) {
+          btn.style.display = "block";
+        } else {
+          btn.style.display = "none";
+        }
+      });
+    });
+
     // Keep sidebar link highlighting up-to-date
     function highlightActiveLink(btn) {
       document.querySelectorAll('aside nav button').forEach(b => {
         b.classList.remove('bg-slate-800', 'text-white', 'hover:bg-slate-900');
-        b.classList.add('text-slate-650', 'hover:bg-slate-200', 'hover:text-slate-800');
+        b.classList.add('text-slate-600', 'hover:bg-slate-200', 'hover:text-slate-805');
       });
       if (btn) {
-        btn.classList.remove('text-slate-650', 'hover:bg-slate-200', 'hover:text-slate-800');
+        btn.classList.remove('text-slate-600', 'hover:bg-slate-200', 'hover:text-slate-805');
         btn.classList.add('bg-slate-800', 'text-white', 'hover:bg-slate-900');
       }
     }
@@ -250,7 +282,7 @@
         const response = await fetch(`./docs/${docPath}`);
         if (!response.ok) throw new Error("Document not found");
         
-        let markdownText = await response.ok ? await response.text() : "";
+        let markdownText = await response.text();
         
         // Custom parser extension for GitHub ```math code blocks
         // Convert ```math code blocks into standard LaTeX block format $$ so KaTeX auto-render can pick it up
