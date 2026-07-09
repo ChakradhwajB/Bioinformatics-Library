@@ -10,8 +10,10 @@ from core_lib import (
 
 router = APIRouter()
 
-# --- Request/Response Models ---
+MAX_DP_SEQUENCE_LENGTH = 10000  # Cap O(n*m) space complexities
+MAX_LINEAR_SEQUENCE_LENGTH = 1000000  # Cap O(n) space complexities
 
+# --- Request/Response Models ---
 
 class HammingRequest(BaseModel):
     seq1: str
@@ -67,10 +69,14 @@ class SmithWatermanRequest(BaseModel):
 
 # --- Endpoints ---
 
-
 @router.post("/hamming-distance", response_model=HammingResponse)
 def get_hamming_distance(request: HammingRequest):
     """Calculates the Hamming Distance between two genetic sequences."""
+    if len(request.seq1) > MAX_LINEAR_SEQUENCE_LENGTH or len(request.seq2) > MAX_LINEAR_SEQUENCE_LENGTH:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Sequence length exceeds the maximum allowed limit of {MAX_LINEAR_SEQUENCE_LENGTH:,} bases."
+        )
     try:
         distance = HammingDistance(request.seq1, request.seq2)
         return HammingResponse(status="success", distance=distance)
@@ -81,6 +87,11 @@ def get_hamming_distance(request: HammingRequest):
 @router.post("/levenshtein-distance", response_model=LevenshteinResponse)
 def get_levenshtein_distance(request: LevenshteinRequest):
     """Calculates the Levenshtein Distance (edit distance) between two sequences."""
+    if len(request.seq1) > MAX_DP_SEQUENCE_LENGTH or len(request.seq2) > MAX_DP_SEQUENCE_LENGTH:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Sequence length exceeds the maximum allowed limit of {MAX_DP_SEQUENCE_LENGTH:,} bases for quadratic DP algorithms."
+        )
     try:
         distance = LevenshteinDistance(request.seq1, request.seq2)
         return LevenshteinResponse(status="success", distance=distance)
@@ -91,6 +102,11 @@ def get_levenshtein_distance(request: LevenshteinRequest):
 @router.post("/align", response_model=AlignmentResponse)
 def align_sequences(request: AlignmentRequest):
     """Performs global or local sequence alignment using Needleman-Wunsch or Smith-Waterman."""
+    if len(request.seq1) > MAX_DP_SEQUENCE_LENGTH or len(request.seq2) > MAX_DP_SEQUENCE_LENGTH:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Sequence length exceeds the maximum allowed limit of {MAX_DP_SEQUENCE_LENGTH:,} bases for quadratic DP alignments."
+        )
     try:
         if request.alignment_type.lower() == "global":
             score, a1, a2 = NeedlemanWunsch(
@@ -115,6 +131,11 @@ def align_sequences(request: AlignmentRequest):
 @router.post("/needleman-wunsch", response_model=AlignmentResponse)
 def align_needleman_wunsch(request: NeedlemanWunschRequest):
     """Performs global sequence alignment using the Needleman-Wunsch algorithm."""
+    if len(request.seq1) > MAX_DP_SEQUENCE_LENGTH or len(request.seq2) > MAX_DP_SEQUENCE_LENGTH:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Sequence length exceeds the maximum allowed limit of {MAX_DP_SEQUENCE_LENGTH:,} bases for Needleman-Wunsch alignment."
+        )
     try:
         score, a1, a2 = NeedlemanWunsch(
             request.seq1, request.seq2, request.match, request.mismatch, request.gap
@@ -129,6 +150,11 @@ def align_needleman_wunsch(request: NeedlemanWunschRequest):
 @router.post("/smith-waterman", response_model=AlignmentResponse)
 def align_smith_waterman(request: SmithWatermanRequest):
     """Performs local sequence alignment using the Smith-Waterman algorithm."""
+    if len(request.seq1) > MAX_DP_SEQUENCE_LENGTH or len(request.seq2) > MAX_DP_SEQUENCE_LENGTH:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Sequence length exceeds the maximum allowed limit of {MAX_DP_SEQUENCE_LENGTH:,} bases for Smith-Waterman alignment."
+        )
     try:
         score, a1, a2 = SmithWaterman(
             request.seq1, request.seq2, request.match, request.mismatch, request.gap

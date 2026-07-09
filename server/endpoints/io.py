@@ -8,6 +8,8 @@ from core_lib import ValidateInput, FastaParse, FastaWrite
 
 router = APIRouter()
 
+MAX_FILE_SIZE = 5 * 1024 * 1024  # 5 MB limit
+
 # --- Request/Response Models ---
 
 class ValidateRequest(BaseModel):
@@ -59,13 +61,21 @@ def validate_fasta_lines(request: ValidateRequest):
 @router.post("/parse-fasta-text", response_model=ParseFastaResponse)
 def parse_fasta_text(request: FastaTextRequest):
     """Accepts a raw FASTA text string, caches it to disk, and parses it lazily to avoid memory spikes."""
+    if len(request.fasta_text) > MAX_FILE_SIZE:
+        raise HTTPException(
+            status_code=413,
+            detail="Text payload too large. Maximum allowed size is 5 MB."
+        )
+
     temp_dir = tempfile.gettempdir()
     temp_path = os.path.join(temp_dir, f"text_{os.urandom(8).hex()}.fasta")
     
     try:
+        # Write input string to disk to allow lazy file iteration
         with open(temp_path, "w", encoding="utf-8") as f:
             f.write(request.fasta_text)
             
+        # Validate lines lazily (O(1) active RAM)
         with open(temp_path, "r", encoding="utf-8") as f:
             if not ValidateInput(f):
                 raise HTTPException(
@@ -73,6 +83,7 @@ def parse_fasta_text(request: FastaTextRequest):
                     detail="Invalid FASTA format. Only A, C, G, T, N (case-insensitive) allowed in sequences.",
                 )
                 
+        # Parse lines lazily (O(1) active RAM)
         with open(temp_path, "r", encoding="utf-8") as f:
             parsed_records = FastaParse(f)
             
@@ -87,6 +98,7 @@ def parse_fasta_text(request: FastaTextRequest):
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Failed to process text: {str(e)}")
     finally:
+        # Strict resource cleanup
         if os.path.exists(temp_path):
             try:
                 os.remove(temp_path)
@@ -101,14 +113,22 @@ async def parse_fasta_file(file: UploadFile = File(...)):
     temp_path = os.path.join(temp_dir, f"upload_{os.urandom(8).hex()}.fasta")
     
     try:
+        # 1. Stream upload to disk in 10 KB chunks (O(1) space relative to file size)
+        file_size = 0
         with open(temp_path, "wb") as buffer:
             while True:
                 chunk = await file.read(10240)  # Read 10 KB chunks
                 if not chunk:
                     break
+                file_size += len(chunk)
+                if file_size > MAX_FILE_SIZE:
+                    raise HTTPException(
+                        status_code=413,
+                        detail="File too large. Maximum allowed size is 5 MB."
+                    )
                 buffer.write(chunk)
                 
-
+        # 2. Validate lazily from disk (O(1) active RAM)
         with open(temp_path, "r", encoding="utf-8") as f:
             if not ValidateInput(f):
                 raise HTTPException(
@@ -116,7 +136,7 @@ async def parse_fasta_file(file: UploadFile = File(...)):
                     detail="Invalid FASTA format. Only A, C, G, T, N (case-insensitive) allowed in sequences.",
                 )
                 
-
+        # 3. Parse records lazily from disk (O(1) active RAM)
         with open(temp_path, "r", encoding="utf-8") as f:
             parsed_records = FastaParse(f)
             

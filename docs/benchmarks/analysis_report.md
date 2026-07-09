@@ -68,6 +68,19 @@ Pure Python loops are slow for heavy computations. At $n = m = 5,000$, the neste
 Storing an $(n+1) \times (m+1)$ dynamic programming grid requires significant space. At $n = m = 5,000$, the score matrix contains $25,010,001$ cells. In Python, integers are heap-allocated objects, taking 28 bytes each. A list of lists representing a $5,000 \times 5,000$ grid occupies $\approx 700\text{MB}$ of RAM. If a user tries to align sequence lengths of $100,000$ bases, the grid will require $10^{10}$ cells, demanding over 280 GB of memory, leading to immediate out-of-memory (OOM) crashes.
 
 ---
+ 
+## Strict Resource Safety Limits
+
+To guarantee server stability and prevent Out-of-Memory (OOM) crashes under strict free-tier memory allocations (512 MB RAM cap), the backend API enforces the following security boundaries:
+
+1. **File & Data Ingestion Limits**:
+   * **Maximum File Upload Size:** **5 MB** (enforced via chunked read trackers on `/parse-fasta`).
+   * **Maximum Text Payload Size:** **5 MB** (enforced on `/parse-fasta-text`).
+2. **Algorithm Execution Limits**:
+   * **Quadratic Algorithms ($\mathcal{O}(n^2)$ space/time):** Capped at **10,000 bases** per sequence. Enforced on Needleman-Wunsch, Smith-Waterman, and Levenshtein edit distance.
+   * **Linear Algorithms ($\mathcal{O}(n)$ space/time):** Capped at **1,000,000 bases** per sequence. Enforced on Hamming distance, DNA complementation, transcription, translation, and motif search.
+
+---
 
 ## Future Improvements
 
