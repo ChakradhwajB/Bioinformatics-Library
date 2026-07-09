@@ -31,8 +31,8 @@ $$
 For $1 \le i \le n$ and $1 \le j \le m$, the edit distance cell is computed as the minimum of three transition paths:
 $$
 D\_{i, j} = \min \begin{cases} 
-D\_{i-1, j-1} + \text{cost} & \text{(Match / Substitution)} \\
-D\_{i-1, j} + 1 & \text{(Deletion)} \\
+D\_{i-1, j-1} + \text{cost} & \text{(Match / Substitution)} \\\\
+D\_{i-1, j} + 1 & \text{(Deletion)} \\\\
 D\_{i, j-1} + 1 & \text{(Insertion)}
 \end{cases}
 $$
@@ -40,7 +40,7 @@ $$
 Where the step-wise operation cost is defined as:
 $$
 \text{cost} = \begin{cases} 
-0 & \text{if } S\_1[i-1] = S\_2[j-1] \\
+0 & \text{if } S\_1[i-1] = S\_2[j-1] \\\\
 1 & \text{if } S\_1[i-1] \neq S\_2[j-1]
 \end{cases}
 $$

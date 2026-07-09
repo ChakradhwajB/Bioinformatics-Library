@@ -32,9 +32,9 @@ $$
 For $1 \le i \le n$ and $1 \le j \le m$, the value is computed as:
 $$
 H\_{i, j} = \max \begin{cases} 
-0 & \text{(Terminate alignment)} \\
-H\_{i-1, j-1} + S(S\_1[i-1], S\_2[j-1]) & \text{(Match / Mismatch)} \\
-H\_{i-1, j} + \text{gap} & \text{(Deletion from } S\_1\text{)} \\
+0 & \text{(Terminate alignment)} \\\\
+H\_{i-1, j-1} + S(S\_1[i-1], S\_2[j-1]) & \text{(Match / Mismatch)} \\\\
+H\_{i-1, j} + \text{gap} & \text{(Deletion from } S\_1\text{)} \\\\
 H\_{i, j-1} + \text{gap} & \text{(Insertion into } S\_1\text{)}
 \end{cases}
 $$
@@ -42,7 +42,7 @@ $$
 Where the similarity function $S(a, b)$ is:
 $$
 S(a, b) = \begin{cases} 
-\text{match} & \text{if } a = b \\
+\text{match} & \text{if } a = b \\\\
 \text{mismatch} & \text{if } a \neq b
 \end{cases}
 $$

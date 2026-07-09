@@ -21,7 +21,7 @@ Let:
 We define the indicator match function for offset $k$ starting at positions $i$ and $j$ as:
 $$
 \delta(i, j, k) = \begin{cases} 
-1 & \text{if } S\_1[i+k] = S\_2[j+k] \\
+1 & \text{if } S\_1[i+k] = S\_2[j+k] \\\\
 0 & \text{if } S\_1[i+k] \neq S\_2[j+k]
 \end{cases}
 $$

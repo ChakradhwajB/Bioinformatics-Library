@@ -20,7 +20,7 @@ $$
 Where the substitution function $g(c)$ is:
 $$
 g(c) = \begin{cases} 
-U & \text{if } c = T \\
+U & \text{if } c = T \\\\
 c & \text{otherwise}
 \end{cases}
 $$

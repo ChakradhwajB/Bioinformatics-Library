@@ -22,9 +22,9 @@ $$
 Where the complement mapping function $f(c)$ is defined as:
 $$
 f(c) = \begin{cases} 
-T & \text{if } c = A \\
-A & \text{if } c = T \\
-G & \text{if } c = C \\
+T & \text{if } c = A \\\\
+A & \text{if } c = T \\\\
+G & \text{if } c = C \\\\
 C & \text{if } c = G
 \end{cases}
 $$

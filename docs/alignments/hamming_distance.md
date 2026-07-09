@@ -23,7 +23,7 @@ $$
 Where the indicator function $\delta(a, b)$ is:
 $$
 \delta(a, b) = \begin{cases} 
-0 & \text{if } a = b \\
+0 & \text{if } a = b \\\\
 1 & \text{if } a \neq b
 \end{cases}
 $$
