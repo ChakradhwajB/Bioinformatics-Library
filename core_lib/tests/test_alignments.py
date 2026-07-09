@@ -1,12 +1,10 @@
 from core_lib.alignments import HammingDistance,LevenshteinDistance,NeedlemanWunsch,SmithWaterman
 
 def test_levenshtein_distance_different():
-    """Test standard case: 3 edits (replace k->s, e->i, add g)."""
     result = LevenshteinDistance("kitten", "sitting")
     assert result == 3
 
 def test_levenshtein_distance_identical():
-    """Test edge case: identical strings require 0 edits."""
     result = LevenshteinDistance("hello", "hello")
     assert result == 0
 

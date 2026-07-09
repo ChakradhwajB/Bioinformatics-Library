@@ -1,6 +1,6 @@
 """
 Benchmark suite for the Bioinformatics core_lib.
-Measures wall-clock runtime of every public function.
+Measures wall-clock runtime of every function.
 """
 
 import time
