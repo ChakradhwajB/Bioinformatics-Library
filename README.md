@@ -1,6 +1,6 @@
-# Bioinformatics Library
+# Bioinformatics Docs
 
-A Python bioinformatics toolkit implementing sequence alignment, distance metrics, sequence transformations, and file processing algorithms from computational biology.
+A Python bioinformatics toolkit implementing sequence alignment, distance metrics, sequence transformations, and file processing algorithms.
 
 [Documentation](https://bioinformatics-docs.netlify.app/pages/docs.html) • [Benchmarks](https://bioinformatics-docs.netlify.app/pages/docs.html?path=benchmarks/analysis_report.md) • [Website](https://bioinformatics-docs.netlify.app/) • [Source Code](https://github.com/ChakradhwajB/Bioinformatics-Docs)
 
@@ -168,7 +168,7 @@ Detailed educational guide articles, math formulas, and interactive trace tutori
 
 ### Planned
 
-- [ ] **Linear-space alignments** using Hirschberg's algorithm (reducing space to $\mathcal{O}(m)$).
+- [ ] **Linear-space alignments** using Hirschberg's algorithm.
 - [ ] **Suffix Array & FM-Index** implementations for index-backed fast genome lookups.
 - [ ] **De Bruijn Graphs** for assembly simulation of short reads.
 - [ ] **BWT (Burrows-Wheeler Transform)** compression analysis.
