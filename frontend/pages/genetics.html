@@ -56,6 +56,22 @@
     .font-mono-seq {
       font-family: 'Fira Code', monospace;
     }
+    /* Collapsible Sidebar Styles */
+    #sidebar {
+      transition: width 0.2s ease, padding 0.2s ease, border-color 0.2s ease;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    #sidebar::-webkit-scrollbar {
+      display: none;
+    }
+    .sidebar-collapsed {
+      width: 0px !important;
+      padding-left: 0px !important;
+      padding-right: 0px !important;
+      border-right-width: 0px !important;
+      overflow: hidden !important;
+    }
   </style>
 </head>
 <body class="bg-slate-100 text-slate-900 min-h-screen h-screen flex flex-col overflow-hidden">
@@ -79,10 +95,10 @@
   </header>
 
   <!-- Workspace Shell -->
-  <div class="flex-grow flex h-[calc(100vh-45px)] overflow-hidden">
+  <div class="flex-grow flex h-[calc(100vh-45px)] overflow-hidden relative">
     
     <!-- Left Sidebar (Inputs & Controls) -->
-    <aside class="w-80 bg-slate-55 border-r border-slate-200 p-4 flex flex-col justify-between overflow-y-auto select-none">
+    <aside id="sidebar" class="w-80 bg-slate-55 border-r border-slate-200 p-4 flex flex-col justify-between overflow-y-auto select-none transition-all duration-300 shrink-0">
       <div class="space-y-4">
         
         <!-- Tool Navigation list -->
@@ -104,10 +120,16 @@
             <a href="./dot_plot.html" class="block px-2.5 py-1.5 text-[11px] font-medium rounded-sm text-slate-600 hover:bg-slate-200 transition-colors">
               Dot Plot Visualizer
             </a>
+            <a href="./genetics.html" class="block px-2.5 py-1.5 text-[11px] font-semibold rounded-sm text-indigo-650 bg-indigo-50 border-l-2 border-indigo-500 transition-colors">
+              Genetics Workbench
+            </a>
+            <a href="./kmers.html" class="block px-2.5 py-1.5 text-[11px] font-medium rounded-sm text-slate-600 hover:bg-slate-200 transition-colors">
+              K-mer Profiler
+            </a>
             <a href="./io.html" class="block px-2.5 py-1.5 text-[11px] font-medium rounded-sm text-slate-600 hover:bg-slate-200 transition-colors">
               FASTA File IO
             </a>
-          <a href="./docs.html" class="block px-2.5 py-1.5 text-xs font-bold rounded-sm text-indigo-600 hover:bg-slate-200 transition-colors">Documentation &rarr;</a>
+            <a href="./docs.html" class="block px-2.5 py-1.5 text-xs font-bold rounded-sm text-indigo-600 hover:bg-slate-200 transition-colors">Documentation &rarr;</a>
           </nav>
         </div>
 
@@ -142,6 +164,15 @@
         </button>
       </div>
     </aside>
+
+    <!-- Collapsible Sibling Toggle Button -->
+    <button
+      id="sidebar-toggle"
+      class="absolute top-1/2 -translate-y-1/2 bg-white border border-slate-200 text-slate-500 hover:text-slate-800 h-8 w-4 rounded-r-md shadow-sm flex items-center justify-center cursor-pointer transition-all duration-300 z-40 select-none"
+      style="left: 19.25rem"
+    >
+      &lsaquo;
+    </button>
 
     <!-- Right Panels (Scrollable Workspace) -->
     <main class="flex-grow overflow-y-auto bg-slate-100 p-5 space-y-5">
@@ -209,5 +240,22 @@
 
   <script src="../src/app.js"></script>
   <script src="../src/genetics.js"></script>
+  <script>
+    // Collapsible Sidebar logic
+    const sidebar = document.getElementById("sidebar");
+    const toggleBtn = document.getElementById("sidebar-toggle");
+    if (sidebar && toggleBtn) {
+      toggleBtn.addEventListener("click", () => {
+        sidebar.classList.toggle("sidebar-collapsed");
+        if (sidebar.classList.contains("sidebar-collapsed")) {
+          toggleBtn.innerHTML = "&rsaquo;";
+          toggleBtn.style.left = "0.25rem";
+        } else {
+          toggleBtn.innerHTML = "&lsaquo;";
+          toggleBtn.style.left = "19.25rem";
+        }
+      });
+    }
+  </script>
 </body>
 </html>

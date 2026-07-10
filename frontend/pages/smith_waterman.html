@@ -59,6 +59,11 @@
     /* Collapsible Sidebar Styles */
     #sidebar {
       transition: width 0.2s ease, padding 0.2s ease, border-color 0.2s ease;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    #sidebar::-webkit-scrollbar {
+      display: none;
     }
     .sidebar-collapsed {
       width: 0px !important;
@@ -97,7 +102,7 @@
   </header>
 
   <!-- Workspace Shell -->
-  <div class="flex-grow flex h-[calc(100vh-45px)] overflow-hidden">
+  <div class="flex-grow flex h-[calc(100vh-45px)] overflow-hidden relative">
     
     <!-- Left Sidebar (Inputs & Controls) -->
     <!-- Left Sidebar (Inputs & Controls) -->
@@ -111,14 +116,11 @@
             <a href="./needleman_wunsch.html" class="block px-2.5 py-1.5 text-[11px] font-medium rounded-sm text-slate-600 hover:bg-slate-200 transition-colors">
               Needleman-Wunsch Global
             </a>
-            <a href="./smith_waterman.html" class="block px-2.5 py-1.5 text-[11px] font-bold rounded-sm bg-slate-100 text-slate-800 border border-slate-200">
+            <a href="./smith_waterman.html" class="block px-2.5 py-1.5 text-[11px] font-semibold rounded-sm text-indigo-650 bg-indigo-50 border-l-2 border-indigo-500 transition-colors">
               Smith-Waterman Local
             </a>
             <a href="./distances.html" class="block px-2.5 py-1.5 text-[11px] font-medium rounded-sm text-slate-600 hover:bg-slate-200 transition-colors">
               Sequence Distances
-            </a>
-            <a href="./genetics.html" class="block px-2.5 py-1.5 text-[11px] font-medium rounded-sm text-slate-600 hover:bg-slate-200 transition-colors">
-              Genetics Workbench
             </a>
             <a href="./find_motif.html" class="block px-2.5 py-1.5 text-[11px] font-medium rounded-sm text-slate-600 hover:bg-slate-200 transition-colors">
               Motif Finder
@@ -126,10 +128,16 @@
             <a href="./dot_plot.html" class="block px-2.5 py-1.5 text-[11px] font-medium rounded-sm text-slate-600 hover:bg-slate-200 transition-colors">
               Dot Plot Visualizer
             </a>
+            <a href="./genetics.html" class="block px-2.5 py-1.5 text-[11px] font-medium rounded-sm text-slate-600 hover:bg-slate-200 transition-colors">
+              Genetics Workbench
+            </a>
+            <a href="./kmers.html" class="block px-2.5 py-1.5 text-[11px] font-medium rounded-sm text-slate-600 hover:bg-slate-200 transition-colors">
+              K-mer Profiler
+            </a>
             <a href="./io.html" class="block px-2.5 py-1.5 text-[11px] font-medium rounded-sm text-slate-600 hover:bg-slate-200 transition-colors">
               FASTA File IO
             </a>
-            <a href="./docs.html" class="block px-2.5 py-1.5 text-xs font-bold rounded-sm text-indigo-650 hover:bg-slate-200 transition-colors">Documentation &rarr;</a>
+            <a href="./docs.html" class="block px-2.5 py-1.5 text-xs font-bold rounded-sm text-indigo-655 hover:bg-slate-200 transition-colors">Documentation &rarr;</a>
           </nav>
         </div>
 
@@ -216,8 +224,12 @@
       </div>
     </aside>
 
-    <!-- Collapse toggle button -->
-    <button id="sidebar-toggle" class="absolute top-3 bg-white border-2 border-slate-200 rounded-full h-6 w-6 flex items-center justify-center shadow-sm hover:bg-slate-50 cursor-pointer text-slate-500 hover:text-slate-800 z-50 text-[10px] font-bold select-none focus:outline-none transition-all duration-300" style="left: 19.25rem;">
+    <!-- Collapsible Sibling Toggle Button -->
+    <button
+      id="sidebar-toggle"
+      class="absolute top-1/2 -translate-y-1/2 bg-white border border-slate-200 text-slate-500 hover:text-slate-800 h-8 w-4 rounded-r-md shadow-sm flex items-center justify-center cursor-pointer transition-all duration-300 z-40 select-none"
+      style="left: 19.25rem"
+    >
       &lsaquo;
     </button>
 

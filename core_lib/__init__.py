@@ -21,6 +21,12 @@ from .alignments import (
     SmithWaterman,
 )
 
+from .kmers import (
+    GenerateKmers,
+    CountKmers,
+    MostFrequentKmers,
+)
+
 __all__ = [
     "ValidateInput",
     "FastaParse",
@@ -34,4 +40,7 @@ __all__ = [
     "LevenshteinDistance",
     "NeedlemanWunsch",
     "SmithWaterman",
+    "GenerateKmers",
+    "CountKmers",
+    "MostFrequentKmers",
 ]

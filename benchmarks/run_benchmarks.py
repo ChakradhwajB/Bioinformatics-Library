@@ -23,6 +23,7 @@ from core_lib import (
     FindMotif,
     ValidateInput,
     FastaParse,
+    MostFrequentKmers,
 )
 
 BASES = "ACGT"
@@ -142,6 +143,13 @@ BENCHMARKS = [
         lambda n: (make_fasta_lines(n),),
         FastaParse,
     ),
+    (
+        "MostFrequentKmers",
+        "$\\mathcal{O}(n \\cdot k)$",
+        LINEAR,
+        lambda n: (random_dna(n), 3),
+        MostFrequentKmers,
+    ),
 ]
 
 
@@ -171,6 +179,7 @@ def main():
         "ReverseComplement",
         "Transcribe",
         "ValidateInput",
+        "MostFrequentKmers",
     ]
     for name in linear_to_plot:
         if name in all_results:

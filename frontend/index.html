@@ -84,14 +84,69 @@
       html {
         scroll-behavior: smooth;
       }
+      /* Background Dot Grid */
+      .bg-dot-grid {
+        background-image: radial-gradient(rgba(148, 163, 184, 0.12) 1.5px, transparent 1.5px);
+        background-size: 24px 24px;
+      }
+      /* Self-drawing path animation */
+      @keyframes draw-svg-path {
+        from {
+          stroke-dashoffset: 400;
+        }
+        to {
+          stroke-dashoffset: 0;
+        }
+      }
+      .path-draw-animation {
+        stroke-dasharray: 400;
+        stroke-dashoffset: 400;
+        animation: draw-svg-path 2.5s linear forwards;
+      }
+      /* Gentle node pulsing keyframe (without glow) */
+      @keyframes node-pulse {
+        0%, 100% {
+          r: 5px;
+        }
+        50% {
+          r: 6.5px;
+        }
+      }
+      .pulse-node {
+        animation: node-pulse 3s infinite ease-in-out;
+        transform-origin: center;
+        transition: r 0.15s ease-in-out;
+      }
+      /* Hover highlights for traceback nodes */
+      .traceback-node .lookup-links.active-lookup {
+        opacity: 1 !important;
+      }
+      .traceback-node circle.pulse-node.active-circle {
+        r: 8px !important;
+        fill: #059669 !important;
+      }
     </style>
   </head>
   <body
     class="bg-white text-slate-900 min-h-screen overflow-y-auto flex flex-col"
   >
     <section
-      class="min-h-screen flex flex-col justify-between p-6 lg:p-8 border-b border-slate-100"
+      class="min-h-screen flex flex-col justify-between p-6 lg:p-8 border-b border-slate-100 bg-dot-grid relative overflow-hidden"
     >
+      <!-- Massive DNA Helix Watermark -->
+      <svg class="absolute -left-48 top-12 w-[600px] h-[600px] opacity-[0.015] text-slate-800 pointer-events-none -z-20 select-none" viewBox="0 0 100 200" fill="none" stroke="currentColor" stroke-width="1.2">
+        <path d="M 30 0 C 80 50 20 100 70 150 C 120 200 40 250 90 300" />
+        <path d="M 70 0 C 20 50 80 100 30 150 C -20 200 60 250 10 300" />
+        <line x1="42" y1="20" x2="58" y2="20" />
+        <line x1="50" y1="40" x2="50" y2="40" />
+        <line x1="58" y1="60" x2="42" y2="60" />
+        <line x1="50" y1="80" x2="50" y2="80" />
+        <line x1="42" y1="100" x2="58" y2="100" />
+        <line x1="50" y1="120" x2="50" y2="120" />
+        <line x1="58" y1="140" x2="42" y2="140" />
+        <line x1="50" y1="160" x2="50" y2="160" />
+      </svg>
+
       <header
         class="w-full flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 select-none z-50"
       >
@@ -143,7 +198,7 @@
         >
           <div class="space-y-1">
             <span
-              class="block font-mono text-[9px] text-slate-400 uppercase tracking-wider font-bold"
+              class="block font-mono text-[9px] text-slate-500 uppercase tracking-wider font-bold"
               >01 / Alignment Models</span
             >
             <h4
@@ -151,14 +206,14 @@
             >
               Homology Matching
             </h4>
-            <p class="text-[11px] text-slate-500 leading-relaxed">
+            <p class="text-[11px] text-slate-700 leading-relaxed">
               Global Needleman-Wunsch and local Smith-Waterman dynamic
               programming implementations with traceback path states.
             </p>
           </div>
           <div class="space-y-1">
             <span
-              class="block font-mono text-[9px] text-slate-400 uppercase tracking-wider font-bold"
+              class="block font-mono text-[9px] text-slate-500 uppercase tracking-wider font-bold"
               >02 / Distance Metrics</span
             >
             <h4
@@ -166,14 +221,14 @@
             >
               Sequence Distances
             </h4>
-            <p class="text-[11px] text-slate-500 leading-relaxed">
+            <p class="text-[11px] text-slate-700 leading-relaxed">
               Empirical mutation metrics including Hamming distance and
               Levenshtein edit distance with visual cell inspectors.
             </p>
           </div>
           <div class="space-y-1">
             <span
-              class="block font-mono text-[9px] text-slate-400 uppercase tracking-wider font-bold"
+              class="block font-mono text-[9px] text-slate-500 uppercase tracking-wider font-bold"
               >03 / Translation & Search</span
             >
             <h4
@@ -181,7 +236,7 @@
             >
               Sequence Transformations
             </h4>
-            <p class="text-[11px] text-slate-500 leading-relaxed">
+            <p class="text-[11px] text-slate-700 leading-relaxed">
               Watson-Crick complements, transcription, translation operations,
               and sliding-window motif maps.
             </p>
@@ -191,9 +246,13 @@
         <div
           class="w-full lg:w-2/5 flex items-center justify-center order-1 lg:order-2 relative"
         >
-          <div
-            class="absolute inset-0 bg-gradient-to-tr from-indigo-50/50 to-emerald-50/50 rounded-full blur-3xl -z-10"
-          ></div>
+          <div class="absolute w-[750px] h-[750px] -z-10 rounded-full bg-radial from-slate-300 via-slate-200/50 to-transparent blur-2xl"></div>
+
+          <!-- Interactive Tooltip Overlay -->
+          <div id="graph-tooltip" class="absolute hidden bg-white/95 text-slate-800 text-[10px] p-2.5 rounded-md shadow-md z-50 pointer-events-none border border-slate-200 transition-opacity duration-150 backdrop-blur-sm">
+            <div id="tooltip-formula" class="font-mono text-[10px] text-slate-700 leading-none select-all"></div>
+          </div>
+
 
           <svg
             viewBox="-20 -20 320 320"
@@ -207,7 +266,7 @@
                 refY="5"
                 markerWidth="5"
                 markerHeight="5"
-                orient="auto-start-reverse"
+                orient="auto"
               >
                 <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#0f172a" />
               </marker>
@@ -261,7 +320,8 @@
             >
               <path
                 d="M 280 220 L 220 160 L 160 100 L 100 100 L 40 40"
-                marker-start="url(#node-arrow)"
+                marker-end="url(#node-arrow)"
+                class="path-draw-animation"
               />
             </g>
 
@@ -279,20 +339,55 @@
               <text x="220" y="30">-3</text>
               <text x="280" y="30">-4</text>
 
-              <circle cx="40" cy="40" r="5" fill="#10b981" />
-              <circle cx="100" cy="100" r="5" fill="#10b981" />
-              <circle cx="160" cy="100" r="5" fill="#10b981" />
-              <circle cx="220" cy="160" r="5" fill="#10b981" />
-              <circle cx="280" cy="220" r="5" fill="#10b981" ring="2" />
-              <circle
-                cx="280"
-                cy="220"
-                r="9"
-                fill="none"
-                stroke="#10b981"
-                stroke-width="1.5"
-                opacity="0.5"
-              />
+              <!-- Traceback Node (0, 0) -->
+              <g class="traceback-node cursor-pointer" data-cell="0,0" data-value="0" data-chars="Start Boundary" data-looks="" data-formula="Boundary condition: M[0,0] = 0">
+                <circle cx="40" cy="40" r="5" fill="#10b981" class="pulse-node" />
+              </g>
+              <!-- Traceback Node (1, 1) -->
+              <g class="traceback-node cursor-pointer" data-cell="1,1" data-value="1" data-chars="A vs A (Match)" data-looks="diag: 0, top: -1, left: -1" data-formula="max(0 + 1, -1 - 1, -1 - 1) = 1">
+                <g class="lookup-links opacity-0 transition-opacity duration-150" stroke="#f43f5e" stroke-width="1.2" stroke-dasharray="2 2" fill="none">
+                  <line x1="100" y1="100" x2="40" y2="40" />
+                  <line x1="100" y1="100" x2="100" y2="40" />
+                  <line x1="100" y1="100" x2="40" y2="100" />
+                </g>
+                <circle cx="100" cy="100" r="5" fill="#10b981" class="pulse-node" />
+              </g>
+              <!-- Traceback Node (1, 2) -->
+              <g class="traceback-node cursor-pointer" data-cell="1,2" data-value="0" data-chars="A vs C (Mismatch)" data-looks="diag: -1, top: -2, left: 1" data-formula="max(-1 - 1, 1 - 1, -2 - 1) = 0">
+                <g class="lookup-links opacity-0 transition-opacity duration-150" stroke="#f43f5e" stroke-width="1.2" stroke-dasharray="2 2" fill="none">
+                  <line x1="160" y1="100" x2="100" y2="40" />
+                  <line x1="160" y1="100" x2="160" y2="40" />
+                  <line x1="160" y1="100" x2="100" y2="100" />
+                </g>
+                <circle cx="160" cy="100" r="5" fill="#10b981" class="pulse-node" />
+              </g>
+              <!-- Traceback Node (2, 3) -->
+              <g class="traceback-node cursor-pointer" data-cell="2,3" data-value="1" data-chars="G vs G (Match)" data-looks="diag: 0, top: -1, left: 0" data-formula="max(0 + 1, -1 - 1, 0 - 1) = 1">
+                <g class="lookup-links opacity-0 transition-opacity duration-150" stroke="#f43f5e" stroke-width="1.2" stroke-dasharray="2 2" fill="none">
+                  <line x1="220" y1="160" x2="160" y2="100" />
+                  <line x1="220" y1="160" x2="220" y2="100" />
+                  <line x1="220" y1="160" x2="160" y2="160" />
+                </g>
+                <circle cx="220" cy="160" r="5" fill="#10b981" class="pulse-node" />
+              </g>
+              <!-- Traceback Node (3, 4) -->
+              <g class="traceback-node cursor-pointer" data-cell="3,4" data-value="2" data-chars="T vs T (Match)" data-looks="diag: 1, top: 0, left: 0" data-formula="max(1 + 1, 0 - 1, 0 - 1) = 2">
+                <g class="lookup-links opacity-0 transition-opacity duration-150" stroke="#f43f5e" stroke-width="1.2" stroke-dasharray="2 2" fill="none">
+                  <line x1="280" y1="220" x2="220" y2="160" />
+                  <line x1="280" y1="220" x2="280" y2="160" />
+                  <line x1="280" y1="220" x2="220" y2="220" />
+                </g>
+                <circle cx="280" cy="220" r="5" fill="#10b981" class="pulse-node" />
+                <circle
+                  cx="280"
+                  cy="220"
+                  r="9"
+                  fill="none"
+                  stroke="#10b981"
+                  stroke-width="1.5"
+                  opacity="0.5"
+                />
+              </g>
 
               <text x="40" y="90">-1</text>
               <text x="100" y="90" font-weight="700" fill="#0f172a">1</text>
@@ -343,7 +438,7 @@
             Library
           </h1>
           <p
-            class="text-[12px] text-slate-500 max-w-xs leading-relaxed tracking-tighter "
+            class="text-[12px] text-slate-600 max-w-xs leading-relaxed tracking-tighter"
           >A modular, browser-based toolkit for computing alignments, edit distances, and core genetic operations
           </p>
           <a
@@ -695,6 +790,42 @@
 
         <div
           class="bg-white border border-slate-200 rounded-sm p-6 flex flex-col justify-between shadow-sm hover:border-slate-300 transition-colors"
+          data-name="kmer profiler overlapping substring frequency count most frequent"
+        >
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span
+                class="text-[9px] font-bold text-slate-500 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-sm uppercase tracking-wider"
+                >Analysis</span
+              >
+              <span class="text-[9px] font-mono text-slate-400 font-semibold"
+                >O(n*k) sliding</span
+              >
+            </div>
+            <h3
+              class="text-xs font-bold text-slate-900 uppercase tracking-wider"
+            >
+              K-mer Profiler
+            </h3>
+            <p class="text-xs text-slate-500 leading-relaxed">
+              Extracts overlapping substrings of size k, computes their frequencies, and generates live distribution histograms.
+            </p>
+            <div
+              class="bg-slate-50 p-2 rounded-sm font-mono text-[9px] border border-slate-200 text-center select-none text-slate-500"
+            >
+              $$\text{Count}(S_k) = \sum_{i=1}^{N-k+1} [S[i \dots i+k-1] == S_k]$$
+            </div>
+          </div>
+          <a
+            href="./pages/kmers.html"
+            class="mt-5 inline-flex items-center justify-center px-3 py-2.5 bg-slate-800 hover:bg-slate-900 text-white font-semibold rounded-sm text-[10px] uppercase tracking-wider transition-colors select-none"
+          >
+            Launch Module &rarr;
+          </a>
+        </div>
+
+        <div
+          class="bg-white border border-slate-200 rounded-sm p-6 flex flex-col justify-between shadow-sm hover:border-slate-300 transition-colors"
           data-name="documentation reference docs tutorial markdown equations latex benchmarks"
         >
           <div class="space-y-3">
@@ -760,6 +891,117 @@
             card.classList.add("hidden");
           }
         });
+      });
+
+      // Interactive SVG Traceback Tooltip logic
+      document.addEventListener("DOMContentLoaded", () => {
+        const tooltip = document.getElementById("graph-tooltip");
+        const formula = document.getElementById("tooltip-formula");
+        const nodes = Array.from(document.querySelectorAll(".traceback-node"));
+
+        let isAutoplayActive = true;
+
+        // Manual hover logic
+        function showTooltip(node, clientX, clientY) {
+          // Add active class to node to show helper dashed lines (active during autoplay too)
+          node.querySelector(".lookup-links")?.classList.add("active-lookup");
+          node.querySelector("circle.pulse-node")?.classList.add("active-circle");
+
+          // Only display the tooltip popup if autoplay is complete
+          if (!isAutoplayActive) {
+            const form = node.getAttribute("data-formula");
+            formula.textContent = form;
+
+            // Position tooltip relative to relative parent container
+            const container = tooltip.parentElement;
+            const rect = container.getBoundingClientRect();
+            const x = clientX - rect.left + 15;
+            const y = clientY - rect.top - 55;
+
+            tooltip.style.left = `${x}px`;
+            tooltip.style.top = `${y}px`;
+            tooltip.classList.remove("hidden");
+            tooltip.style.opacity = "1";
+          }
+        }
+
+        function hideTooltip(node) {
+          tooltip.classList.add("hidden");
+          tooltip.style.opacity = "0";
+          node.querySelector(".lookup-links")?.classList.remove("active-lookup");
+          node.querySelector("circle.pulse-node")?.classList.remove("active-circle");
+        }
+
+        // Add manual hover listeners
+        nodes.forEach(node => {
+          const circle = node.querySelector("circle.pulse-node");
+          if (!circle) return;
+
+          circle.addEventListener("mouseenter", (e) => {
+            if (isAutoplayActive) return; // Ignore hover during autoplay
+            showTooltip(node, e.clientX, e.clientY);
+          });
+
+          circle.addEventListener("mousemove", (e) => {
+            if (isAutoplayActive) return;
+            // Update position
+            const container = tooltip.parentElement;
+            const rect = container.getBoundingClientRect();
+            const x = e.clientX - rect.left + 15;
+            const y = e.clientY - rect.top - 55;
+            tooltip.style.left = `${x}px`;
+            tooltip.style.top = `${y}px`;
+          });
+
+          circle.addEventListener("mouseleave", () => {
+            if (isAutoplayActive) return;
+            hideTooltip(node);
+          });
+        });
+
+        // Autoplay sequence: Bottom-Right to Top-Left
+        const autoplayNodes = [...nodes].reverse();
+        let step = 0;
+
+        function runAutoplayStep() {
+          if (step >= autoplayNodes.length) {
+            // End autoplay sequence, hide tooltip and clean up
+            if (step > 0) {
+              hideTooltip(autoplayNodes[step - 1]);
+            }
+            isAutoplayActive = false;
+            return;
+          }
+
+          const node = autoplayNodes[step];
+          const circle = node.querySelector("circle.pulse-node");
+          const svgElement = circle.ownerSVGElement;
+          const svgRect = svgElement.getBoundingClientRect();
+
+          // Get absolute position of the circle node
+          const cx = parseFloat(circle.getAttribute("cx"));
+          const cy = parseFloat(circle.getAttribute("cy"));
+
+          // Convert SVG local coordinates to client viewport coordinates
+          // SVG viewBox is -20 -20 320 320 (total size 360x360). Scale is svgRect.width / 360
+          const scale = svgRect.width / 360;
+          const clientX = svgRect.left + (cx + 20) * scale;
+          const clientY = svgRect.top + (cy + 20) * scale;
+
+          // Clear previous node highlights if any
+          if (step > 0) {
+            hideTooltip(autoplayNodes[step - 1]);
+          }
+
+          // Show tooltip at this node
+          showTooltip(node, clientX, clientY);
+
+          step++;
+          setTimeout(runAutoplayStep, 500);
+        }
+
+        // Start autoplay after path animation has begun drawing (e.g. 180ms offset)
+        setTimeout(runAutoplayStep, 180);
       });
     </script>
   </body>

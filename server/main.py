@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from server.endpoints import alignments, genetics, io
+from server.endpoints import alignments, genetics, io, kmers
 
 app = FastAPI(
     title="Bioinformatics Platform API",
@@ -21,6 +21,7 @@ app.add_middleware(
 app.include_router(alignments.router, prefix="/api/v1/alignments", tags=["alignments"])
 app.include_router(genetics.router, prefix="/api/v1/genetics", tags=["genetics"])
 app.include_router(io.router, prefix="/api/v1/io", tags=["io"])
+app.include_router(kmers.router, prefix="/api/v1/kmers", tags=["kmers"])
 
 
 @app.get("/")

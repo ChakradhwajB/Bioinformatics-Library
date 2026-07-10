@@ -67,6 +67,7 @@ def main():
         "ReverseComplement",
         "Transcribe",
         "ValidateInput",
+        "MostFrequentKmers",
     ]
     for name in linear_funcs:
         if name in data:
@@ -197,6 +198,7 @@ def main():
                 "FindMotif": "$\\mathcal{O}(n \\cdot m)$",
                 "ValidateInput": "$\\mathcal{O}(N)$",
                 "FastaParse": "$\\mathcal{O}(N)$",
+                "MostFrequentKmers": "$\\mathcal{O}(n \\cdot k)$",
             }
             comp = complexity_map.get(name, "")
             f.write(f"## {name}\n\n")
