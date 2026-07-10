@@ -138,19 +138,19 @@ Empirical runtime validations show that our implementations match theoretical co
 ## Project Structure
 
 ```text
-├── core_lib/        # Reusable core bioinformatics algorithm engine
+├── core_lib/        # Core bioinformatics algorithm engine
 │   ├── alignments.py
 │   ├── genetics.py
 │   └── io.py
-├── server/          # FastAPI REST API wrapper
+├── server/          # FastAPI REST API
 │   ├── endpoints/
 │   └── main.py
-├── frontend/        # HTML5/JS Visual Dashboard
+├── frontend/        # Dashboard
 │   ├── pages/
 │   └── src/
-├── docs/            # Markdown documentation library (Math enabled)
-├── benchmarks/      # Performance evaluation script suite & graphs
-└── tests/           # Pytest unit testing suite
+├── docs/            # Markdown documentation
+├── benchmarks/      # Performance evaluation scripts and graphs
+└── tests/           # Pytest unit tests
 ```
 
 ---
