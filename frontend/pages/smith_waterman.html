@@ -67,6 +67,13 @@
       border-right-width: 0px !important;
       overflow: hidden !important;
     }
+    /* Active animating cell in traceback */
+    .active-traceback-cell {
+      position: relative;
+      border-color: #047857 !important;
+      box-shadow: 0 0 12px 4px rgba(16, 185, 129, 0.6) !important;
+      outline: none;
+    }
   </style>
 </head>
 <body class="bg-slate-100 text-slate-900 min-h-screen h-screen flex flex-col overflow-hidden">
@@ -240,18 +247,18 @@
       <section class="bg-white p-5 border border-slate-200 rounded-sm shadow-sm flex flex-col">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-3 select-none">
           <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Dynamic Programming Grid Matrix</span>
-          <div class="flex flex-wrap items-center gap-2">
-            <!-- Player Controls -->
-            <div id="player-controls" class="flex items-center space-x-1 bg-slate-50 border border-slate-200 p-1 rounded-sm hidden">
-              <button id="player-reset" class="px-2 py-1 text-[10px] hover:bg-slate-200 rounded-sm font-bold border border-slate-200 cursor-pointer text-slate-700">Reset</button>
-              <button id="player-prev" class="px-2 py-1 text-[10px] hover:bg-slate-200 rounded-sm font-bold border border-slate-200 cursor-pointer text-slate-700">Prev</button>
-              <button id="player-play" class="px-2.5 py-1 text-[10px] bg-slate-800 text-white hover:bg-slate-900 rounded-sm font-bold cursor-pointer">Play</button>
-              <button id="player-next" class="px-2 py-1 text-[10px] hover:bg-slate-200 rounded-sm font-bold border border-slate-200 cursor-pointer text-slate-700">Next</button>
-            </div>
-            <div id="dp-inspector" class="text-[10px] font-mono text-slate-500 bg-slate-50 px-2 py-1 rounded-sm border border-slate-200 w-80 truncate text-left">
-              Hover over cells to inspect DP calculations.
-            </div>
+          <!-- Player Controls -->
+          <div id="player-controls" class="flex items-center space-x-1 bg-slate-50 border border-slate-200 p-1 rounded-sm hidden">
+            <button id="player-reset" class="px-2 py-1 text-[10px] hover:bg-slate-200 rounded-sm font-bold border border-slate-200 cursor-pointer text-slate-700">Reset</button>
+            <button id="player-prev" class="px-2 py-1 text-[10px] hover:bg-slate-200 rounded-sm font-bold border border-slate-200 cursor-pointer text-slate-700">Prev</button>
+            <button id="player-play" class="px-2.5 py-1 text-[10px] bg-slate-800 text-white hover:bg-slate-900 rounded-sm font-bold cursor-pointer">Play</button>
+            <button id="player-next" class="px-2 py-1 text-[10px] hover:bg-slate-200 rounded-sm font-bold border border-slate-200 cursor-pointer text-slate-700">Next</button>
           </div>
+        </div>
+
+        <!-- Prominent wide calculations inspector -->
+        <div id="dp-inspector" class="mb-4 text-xs font-semibold font-mono text-indigo-950 bg-indigo-50 border border-indigo-150 p-3 rounded-md w-full text-left leading-relaxed shadow-sm">
+          Hover over cells to inspect DP calculations.
         </div>
 
         <div id="matrix-container" class="border border-slate-200 rounded-sm overflow-x-auto bg-slate-50 p-4">

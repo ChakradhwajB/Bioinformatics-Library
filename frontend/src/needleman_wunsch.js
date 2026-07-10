@@ -183,7 +183,7 @@ function renderDPMatrix(seq1, seq2, match, mismatch, gap) {
         path.forEach(coord => {
           const pathCell = table.querySelector(`#cell-${coord}`);
           if (pathCell) {
-            pathCell.style.backgroundColor = "#475569";
+            pathCell.style.backgroundColor = "#4f46e5";
             pathCell.style.color = "#ffffff";
           }
         });
@@ -327,7 +327,7 @@ function renderDPMatrix(seq1, seq2, match, mismatch, gap) {
         const coord = steps[s];
         const pathCell = table.querySelector(`#cell-${coord}`);
         if (pathCell) {
-          pathCell.style.backgroundColor = "#475569";
+          pathCell.style.backgroundColor = "#4f46e5";
           pathCell.style.color = "#ffffff";
         }
       }
@@ -338,8 +338,7 @@ function renderDPMatrix(seq1, seq2, match, mismatch, gap) {
       if (activeCell) {
         activeCell.style.backgroundColor = "#10b981"; // Emerald bg
         activeCell.style.color = "#ffffff";
-        activeCell.classList.remove("ring-slate-400");
-        activeCell.classList.add("ring-4", "ring-emerald-400", "z-20");
+        activeCell.classList.add("active-traceback-cell", "z-30");
         
         // Scroll into view
         activeCell.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
