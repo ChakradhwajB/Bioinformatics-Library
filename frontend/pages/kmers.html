@@ -374,103 +374,60 @@ Perform analysis to generate k-mer frequencies.</pre
           </h3>
 
           <div class="text-xs leading-relaxed space-y-3 text-slate-800">
-            <p>
-              A <strong>k-mer</strong> is a substring of length $k$ contained
-              within a longer biological sequence. Analyzing k-mer frequency
-              distributions is a cornerstone of modern bioinformatics,
-              particularly for assembly and alignment-free sequence comparison.
-            </p>
-
-            <h4 class="font-bold text-slate-900 text-xs">
-              1. Mathematical Formulations & Counts
+            <h4 class="font-bold text-slate-900 text-xs mt-2 border-b border-slate-100 pb-1">
+              1. Motivation: Why care?
             </h4>
             <p>
-              For a sequence $S$ of length $N$ over an alphabet $\Sigma$ (where
-              $\Sigma = \{A, C, G, T\}$ for DNA), the number of possible unique
-              k-mers is bounded by: $$\text{Max Unique } K\text{-mers} =
-              |\Sigma|^k = 4^k$$ For a given sequence size $N$ and k-mer size
-              $k$, the number of overlapping windows generated sequentially is:
-              $$M = N - k + 1 \quad (\text{where } 1 \le k \le N)$$ The
-              occurrence frequency of a specific k-mer pattern $P$ of length $k$
-              inside sequence $S$ is mathematically expressed using the
-              summation: $$\text{Freq}(P) = \sum_{i=0}^{N-k} I(S[i \dots i+k-1]
-              == P)$$ where $I(\text{condition})$ is the indicator function
-              returning $1$ if the condition is met and $0$ otherwise. The set
-              of most frequent k-mers $F$ represents the local mode of this
-              frequency distribution: $$F = \{ P \mid \text{Freq}(P) = \max_{X
-              \in \Sigma^k} \text{Freq}(X) \}$$
+              Comparing entire genomes base-by-base is computationally expensive and sometimes impossible if the sequences are fragmented. Instead, bioinformaticians break sequences into small, overlapping "words" of length $k$, called <strong>k-mers</strong>. By analyzing the frequency of these k-mers, we can estimate sequence similarity without alignment, identify repetitive elements, and piece together short DNA sequencing reads into full genomes using De Bruijn graphs.
             </p>
 
-            <h4 class="font-bold text-slate-900 text-xs">
-              2. Algorithmic Complexity Analyses
+            <h4 class="font-bold text-slate-900 text-xs mt-4 border-b border-slate-100 pb-1">
+              2. Concept &amp; Complexity
             </h4>
             <p>
-              Extracting overlapping k-mers and building their frequency
-              histogram is achieved in linear time relative to sequence length:
+              For a sequence $S$ of length $N$ over an alphabet $\Sigma$, the number of possible unique k-mers is bounded by $|\Sigma|^k$.
+              The number of overlapping windows generated sequentially is $M = N - k + 1$.
+            </p>
+            <p>
+              The occurrence frequency of a specific k-mer pattern $P$ is mathematically expressed using the summation:
+              $$\text{Freq}(P) = \sum_{i=0}^{N-k} I(S[i \dots i+k-1] == P)$$
+              where $I$ is an indicator function returning 1 if true, 0 otherwise.
             </p>
             <ul class="list-disc pl-5 space-y-1 mb-2">
               <li>
-                <strong>Time Complexity:</strong> $\mathcal{O}(N \cdot k)$
-                <p class="text-[11px] text-slate-500 pl-1">
-                  There are $N - k + 1$ overlapping k-mers. For each window,
-                  slice copying and dictionary hashing operations depend on
-                  substring length $k$, leading to $\mathcal{O}(N \cdot k)$
-                  total runtime.
-                </p>
+                <strong>Time Complexity:</strong> $\mathcal{O}(N \cdot k)$ — We slice $N - k + 1$ overlapping windows. Each string slice and hash takes $\mathcal{O}(k)$ time.
               </li>
               <li>
-                <strong>Space Complexity:</strong> $\mathcal{O}(N \cdot k)$
-                <p class="text-[11px] text-slate-500 pl-1">
-                  In the worst case where every overlapping k-mer in the
-                  sequence is unique (e.g. random sequence or small $k$), the
-                  hash table stores $N - k + 1$ keys. Each key occupies
-                  $\mathcal{O}(k)$ memory, totaling $\mathcal{O}(N \cdot k)$
-                  auxiliary space.
-                </p>
+                <strong>Space Complexity:</strong> $\mathcal{O}(N \cdot k)$ — In the worst case, every k-mer is unique, requiring memory proportional to the number of windows times their length.
               </li>
             </ul>
 
-            <h4 class="font-bold text-slate-900 text-xs">
-              3. Practical Biological Applications
+            <h4 class="font-bold text-slate-900 text-xs mt-4 border-b border-slate-100 pb-1">
+              3. Worked Example
             </h4>
-            <ul class="list-disc pl-5 space-y-1">
-              <li>
-                <strong>De Bruijn Graph Assembly</strong>: Overlapping k-mers of
-                length $k$ form nodes or directed edges, and overlap
-                relationships of length $k-1$ form path networks. Traversing
-                Eulerian or Hamiltonian walks solves the short-read sequence
-                assembly puzzle.
-              </li>
-            </ul>
-
-            <h4 class="font-bold text-slate-900 text-xs">4. Python Code Implementations</h4>
-            <p>Here is how to extract overlapping k-mers naively versus using an optimized dictionary-based single-pass scanner:</p>
-
-            <p class="font-semibold text-slate-700 text-[11px] mb-1">Naive k-mer Counting (Independent scanning):</p>
-            <div class="relative group">
-              <button onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText); this.textContent = 'Copied!'; setTimeout(() => this.textContent = 'Copy', 2000)" class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 bg-indigo-600 hover:bg-indigo-500 text-white px-2.5 py-1 rounded-sm text-[9px] font-bold tracking-wide transition-all duration-150 shadow-sm cursor-pointer select-none">Copy</button>
-              <pre class="bg-slate-50 border border-slate-200 text-slate-700 p-3.5 pr-12 rounded-sm font-mono text-[10px] overflow-x-auto leading-relaxed"><span class="text-pink-600">def</span> <span class="text-sky-600">naive_kmer_count</span>(sequence, k):
-    unique_kmers = []
-    n = <span class="text-sky-600">len</span>(sequence)
-    <span class="text-slate-500 italic"># Find all unique k-mers first</span>
-    <span class="text-pink-600">for</span> i <span class="text-pink-600">in</span> <span class="text-sky-600">range</span>(n - k + <span class="text-orange-600">1</span>):
-        kmer = sequence[i : i + k]
-        <span class="text-pink-600">if</span> kmer <span class="text-pink-600">not in</span> unique_kmers:
-            unique_kmers.append(kmer)
-            
-    <span class="text-slate-500 italic"># Scan sequence again for each unique k-mer</span>
-    frequencies = {}
-    <span class="text-pink-600">for</span> kmer <span class="text-pink-600">in</span> unique_kmers:
-        count = <span class="text-orange-600">0</span>
-        <span class="text-pink-600">for</span> i <span class="text-pink-600">in</span> <span class="text-sky-600">range</span>(n - k + <span class="text-orange-600">1</span>):
-            <span class="text-pink-600">if</span> sequence[i : i + k] == kmer:
-                count += <span class="text-orange-600">1</span>
-        frequencies[kmer] = count
-    <span class="text-pink-600">return</span> frequencies</pre>
+            <p>
+              Let's find all 3-mers ($k=3$) in the sequence $S = \text{"GATTACA"}$.
+              We slide a window of size 3 from left to right:
+            </p>
+            <div class="bg-slate-50 p-2 rounded-sm font-mono text-[10px] border border-slate-200 text-slate-600 ml-2 border-l-4 border-l-indigo-400">
+GATTACA
+---      (GAT)
+ ---     (ATT)
+  ---    (TTA)
+   ---   (TAC)
+    ---  (ACA)
             </div>
+            <p>
+              The resulting dictionary of frequencies is: 
+              <code class="text-[10px] bg-slate-100 px-1 py-0.5 rounded text-pink-600">{"GAT": 1, "ATT": 1, "TTA": 1, "TAC": 1, "ACA": 1}</code>
+            </p>
 
-            <p class="font-semibold text-slate-700 text-[11px] mt-3 mb-1">Optimized Single-Pass Frequency Counter:</p>
-            <div class="relative group">
+            <h4 class="font-bold text-slate-900 text-xs mt-4 border-b border-slate-100 pb-1">
+              4. Python Code
+            </h4>
+            <p>Here is how to extract overlapping k-mers using an optimized dictionary-based single-pass scanner:</p>
+
+            <div class="relative group mt-1">
               <button onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText); this.textContent = 'Copied!'; setTimeout(() => this.textContent = 'Copy', 2000)" class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 bg-indigo-600 hover:bg-indigo-500 text-white px-2.5 py-1 rounded-sm text-[9px] font-bold tracking-wide transition-all duration-150 shadow-sm cursor-pointer select-none">Copy</button>
               <pre class="bg-slate-50 border border-slate-200 text-slate-700 p-3.5 pr-12 rounded-sm font-mono text-[10px] overflow-x-auto leading-relaxed"><span class="text-pink-600">def</span> <span class="text-sky-600">count_kmers</span>(sequence, k):
     frequencies = {}
@@ -485,6 +442,24 @@ Perform analysis to generate k-mer frequencies.</pre
             frequencies[kmer] = <span class="text-orange-600">1</span>
             
     <span class="text-pink-600">return</span> frequencies</pre>
+            </div>
+
+            <h4 class="font-bold text-slate-900 text-xs mt-4 border-b border-slate-100 pb-1">
+              5. Practice Problems
+            </h4>
+            <div class="space-y-3">
+              <div class="bg-emerald-50 border border-emerald-100 p-3 rounded-sm">
+                <span class="text-[9px] font-bold text-emerald-600 uppercase tracking-widest block mb-1">Warm-up</span>
+                <p class="text-[11px] text-slate-700">Given the sequence <code>"ATATATA"</code>, what are all the unique 3-mers and their respective counts? Try to work it out by hand.</p>
+              </div>
+              <div class="bg-indigo-50 border border-indigo-100 p-3 rounded-sm">
+                <span class="text-[9px] font-bold text-indigo-600 uppercase tracking-widest block mb-1">Core</span>
+                <p class="text-[11px] text-slate-700">Write a function <code>find_most_frequent_kmers(seq, k)</code> that builds on the counter above to return a list of the k-mer(s) that appear the most times in the sequence.</p>
+              </div>
+              <div class="bg-rose-50 border border-rose-100 p-3 rounded-sm">
+                <span class="text-[9px] font-bold text-rose-600 uppercase tracking-widest block mb-1">Extension</span>
+                <p class="text-[11px] text-slate-700">Modify the k-mer counter to count a k-mer and its Watson-Crick reverse complement as the <em>same entity</em>. This is often necessary when analyzing unstranded DNA sequencing data.</p>
+              </div>
             </div>
           </div>
         </section>

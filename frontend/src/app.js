@@ -123,7 +123,31 @@ window.updateProgressUI = function() {
       }
     }
   });
+
+  // The index page no longer handles big orange locks.
+  // Instead, individual pages will show a small banner if prerequisites aren't met.
 };
+
+const PREREQUISITES = {
+  "genetics.html": "io.html",
+  "find_motif.html": "kmers.html",
+  "distances.html": "genetics.html",
+  "needleman_wunsch.html": "dot_plot.html",
+  "smith_waterman.html": "distances.html",
+  "trie.html": "distances.html",
+  "suffix_array.html": "needleman_wunsch.html"
+};
+
+function checkPagePrerequisite(pageName) {
+  const req = PREREQUISITES[pageName];
+  if (req && !window.isPageCompleted(req)) {
+    const friendlyName = req.replace(".html", "").replace("_", " ").toUpperCase();
+    const banner = document.createElement("div");
+    banner.className = "bg-slate-100 text-slate-600 text-xs py-2 text-center border-b border-slate-200 font-medium";
+    banner.innerHTML = `Note: This module builds upon concepts from <a href="${req}" class="text-indigo-600 font-bold hover:underline">${friendlyName}</a>. Consider completing it first.`;
+    document.body.insertBefore(banner, document.body.firstChild);
+  }
+}
 
 // Auto-init progress on page load
 document.addEventListener("DOMContentLoaded", () => {
@@ -137,6 +161,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // We always normalise to include the .html suffix so it matches stored keys.
     let pageName = window.location.pathname.split("/").pop() || "index.html";
     if (!pageName.endsWith(".html")) pageName += ".html";
+    
+    checkPagePrerequisite(pageName);
 
     checkbox.checked = window.isPageCompleted(pageName);
     checkbox.addEventListener("change", (e) => {

@@ -238,30 +238,40 @@
         <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Educational Guide: FASTA File Ingestion & JSON Exporters</h3>
         
         <div class="text-xs leading-relaxed space-y-3 text-slate-800">
+          <h4 class="font-bold text-slate-900 text-xs mt-2 border-b border-slate-100 pb-1">1. Motivation: Why care?</h4>
           <p>
-            In bioinformatics, storing and sharing genetic sequences is standardly performed using text-based file formats. The most common of these is the <strong>FASTA</strong> format.
+            In bioinformatics, storing and sharing genetic sequences is standardly performed using text-based file formats. The most common and universally supported format is <strong>FASTA</strong>. Without a standardized way to read and parse this raw sequence text, downstream computational analyses—like alignment, motif searching, and phylogenetic tree building—are impossible to automate.
           </p>
           
-          <h4 class="font-bold text-slate-900 text-xs">1. FASTA File Structure</h4>
+          <h4 class="font-bold text-slate-900 text-xs mt-4 border-b border-slate-100 pb-1">2. Concept &amp; Complexity</h4>
           <p>
-            A FASTA file represents nucleotide sequences or peptide sequences using single-letter codes. A sequence in FASTA format begins with a single-line description/header, followed by lines of sequence data. 
-            The description line is distinguished from the sequence data by a greater-than symbol (<code>&gt;</code>) at the beginning of the line:
+            A FASTA file represents nucleotide or peptide sequences using single-letter codes. Each sequence begins with a single-line description (header), distinguished by a greater-than symbol (<code>&gt;</code>). The sequence data follows on the subsequent lines.
           </p>
-          <pre class="bg-slate-50 p-2.5 border border-slate-200 rounded-sm font-mono text-[10px] my-2 overflow-x-auto">
-&gt;MCHU - Mycoplasma chromosome fragment
-ASEUIAHSEUIHASEUIHASEUIAHSEUIAHSE
+          <ul class="list-disc pl-5 space-y-1">
+            <li><strong>Time Complexity:</strong> $\mathcal{O}(N)$ where $N$ is the total length of the file. The parser scans the file line-by-line exactly once.</li>
+            <li><strong>Space Complexity:</strong> $\mathcal{O}(M)$ where $M$ is the size of the parsed sequences kept in memory as a dictionary structure.</li>
+          </ul>
+
+          <h4 class="font-bold text-slate-900 text-xs mt-4 border-b border-slate-100 pb-1">3. Worked Example</h4>
+          <p>
+            Consider a file with the following contents:
+          </p>
+          <pre class="bg-slate-50 p-2.5 border border-slate-200 rounded-sm font-mono text-[10px] my-2 overflow-x-auto text-slate-650 border-l-4 border-l-indigo-400">
+>seq1_human
+ATGCGATA
+>seq2_mouse
+ATGC
+GATA
           </pre>
-
-          <h4 class="font-bold text-slate-900 text-xs">2. Linear Parsing Mechanics</h4>
-          <p>
-            The parser scans the file line-by-line in $\mathcal{O}(n)$ time complexity. It ignores whitespaces and joins lines belonging to the same identifier header, creating a clean key-value mapping of records.
+          <p class="mt-2">
+            The parser reads the first header <code>seq1_human</code>, then the sequence. For <code>seq2_mouse</code>, the sequence spans multiple lines, which the parser concatenates. The resulting mapped dictionary is:
+            <br/><code class="text-[10px] bg-slate-100 px-1 py-0.5 rounded text-pink-600">{"seq1_human": "ATGCGATA", "seq2_mouse": "ATGCGATA"}</code>
           </p>
 
-          <h4 class="font-bold text-slate-900 text-xs">3. Python Code Implementations</h4>
+          <h4 class="font-bold text-slate-900 text-xs mt-4 border-b border-slate-100 pb-1">4. Python Code</h4>
           <p>Here is how to parse a FASTA file line-by-line and export the records as a JSON string in Python:</p>
 
-          <p class="font-semibold text-slate-700 text-[11px] mb-1">FASTA Parser & JSON Exporter:</p>
-          <div class="relative group">
+          <div class="relative group mt-1">
             <button onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText); this.textContent = 'Copied!'; setTimeout(() => this.textContent = 'Copy', 2000)" class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 bg-indigo-600 hover:bg-indigo-500 text-white px-2.5 py-1 rounded-sm text-[9px] font-bold tracking-wide transition-all duration-150 shadow-sm cursor-pointer select-none">Copy</button>
             <pre class="bg-slate-55 border border-slate-200 text-slate-700 p-3.5 pr-12 rounded-sm font-mono text-[10px] overflow-x-auto leading-relaxed"><span class="text-pink-600">import</span> json
 
@@ -287,6 +297,22 @@ ASEUIAHSEUIHASEUIHASEUIAHSEUIAHSE
 
 <span class="text-pink-600">def</span> <span class="text-sky-600">export_to_json</span>(records):
     <span class="text-pink-600">return</span> json.dumps(records, indent=<span class="text-orange-600">4</span>)</pre>
+          </div>
+
+          <h4 class="font-bold text-slate-900 text-xs mt-4 border-b border-slate-100 pb-1">5. Practice Problems</h4>
+          <div class="space-y-3">
+            <div class="bg-emerald-50 border border-emerald-100 p-3 rounded-sm">
+              <span class="text-[9px] font-bold text-emerald-600 uppercase tracking-widest block mb-1">Warm-up</span>
+              <p class="text-[11px] text-slate-700">Manually format a valid FASTA string containing two sequences of your choice. Ensure one sequence spans at least two lines.</p>
+            </div>
+            <div class="bg-indigo-50 border border-indigo-100 p-3 rounded-sm">
+              <span class="text-[9px] font-bold text-indigo-600 uppercase tracking-widest block mb-1">Core</span>
+              <p class="text-[11px] text-slate-700">Modify the <code>parse_fasta</code> function to count and return the total number of sequences successfully parsed without using the <code>len()</code> function on the final dictionary.</p>
+            </div>
+            <div class="bg-rose-50 border border-rose-100 p-3 rounded-sm">
+              <span class="text-[9px] font-bold text-rose-600 uppercase tracking-widest block mb-1">Extension</span>
+              <p class="text-[11px] text-slate-700">FASTQ is another format that includes sequence quality scores. Research the FASTQ format and write a parser for it that extracts both the sequence and the quality string.</p>
+            </div>
           </div>
         </div>
       </section>

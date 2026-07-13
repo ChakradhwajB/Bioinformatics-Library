@@ -306,40 +306,34 @@
       <section class="bg-white p-6 border border-slate-200 rounded-sm shadow-sm space-y-4">
         <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Educational Guide: Local Sequence Alignment</h3>
         
-        <div class="text-xs leading-relaxed space-y-3 text-slate-800">
+          <h4 class="font-bold text-slate-900 text-xs mt-2 border-b border-slate-100 pb-1">1. Motivation: Why care?</h4>
           <p>
-            The <strong>Smith-Waterman</strong> algorithm is a dynamic programming method designed to compute the optimal local sequence alignment. Local alignment isolates matching regions of high similarity between subsequences, making it highly effective for finding conserved motifs or matching segments in divergent genomes.
+            The <strong>Smith-Waterman</strong> algorithm is designed to compute the optimal local sequence alignment. Unlike global alignment which aligns sequences end-to-end, local alignment isolates matching regions of high similarity between subsequences. This is highly effective for finding conserved motifs or matching short segments within divergent genomes.
           </p>
           
-          <h4 class="font-bold text-slate-900 text-xs">1. Mathematical Model & Transition Rule</h4>
+          <h4 class="font-bold text-slate-900 text-xs mt-4 border-b border-slate-100 pb-1">2. Concept &amp; Complexity</h4>
           <p>
-            Let $S_1$ and $S_2$ be sequences of lengths $n$ and $m$. We construct an $(n+1) \times (m+1)$ score grid $H$. To prevent negative scores from propagating, cells are capped at $0$:
+            Let <em>S<sub>1</sub></em> and <em>S<sub>2</sub></em> be sequences of lengths <em>n</em> and <em>m</em>. We construct an (<em>n</em>+1) &times; (<em>m</em>+1) score grid <em>H</em>. To prevent negative scores from propagating, cells are capped at 0:
           </p>
-          <div class="bg-slate-50 p-3 border border-slate-200 rounded-sm font-mono text-center my-2 text-xs">
-            $$H_{i, j} = \max \begin{cases} 
-            0 & \text{(Terminate alignment)} \\
-            H_{i-1, j-1} + S(S_1[i-1], S_2[j-1]) & \text{(Match / Mismatch)} \\
-            H_{i-1, j} + \text{gap} & \text{(Deletion)} \\
-            H_{i, j-1} + \text{gap} & \text{(Insertion)}
-            \end{cases}$$
-          </div>
-          <p>
-            where $S(a,b) = \text{match}$ if $a = b$, and $\text{mismatch}$ if $a \neq b$.
-          </p>
-
-          <h4 class="font-bold text-slate-900 text-xs">2. Workflow</h4>
-          <ul class="list-disc pl-5 space-y-1.5">
-            <li><strong>Initialization:</strong> The boundary cells are initialized to $0$ ($H_{i, 0} = 0$, $H_{0, j} = 0$), meaning a local alignment can start anywhere without gap penalties.</li>
-            <li><strong>Matrix Fill:</strong> The grid is filled row-by-row. Values drop back to $0$ whenever the alignment score becomes negative, ending that alignment path.</li>
-            <li><strong>Traceback:</strong> Traceback begins from the highest scoring cell in the entire matrix (not necessarily the bottom-right corner). We trace backwards following path decisions and stop immediately when a cell with a score of $0$ is reached.</li>
+          <ul class="list-disc pl-5 space-y-1">
+            <li><strong>Initialization:</strong> Boundary cells are 0. A local alignment can start anywhere without penalty.</li>
+            <li><strong>Matrix Fill:</strong> Values drop to 0 if a path score becomes negative.</li>
+            <li><strong>Traceback:</strong> Begins from the absolute highest scoring cell in the matrix and stops immediately when hitting a 0.</li>
+          </ul>
+          <ul class="list-disc pl-5 space-y-1 mt-2">
+            <li><strong>Time Complexity:</strong> <em>O</em>(<em>n</em> &times; <em>m</em>) since every cell is computed in constant time.</li>
+            <li><strong>Space Complexity:</strong> <em>O</em>(<em>n</em> &times; <em>m</em>) to store the score grid for backtracking.</li>
           </ul>
 
-          <h4 class="font-bold text-slate-950 text-xs">3. Algorithmic Complexity Analysis</h4>
+          <h4 class="font-bold text-slate-900 text-xs mt-4 border-b border-slate-100 pb-1">3. Worked Example</h4>
           <p>
-            Time complexity is $\mathcal{O}(n \cdot m)$ since every cell is computed in constant time. Space complexity is $\mathcal{O}(n \cdot m)$ to store the score grid for backtracking.
+            Consider local alignment between <code>ATAC</code> and <code>TACG</code> with match=1, mismatch=-1, gap=-1.
           </p>
+          <div class="bg-slate-50 p-2.5 rounded-sm font-mono text-[10px] border border-slate-200 text-slate-650 ml-2 border-l-4 border-l-indigo-400">
+            The maximum score will occur after 'TAC' aligns perfectly with 'TAC', reaching a max score of 3. Traceback stops when it reaches 0 (the start of 'TAC').
+          </div>
 
-          <h4 class="font-bold text-slate-900 text-xs">4. Python Code Implementations</h4>
+          <h4 class="font-bold text-slate-900 text-xs mt-4 border-b border-slate-100 pb-1">4. Python Code</h4>
           <p>Here is how to implement the Smith-Waterman local alignment algorithm in Python:</p>
 
           <p class="font-semibold text-slate-700 text-[11px] mb-1">Smith-Waterman Local Alignment:</p>

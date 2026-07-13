@@ -207,6 +207,22 @@ function buildAndRenderTrieSVG(patterns) {
 
   svgHtml += `</svg>`;
   document.getElementById("trie-graph-container").innerHTML = svgHtml;
+
+  attachTrieNodeHoverListeners();
+}
+
+function attachTrieNodeHoverListeners() {
+  document.querySelectorAll(".trie-node").forEach(nodeEl => {
+    nodeEl.style.cursor = "pointer";
+    nodeEl.addEventListener("mouseenter", () => {
+      const pfx = nodeEl.getAttribute("data-prefix");
+      if (!pfx) return;
+      
+      // Highlight the path in the Trie tree matching this node's prefix
+      highlightPatternPath(pfx);
+    });
+    nodeEl.addEventListener("mouseleave", resetTrieHighlights);
+  });
 }
 
 function highlightPatternPath(pattern) {

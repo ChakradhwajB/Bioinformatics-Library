@@ -235,32 +235,39 @@
       <section class="bg-white p-6 border border-slate-200 rounded-sm shadow-sm space-y-4">
         <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Educational Guide: Central Dogma Transformations</h3>
         
-        <div class="text-xs leading-relaxed space-y-3 text-slate-800">
+          <h4 class="font-bold text-slate-900 text-xs mt-2 border-b border-slate-100 pb-1">1. Motivation: Why care?</h4>
           <p>
-            In molecular biology, genetic information is preserved and converted through three main steps described by the <strong>Central Dogma</strong>: DNA replication, transcription to RNA, and translation to proteins.
+            The Central Dogma of molecular biology explains how genetic information flows from DNA to RNA to proteins. Understanding how to computationally replicate this process allows us to translate a raw genomic sequence into the amino acid string that builds actual functioning proteins. This is the foundational step for understanding gene expression.
           </p>
           
-          <h4 class="font-bold text-slate-900 text-xs">1. Transcription (DNA $\rightarrow$ RNA)</h4>
+          <h4 class="font-bold text-slate-900 text-xs mt-4 border-b border-slate-100 pb-1">2. Concept &amp; Complexity</h4>
           <p>
-            Transcription is the process of copying a segment of DNA into RNA. In this translation step, Thymine ($T$) bases are substituted by Uracil ($U$) bases. The sequence is processed linearly in the $5' \rightarrow 3'$ direction.
+            The transformation involves three operations:
           </p>
+          <ul class="list-disc pl-5 space-y-1">
+            <li><strong>Reverse Complement:</strong> Generating the opposing DNA strand (A &harr; T, C &harr; G) and reversing its direction (5' &rarr; 3').</li>
+            <li><strong>Transcription:</strong> Converting DNA to RNA by substituting Thymine (T) with Uracil (U).</li>
+            <li><strong>Translation:</strong> Mapping triplets of RNA nucleotides (codons) to amino acids using a standard codon table. Halts upon a "Stop" codon.</li>
+          </ul>
+          <ul class="list-disc pl-5 space-y-1 mt-2">
+            <li><strong>Time Complexity:</strong> <em>O</em>(<em>N</em>) for all transformations, where <em>N</em> is the sequence length.</li>
+            <li><strong>Space Complexity:</strong> <em>O</em>(<em>N</em>) to store the resulting strings.</li>
+          </ul>
 
-          <h4 class="font-bold text-slate-900 text-xs">2. Translation (RNA $\rightarrow$ Protein Peptide)</h4>
+          <h4 class="font-bold text-slate-900 text-xs mt-4 border-b border-slate-100 pb-1">3. Worked Example</h4>
           <p>
-            Translation maps mRNA nucleotides into chains of amino acid residues. This mapping is performed by the ribosome reading triplets of nucleotides called <strong>codons</strong>. 
-            Each codon corresponds to one of $20$ standard amino acids (e.g. $AUG \rightarrow \text{Methionine / Start}$, $UUU \rightarrow \text{Phenylalanine}$). The translation terminates immediately when one of the Stop codons ($UAA$, $UAG$, $UGA$) is reached.
+            Start with the DNA sequence <code>TACGGC</code>.
           </p>
+          <div class="bg-slate-50 p-2.5 rounded-sm font-mono text-[10px] border border-slate-200 text-slate-650 ml-2 border-l-4 border-l-indigo-400">
+            1. Transcribe (T &rarr; U): UACGGC
+            2. Reverse Complement (A&harr;T, C&harr;G, reversed): GCCGTA
+            3. Translate "UACGGC" (Codons: UAC, GGC): Y G (Tyrosine, Glycine)
+          </div>
 
-          <h4 class="font-bold text-slate-900 text-xs">3. Watson-Crick Base Pairing Complementation</h4>
-          <p>
-            Complementary strands are generated using base-pairing rules ($A \leftrightarrow T$, $C \leftrightarrow G$). The reverse complement reverses the complementary strand direction ($3' \rightarrow 5'$ flipped to $5' \rightarrow 3'$), representing the opposing strand of a double helix.
-          </p>
+          <h4 class="font-bold text-slate-900 text-xs mt-4 border-b border-slate-100 pb-1">4. Python Code</h4>
+          <p>Here are the implementations for basic sequence manipulations:</p>
 
-          <h4 class="font-bold text-slate-900 text-xs">4. Python Code Implementations</h4>
-          <p>Here is how to perform transcription, reverse complement, and codon translation in Python:</p>
-
-          <p class="font-semibold text-slate-700 text-[11px] mb-1">DNA Transcription & Reverse Complement:</p>
-          <div class="relative group">
+          <div class="relative group mt-1">
             <button onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText); this.textContent = 'Copied!'; setTimeout(() => this.textContent = 'Copy', 2000)" class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 bg-indigo-600 hover:bg-indigo-500 text-white px-2.5 py-1 rounded-sm text-[9px] font-bold tracking-wide transition-all duration-150 shadow-sm cursor-pointer select-none">Copy</button>
             <pre class="bg-slate-55 border border-slate-200 text-slate-700 p-3.5 pr-12 rounded-sm font-mono text-[10px] overflow-x-auto leading-relaxed"><span class="text-pink-600">def</span> <span class="text-sky-600">transcribe_dna</span>(dna):
     <span class="text-pink-600">return</span> dna.replace(<span class="text-teal-700">"T"</span>, <span class="text-teal-700">"U"</span>)
@@ -268,19 +275,9 @@
 <span class="text-pink-600">def</span> <span class="text-sky-600">reverse_complement</span>(dna):
     complements = {<span class="text-teal-700">"A"</span>: <span class="text-teal-700">"T"</span>, <span class="text-teal-700">"T"</span>: <span class="text-teal-700">"A"</span>, <span class="text-teal-700">"C"</span>: <span class="text-teal-700">"G"</span>, <span class="text-teal-700">"G"</span>: <span class="text-teal-700">"C"</span>}
     comp_strand = [complements.get(char, char) <span class="text-pink-600">for</span> char <span class="text-pink-600">in</span> dna]
-    <span class="text-pink-600">return</span> <span class="text-sky-605">""</span>.join(comp_strand[::-<span class="text-orange-600">1</span>])</pre>
-          </div>
+    <span class="text-pink-600">return</span> <span class="text-sky-605">""</span>.join(comp_strand[::-<span class="text-orange-600">1</span>])
 
-          <p class="font-semibold text-slate-700 text-[11px] mt-3 mb-1">RNA Translation (Codon mapping):</p>
-          <div class="relative group">
-            <button onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText); this.textContent = 'Copied!'; setTimeout(() => this.textContent = 'Copy', 2000)" class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 bg-indigo-600 hover:bg-indigo-500 text-white px-2.5 py-1 rounded-sm text-[9px] font-bold tracking-wide transition-all duration-150 shadow-sm cursor-pointer select-none">Copy</button>
-            <pre class="bg-slate-55 border border-slate-200 text-slate-700 p-3.5 pr-12 rounded-sm font-mono text-[10px] overflow-x-auto leading-relaxed">CODON_TABLE = {
-    <span class="text-teal-700">"AUG"</span>: <span class="text-teal-700">"M"</span>, <span class="text-teal-700">"UUU"</span>: <span class="text-teal-700">"F"</span>, <span class="text-teal-700">"UUC"</span>: <span class="text-teal-700">"F"</span>, <span class="text-teal-700">"UUA"</span>: <span class="text-teal-700">"L"</span>, <span class="text-teal-700">"UUG"</span>: <span class="text-teal-700">"L"</span>,
-    <span class="text-teal-700">"UCU"</span>: <span class="text-teal-700">"S"</span>, <span class="text-teal-700">"UCC"</span>: <span class="text-teal-700">"S"</span>, <span class="text-teal-700">"UCA"</span>: <span class="text-teal-700">"S"</span>, <span class="text-teal-700">"UCG"</span>: <span class="text-teal-700">"S"</span>, <span class="text-teal-700">"UAU"</span>: <span class="text-teal-700">"Y"</span>,
-    <span class="text-teal-700">"UAC"</span>: <span class="text-teal-700">"Y"</span>, <span class="text-teal-700">"UGU"</span>: <span class="text-teal-700">"C"</span>, <span class="text-teal-700">"UGC"</span>: <span class="text-teal-700">"C"</span>, <span class="text-teal-700">"UGG"</span>: <span class="text-teal-700">"W"</span>,
-    <span class="text-teal-700">"UAA"</span>: <span class="text-teal-700">"Stop"</span>, <span class="text-teal-700">"UAG"</span>: <span class="text-teal-700">"Stop"</span>, <span class="text-teal-700">"UGA"</span>: <span class="text-teal-700">"Stop"</span>
-    <span class="text-slate-500 italic"># ... other codons mapping ...</span>
-}
+CODON_TABLE = { <span class="text-teal-700">"AUG"</span>: <span class="text-teal-700">"M"</span>, <span class="text-teal-700">"UUU"</span>: <span class="text-teal-700">"F"</span>, <span class="text-teal-700">"UAA"</span>: <span class="text-teal-700">"Stop"</span> <span class="text-slate-500 italic"># (abridged)</span> }
 
 <span class="text-pink-600">def</span> <span class="text-sky-600">translate_rna</span>(rna):
     protein = []
@@ -291,6 +288,22 @@
             <span class="text-pink-600">break</span>
         protein.append(amino_acid)
     <span class="text-pink-600">return</span> <span class="text-sky-605">""</span>.join(protein)</pre>
+          </div>
+
+          <h4 class="font-bold text-slate-900 text-xs mt-4 border-b border-slate-100 pb-1">5. Practice Problems</h4>
+          <div class="space-y-3">
+            <div class="bg-emerald-50 border border-emerald-100 p-3 rounded-sm">
+              <span class="text-[9px] font-bold text-emerald-600 uppercase tracking-widest block mb-1">Warm-up</span>
+              <p class="text-[11px] text-slate-700">Write the reverse complement of <code>ATGCATGC</code> by hand.</p>
+            </div>
+            <div class="bg-indigo-50 border border-indigo-100 p-3 rounded-sm">
+              <span class="text-[9px] font-bold text-indigo-600 uppercase tracking-widest block mb-1">Core</span>
+              <p class="text-[11px] text-slate-700">Write a function that counts how many times the amino acid "Methionine" (M) appears in a given RNA strand translation.</p>
+            </div>
+            <div class="bg-rose-50 border border-rose-100 p-3 rounded-sm">
+              <span class="text-[9px] font-bold text-rose-600 uppercase tracking-widest block mb-1">Extension</span>
+              <p class="text-[11px] text-slate-700">Implement an Open Reading Frame (ORF) finder that scans all 3 possible reading frames to find the longest continuous translated protein chain before hitting a Stop codon.</p>
+            </div>
           </div>
         </div>
       </section>

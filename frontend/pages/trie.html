@@ -335,9 +335,8 @@ ATGCGATCGATCG</textarea
               >Trie Prefix Tree Visualizer</span
             >
             <span
-              class="text-[10px] font-semibold text-indigo-655 bg-indigo-50 border border-indigo-155 px-2 py-0.5 rounded"
-              >Hover sequence base or search summary rows to highlight
-              path</span
+              class="text-[10px] font-semibold text-indigo-655 bg-indigo-50 border border-indigo-155 px-2 py-0.5 rounded shadow-sm"
+              >Hover over nodes, sequence bases, or table rows to highlight paths!</span
             >
           </div>
           <div
@@ -395,54 +394,32 @@ ATGCGATCGATCG</textarea
             Educational Guide: Trie (Prefix Trees)
           </h3>
           <div class="text-xs leading-relaxed space-y-3 text-slate-800">
-            <h4 class="font-bold text-slate-900 text-xs">
-              1. Prefix Trees and String Matching
-            </h4>
-            <p>
-              A <strong>Trie</strong> (from "retrieval") is a tree-like data
-              structure used to store a set of strings, where each path from the
-              root to a node represents a common prefix shared by multiple
-              strings. For genetic sequences, Tries offer a powerful way to
-              match multiple motifs concurrently. Instead of scanning the genome
-              independently $M$ times for $M$ patterns, we build a single Trie
-              and match all patterns in one pass.
-            </p>
-            <h4 class="font-bold text-slate-900 text-xs">
-              2. Algorithmic Matching Flow
-            </h4>
-            <p>
-              At each sequence starting index $i$, we traverse down the Trie
-              starting from the root:
-            </p>
-            <ul class="list-disc pl-5 space-y-1">
-              <li>
-                We consume characters sequentially from $S[i], S[i+1],
-                S[i+2]\dots$.
-              </li>
-              <li>
-                If we transition to a node where `is_end_of_word` is true, we
-                record a pattern match starting at index $i$.
-              </li>
-              <li>
-                If a character does not exist as a child transition, the search
-                for position $i$ terminates immediately, and we advance the
-                window to $i+1$.
-              </li>
-            </ul>
-            <h4 class="font-bold text-slate-900 text-xs">
-              3. Runtimes & Space Bound
-            </h4>
-            <p>
-              Trie pattern matching runs in $\mathcal{O}(N \cdot L)$ time, where
-              $N$ is sequence length and $L$ is max pattern length. The Trie
-              construction requires $\mathcal{O}(P \cdot |\Sigma|)$ space where
-              $P$ is the total number of bases across all query patterns and
-              $|\Sigma| = 4$ for DNA.
-            </p>
-            <h4 class="font-bold text-slate-900 text-xs">
-              4. Python Code Implementations
-            </h4>
-            <p>Here is how to construct a prefix tree and search it in Python, compared against a naive sliding-window approach:</p>
+          <h4 class="font-bold text-slate-900 text-xs mt-2 border-b border-slate-100 pb-1">1. Motivation: Why care?</h4>
+          <p>
+            For genetic sequences, Tries offer a powerful way to match multiple motifs concurrently. Instead of scanning the genome independently $M$ times for $M$ patterns, we build a single Trie and match all patterns in one pass.
+          </p>
+          
+          <h4 class="font-bold text-slate-900 text-xs mt-4 border-b border-slate-100 pb-1">2. Concept &amp; Complexity</h4>
+          <p>
+            A <strong>Trie</strong> (from "retrieval") is a tree-like data structure used to store a set of strings, where each path from the root to a node represents a common prefix shared by multiple strings.
+          </p>
+          <ul class="list-disc pl-5 space-y-1">
+            <li><strong>Time Complexity:</strong> $\mathcal{O}(N \cdot L)$ where $N$ is sequence length and $L$ is max pattern length.</li>
+            <li><strong>Space Complexity:</strong> $\mathcal{O}(P \cdot |\Sigma|)$ where $P$ is the total bases in all patterns and $|\Sigma|=4$ for DNA.</li>
+          </ul>
+
+          <h4 class="font-bold text-slate-900 text-xs mt-4 border-b border-slate-100 pb-1">3. Worked Example</h4>
+          <p>
+            Insert <code>AT</code> and <code>AG</code> into a Trie.
+          </p>
+          <div class="bg-slate-50 p-2.5 rounded-sm font-mono text-[10px] border border-slate-200 text-slate-650 ml-2 border-l-4 border-l-indigo-400">
+            Root -> A
+                 -> T (end of word "AT")
+                 -> G (end of word "AG")
+          </div>
+
+          <h4 class="font-bold text-slate-900 text-xs mt-4 border-b border-slate-100 pb-1">4. Python Code</h4>
+          <p>Here is how to construct a prefix tree and search it in Python, compared against a naive sliding-window approach:</p>
             
             <p class="font-semibold text-slate-700 text-[11px] mb-1">Naive Multi-Pattern Search (Sliding Window):</p>
             <div class="relative group">
@@ -498,6 +475,22 @@ ATGCGATCGATCG</textarea
                     results[matched_pattern].append(i)
     <span class="text-pink-600">return</span> results</pre>
             </div>
+
+          <h4 class="font-bold text-slate-900 text-xs mt-4 border-b border-slate-100 pb-1">5. Practice Problems</h4>
+          <div class="space-y-3 mt-3">
+            <div class="bg-emerald-50 border border-emerald-100 p-3 rounded-sm">
+              <span class="text-[9px] font-bold text-emerald-600 uppercase tracking-widest block mb-1">Warm-up</span>
+              <p class="text-[11px] text-slate-700">Draw a Trie containing the words <code>"CAT"</code>, <code>"CAR"</code>, and <code>"CART"</code>.</p>
+            </div>
+            <div class="bg-indigo-50 border border-indigo-100 p-3 rounded-sm">
+              <span class="text-[9px] font-bold text-indigo-600 uppercase tracking-widest block mb-1">Core</span>
+              <p class="text-[11px] text-slate-700">Modify the Trie insertion code so that each node also stores the number of times it has been visited. How can you use this to find the most frequent prefix?</p>
+            </div>
+            <div class="bg-rose-50 border border-rose-100 p-3 rounded-sm">
+              <span class="text-[9px] font-bold text-rose-600 uppercase tracking-widest block mb-1">Extension</span>
+              <p class="text-[11px] text-slate-700">Implement the Aho-Corasick algorithm, which extends the Trie with failure links to achieve $\mathcal{O}(N + P + k)$ time matching.</p>
+            </div>
+          </div>
           </div>
         </section>
       </main>

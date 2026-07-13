@@ -488,126 +488,56 @@ GGCCG</textarea
           </h3>
 
           <div class="text-xs leading-relaxed space-y-3 text-slate-800">
-            <h4 class="font-bold text-slate-900 text-xs">
-              1. Hamming Distance (Point Mutations)
-            </h4>
-            <p>
-              The <strong>Hamming Distance</strong> counts the number of
-              positions at which two sequences of equal length differ. In
-              biology, it directly represents point mutations (nucleotide
-              substitutions) without any insertions or deletions. For sequences
-              $S_1$ and $S_2$ comparing up to $L = \min(|S_1|, |S_2|)$, it is
-              formulated as:
-            </p>
-            <div
-              class="bg-slate-50 p-3 border border-slate-200 rounded-sm font-mono text-center my-2 text-xs"
-            >
-              $$d_H(S_1, S_2) = \sum_{i=0}^{L-1} \delta(S_1[i], S_2[i]) \quad
-              \text{where } \delta(a,b) = \begin{cases} 0 & a = b \\ 1 & a \neq
-              b \end{cases}$$
-            </div>
+          <h4 class="font-bold text-slate-900 text-xs mt-2 border-b border-slate-100 pb-1">1. Motivation: Why care?</h4>
+          <p>
+            When comparing two biological sequences, we need a mathematical way to quantify how "different" they are. Distance metrics allow us to build phylogenetic trees to track evolution or find the most likely origin of a mutated viral strain.
+          </p>
+          
+          <h4 class="font-bold text-slate-900 text-xs mt-4 border-b border-slate-100 pb-1">2. Concept &amp; Complexity</h4>
+          <p>
+            We explore two primary metrics:
+          </p>
+          <ul class="list-disc pl-5 space-y-1">
+            <li><strong>Hamming Distance:</strong> Counts only substitutions (point mutations) between two sequences of the <em>same length</em>. Time $\mathcal{O}(L)$, Space $\mathcal{O}(1)$.</li>
+            <li><strong>Levenshtein (Edit) Distance:</strong> Counts the minimum number of insertions, deletions, and substitutions to transform one string into another. Handled via dynamic programming on a 2D grid. Time $\mathcal{O}(n \cdot m)$, Space $\mathcal{O}(n \cdot m)$.</li>
+          </ul>
 
-            <h4 class="font-bold text-slate-900 text-xs">
-              2. Levenshtein Distance (Edit Distance)
-            </h4>
-            <p>
-              The <strong>Levenshtein Distance</strong> measures the minimum
-              number of single-character operations (insertions, deletions, or
-              substitutions) required to transform sequence $S_1$ into $S_2$.
-              Unlike Hamming, Levenshtein distance handles alignments of
-              different lengths. We solve it via dynamic programming:
-            </p>
-            <div
-              class="bg-slate-50 p-3 border border-slate-200 rounded-sm font-mono text-center my-2 text-xs"
-            >
-              $$D_{i, j} = \begin{cases} D_{i-1, j-1} & \text{if } S_1[i-1] =
-              S_2[j-1] \\ \min \begin{cases} D_{i-1, j} + 1 & \text{(Deletion)}
-              \\ D_{i, j-1} + 1 & \text{(Insertion)} \\ D_{i-1, j-1} + 1 &
-              \text{(Substitution)} \end{cases} & \text{otherwise} \end{cases}$$
-            </div>
+          <h4 class="font-bold text-slate-900 text-xs mt-4 border-b border-slate-100 pb-1">3. Worked Example</h4>
+          <p>
+            Compare <code>CAT</code> vs <code>CAR</code>:
+          </p>
+          <ul class="list-disc pl-5 space-y-1 text-[11px] text-slate-700">
+             <li><strong>Hamming:</strong> 'C'=='C', 'A'=='A', 'T'!='R'. Distance = 1.</li>
+             <li><strong>Levenshtein:</strong> Substitute 'T' for 'R'. Distance = 1.</li>
+          </ul>
+          <p class="mt-2 text-xs">Compare <code>CAT</code> vs <code>CATS</code>:</p>
+          <ul class="list-disc pl-5 space-y-1 text-[11px] text-slate-700">
+             <li><strong>Hamming:</strong> Undefined (lengths differ).</li>
+             <li><strong>Levenshtein:</strong> Insert 'S' at the end. Distance = 1.</li>
+          </ul>
 
-            <h4 class="font-bold text-slate-900 text-xs">
-              3. Algorithmic Complexity Comparison
-            </h4>
-            <ul class="list-disc pl-5 space-y-1.5 mb-2">
-              <li>
-                <strong>Hamming:</strong> Time complexity $\mathcal{O}(L)$ and
-                Space complexity $\mathcal{O}(1)$ as it runs in a single
-                sequential pass without building a 2D matrix.
-              </li>
-              <li>
-                <strong>Levenshtein:</strong> Time complexity $\mathcal{O}(n
-                \cdot m)$ and Space complexity $\mathcal{O}(n \cdot m)$ to
-                compute and store the 2D grid of subproblems.
-              </li>
-            </ul>
+          <h4 class="font-bold text-slate-900 text-xs mt-4 border-b border-slate-100 pb-1">4. Python Code</h4>
+          <p>Here is how to compute both distance metrics in Python:</p>
 
-            <h4 class="font-bold text-slate-900 text-xs">
-              4. Python Code Implementations
-            </h4>
-            <p>Here is how to compute both distance metrics in Python:</p>
-
-            <p class="font-semibold text-slate-700 text-[11px] mb-1">
-              Hamming Distance (Point Mutations):
-            </p>
-            <div class="relative group">
-              <button
-                onclick="
-                  navigator.clipboard.writeText(
-                    this.nextElementSibling.innerText,
-                  );
-                  this.textContent = 'Copied!';
-                  setTimeout(() => (this.textContent = 'Copy'), 2000);
-                "
-                class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 bg-indigo-600 hover:bg-indigo-500 text-white px-2.5 py-1 rounded-sm text-[9px] font-bold tracking-wide transition-all duration-150 shadow-sm cursor-pointer select-none"
-              >
-                Copy
-              </button>
-              <pre
-                class="bg-slate-55 border border-slate-200 text-slate-700 p-3.5 pr-12 rounded-sm font-mono text-[10px] overflow-x-auto leading-relaxed"
-              ><span class="text-pink-600">def</span> <span class="text-sky-600">hamming_distance</span>(seq1, seq2):
-    <span class="text-pink-605"># Hamming requires equal lengths</span>
+          <p class="font-semibold text-slate-700 text-[11px] mb-1">Hamming Distance:</p>
+          <div class="relative group">
+            <button onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText); this.textContent = 'Copied!'; setTimeout(() => this.textContent = 'Copy', 2000)" class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 bg-indigo-600 hover:bg-indigo-500 text-white px-2.5 py-1 rounded-sm text-[9px] font-bold tracking-wide transition-all duration-150 shadow-sm cursor-pointer select-none">Copy</button>
+            <pre class="bg-slate-55 border border-slate-200 text-slate-700 p-3.5 pr-12 rounded-sm font-mono text-[10px] overflow-x-auto leading-relaxed"><span class="text-pink-600">def</span> <span class="text-sky-600">hamming_distance</span>(seq1, seq2):
     <span class="text-pink-600">if</span> <span class="text-sky-600">len</span>(seq1) != <span class="text-sky-600">len</span>(seq2):
-        <span class="text-pink-600">raise</span> <span class="text-emerald-600">ValueError</span>(<span class="text-teal-700">"Sequences must be of equal length"</span>)
-        
-    distance = <span class="text-orange-600">0</span>
-    <span class="text-pink-600">for</span> i <span class="text-pink-600">in</span> <span class="text-sky-600">range</span>(<span class="text-sky-600">len</span>(seq1)):
-        <span class="text-pink-605">if</span> seq1[i] != seq2[i]:
-            distance += <span class="text-orange-600">1</span>
-            
-    <span class="text-pink-600">return</span> distance</pre>
-            </div>
+        <span class="text-pink-600">raise</span> <span class="text-emerald-600">ValueError</span>(<span class="text-teal-700">"Lengths must match"</span>)
+    <span class="text-pink-600">return</span> <span class="text-sky-600">sum</span>(<span class="text-orange-600">1</span> <span class="text-pink-600">for</span> a, b <span class="text-pink-600">in</span> <span class="text-sky-600">zip</span>(seq1, seq2) <span class="text-pink-600">if</span> a != b)</pre>
+          </div>
 
-            <p class="font-semibold text-slate-700 text-[11px] mt-3 mb-1">
-              Levenshtein Edit Distance (Dynamic Programming):
-            </p>
-            <div class="relative group">
-              <button
-                onclick="
-                  navigator.clipboard.writeText(
-                    this.nextElementSibling.innerText,
-                  );
-                  this.textContent = 'Copied!';
-                  setTimeout(() => (this.textContent = 'Copy'), 2000);
-                "
-                class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 bg-indigo-600 hover:bg-indigo-500 text-white px-2.5 py-1 rounded-sm text-[9px] font-bold tracking-wide transition-all duration-150 shadow-sm cursor-pointer select-none"
-              >
-                Copy
-              </button>
-              <pre
-                class="bg-slate-55 border border-slate-200 text-slate-700 p-3.5 pr-12 rounded-sm font-mono text-[10px] overflow-x-auto leading-relaxed"
-              ><span class="text-pink-600">def</span> <span class="text-sky-600">levenshtein_distance</span>(seq1, seq2):
+          <p class="font-semibold text-slate-700 text-[11px] mt-3 mb-1">Levenshtein Edit Distance:</p>
+          <div class="relative group">
+            <button onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText); this.textContent = 'Copied!'; setTimeout(() => this.textContent = 'Copy', 2000)" class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 bg-indigo-600 hover:bg-indigo-500 text-white px-2.5 py-1 rounded-sm text-[9px] font-bold tracking-wide transition-all duration-150 shadow-sm cursor-pointer select-none">Copy</button>
+            <pre class="bg-slate-55 border border-slate-200 text-slate-700 p-3.5 pr-12 rounded-sm font-mono text-[10px] overflow-x-auto leading-relaxed"><span class="text-pink-600">def</span> <span class="text-sky-600">levenshtein_distance</span>(seq1, seq2):
     n, m = <span class="text-sky-600">len</span>(seq1), <span class="text-sky-600">len</span>(seq2)
-    <span class="text-slate-500 italic"># Initialize 2D DP matrix</span>
     dp = [[<span class="text-orange-600">0</span> <span class="text-pink-605">for</span> _ <span class="text-pink-605">in</span> <span class="text-sky-600">range</span>(m + <span class="text-orange-600">1</span>)] <span class="text-pink-605">for</span> _ <span class="text-pink-605">in</span> <span class="text-sky-600">range</span>(n + <span class="text-orange-600">1</span>)]
     
-    <span class="text-slate-500 italic"># Base cases: cost of deletion/insertion from empty string</span>
-    <span class="text-pink-605">for</span> i <span class="text-pink-650">in</span> <span class="text-sky-600">range</span>(n + <span class="text-orange-600">1</span>):
-        dp[i][<span class="text-orange-600">0</span>] = i
-    <span class="text-pink-605">for</span> j <span class="text-pink-650">in</span> <span class="text-sky-600">range</span>(m + <span class="text-orange-600">1</span>):
-        dp[<span class="text-orange-600">0</span>][j] = j
+    <span class="text-pink-605">for</span> i <span class="text-pink-650">in</span> <span class="text-sky-600">range</span>(n + <span class="text-orange-600">1</span>): dp[i][<span class="text-orange-600">0</span>] = i
+    <span class="text-pink-605">for</span> j <span class="text-pink-650">in</span> <span class="text-sky-600">range</span>(m + <span class="text-orange-600">1</span>): dp[<span class="text-orange-600">0</span>][j] = j
         
-    <span class="text-slate-505 italic"># Compute optimal subproblem values</span>
     <span class="text-pink-650">for</span> i <span class="text-pink-650">in</span> <span class="text-sky-600">range</span>(<span class="text-orange-600">1</span>, n + <span class="text-orange-600">1</span>):
         <span class="text-pink-650">for</span> j <span class="text-pink-650">in</span> <span class="text-sky-600">range</span>(<span class="text-orange-600">1</span>, m + <span class="text-orange-600">1</span>):
             <span class="text-pink-650">if</span> seq1[i - <span class="text-orange-600">1</span>] == seq2[j - <span class="text-orange-600">1</span>]:
@@ -620,6 +550,23 @@ GGCCG</textarea
                 )
                 
     <span class="text-pink-650">return</span> dp[n][m]</pre>
+          </div>
+
+          <h4 class="font-bold text-slate-900 text-xs mt-4 border-b border-slate-100 pb-1">5. Practice Problems</h4>
+          <div class="space-y-3">
+            <div class="bg-emerald-50 border border-emerald-100 p-3 rounded-sm">
+              <span class="text-[9px] font-bold text-emerald-600 uppercase tracking-widest block mb-1">Warm-up</span>
+              <p class="text-[11px] text-slate-700">Calculate the Hamming distance between <code>ACGT</code> and <code>TGCA</code>.</p>
+            </div>
+            <div class="bg-indigo-50 border border-indigo-100 p-3 rounded-sm">
+              <span class="text-[9px] font-bold text-indigo-600 uppercase tracking-widest block mb-1">Core</span>
+              <p class="text-[11px] text-slate-700">Manually compute the Levenshtein DP grid for <code>INT</code> vs <code>EXEC</code>. What is the final edit distance?</p>
+            </div>
+            <div class="bg-rose-50 border border-rose-100 p-3 rounded-sm">
+              <span class="text-[9px] font-bold text-rose-600 uppercase tracking-widest block mb-1">Extension</span>
+              <p class="text-[11px] text-slate-700">The current Levenshtein space complexity is $\mathcal{O}(n \cdot m)$. Optimize the algorithm to only use $\mathcal{O}(\min(n, m))$ space by keeping only the previous row in memory.</p>
+            </div>
+          </div>
             </div>
           </div>
         </section>

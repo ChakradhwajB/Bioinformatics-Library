@@ -306,13 +306,14 @@
         <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Educational Guide: Global Sequence Alignment</h3>
         
         <div class="text-xs leading-relaxed space-y-3 text-slate-800">
+          <h4 class="font-bold text-slate-900 text-xs mt-2 border-b border-slate-100 pb-1">1. Motivation: Why care?</h4>
           <p>
-            The <strong>Needleman-Wunsch</strong> algorithm is a dynamic programming method designed to compute the optimal global alignment between two sequences. Global alignment attempts to match both sequences from end-to-end, which is ideal for closely related sequences of similar length.
+            Without sequence alignment, comparing genetic material between organisms to find evolutionary relationships or functional similarities is impossible. Needleman-Wunsch is the fundamental dynamic programming algorithm that guarantees finding the mathematically optimal <strong>global alignment</strong> between two sequences from end-to-end. It forms the basis of homology search and evolutionary distance calculation.
           </p>
           
-          <h4 class="font-bold text-slate-900 text-xs">1. Mathematical Model & Transition Rule</h4>
+          <h4 class="font-bold text-slate-900 text-xs mt-4 border-b border-slate-100 pb-1">2. Concept &amp; Complexity</h4>
           <p>
-            Let $S_1$ and $S_2$ be sequences of lengths $n$ and $m$. We construct an $(n+1) \times (m+1)$ score grid $E$, where cell $E_{i,j}$ represents the maximum alignment score for prefixes $S_1[0 \dots i-1]$ and $S_2[0 \dots j-1]$. The recurrence relation is formulated as:
+            Let $S_1$ and $S_2$ be sequences of lengths $n$ and $m$. We construct an $(n+1) \times (m+1)$ score grid $E$. The recurrence relation is:
           </p>
           <div class="bg-slate-50 p-3 border border-slate-200 rounded-sm font-mono text-center my-2 text-xs">
             $$E_{i, j} = \max \begin{cases} 
@@ -324,65 +325,87 @@
           <p>
             where the substitution score is $S(a,b) = \text{match}$ if $a = b$, and $\text{mismatch}$ if $a \neq b$.
           </p>
-
-          <h4 class="font-bold text-slate-900 text-xs">2. Workflow</h4>
-          <ul class="list-disc pl-5 space-y-1.5">
-            <li><strong>Initialization:</strong> The first row and column are filled with cumulative gap penalties: $E_{i, 0} = i \times \text{gap}$ and $E_{0, j} = j \times \text{gap}$. This represents aligning prefixes against empty sequences.</li>
-            <li><strong>Matrix Fill:</strong> The grid is filled row-by-row or column-by-column. Every cell value relies solely on its diagonal, top, and left neighbors.</li>
-            <li><strong>Traceback:</strong> To reconstruct the actual alignment, we start at the bottom-right corner $E_{n,m}$ and follow the score transitions backwards. A diagonal step represents aligning characters; a vertical step represents a deletion (gap in $S_2$); a horizontal step represents an insertion (gap in $S_1$).</li>
+          <ul class="list-disc pl-5 space-y-1">
+            <li><strong>Time Complexity:</strong> $\mathcal{O}(n \cdot m)$ since every cell in the grid requires constant $\mathcal{O}(1)$ calculations.</li>
+            <li><strong>Space Complexity:</strong> $\mathcal{O}(n \cdot m)$ to store the entire score matrix for traceback.</li>
           </ul>
 
-          <h4 class="font-bold text-slate-900 text-xs">3. Algorithmic Complexity Analysis</h4>
+          <h4 class="font-bold text-slate-900 text-xs mt-4 border-b border-slate-100 pb-1">3. Worked Example</h4>
           <p>
-            Both Time and Space complexities are quadratic: $\mathcal{O}(n \cdot m)$. This is because every cell in the grid requires constant $\mathcal{O}(1)$ calculations, and we must store the entire matrix in memory to trace back the optimal path.
+            Let's align sequence $S_1 = \text{"GC"}$ (vertical) and $S_2 = \text{"GA"}$ (horizontal) with scoring: Match = 1, Mismatch = -1, Gap = -1.
+          </p>
+          <div class="bg-slate-50 p-2.5 rounded-sm font-mono text-[10px] border border-slate-200 text-slate-650 ml-2 border-l-4 border-l-indigo-400 max-w-xs">
+              -   G   A
+          -   0  -1  -2
+          G  -1   1   0
+          C  -2   0   0
+          </div>
+          <p class="mt-2">
+            Traceback starting at bottom-right cell score 0 yields the optimal alignment:
+            <br/><code class="text-[10px] bg-slate-100 px-1 py-0.5 rounded text-pink-600">S1: G C</code>
+            <br/><code class="text-[10px] bg-slate-100 px-1 py-0.5 rounded text-pink-600">S2: G A</code> (Score: 0)
           </p>
 
-          <h4 class="font-bold text-slate-900 text-xs">4. Python Code Implementations</h4>
-          <p>Here is how to implement the Needleman-Wunsch global alignment algorithm in Python:</p>
+          <h4 class="font-bold text-slate-900 text-xs mt-4 border-b border-slate-100 pb-1">4. Python Code</h4>
+          <p>Here is the implementation of the Needleman-Wunsch global alignment algorithm in Python:</p>
 
-          <p class="font-semibold text-slate-700 text-[11px] mb-1">Needleman-Wunsch Global Alignment:</p>
-          <div class="relative group">
+          <div class="relative group mt-1">
             <button onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText); this.textContent = 'Copied!'; setTimeout(() => this.textContent = 'Copy', 2000)" class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 bg-indigo-600 hover:bg-indigo-500 text-white px-2.5 py-1 rounded-sm text-[9px] font-bold tracking-wide transition-all duration-150 shadow-sm cursor-pointer select-none">Copy</button>
             <pre class="bg-slate-55 border border-slate-200 text-slate-700 p-3.5 pr-12 rounded-sm font-mono text-[10px] overflow-x-auto leading-relaxed"><span class="text-pink-600">def</span> <span class="text-sky-600">needleman_wunsch</span>(seq1, seq2, match=<span class="text-orange-600">1</span>, mismatch=-<span class="text-orange-600">1</span>, gap=-<span class="text-orange-600">1</span>):
     n, m = <span class="text-sky-600">len</span>(seq1), <span class="text-sky-600">len</span>(seq2)
-    <span class="text-slate-500 italic"># Initialize score grid</span>
     score = [[<span class="text-orange-600">0</span> <span class="text-pink-650">for</span> _ <span class="text-pink-650">in</span> <span class="text-sky-600">range</span>(m + <span class="text-orange-600">1</span>)] <span class="text-pink-650">for</span> _ <span class="text-pink-650">in</span> <span class="text-sky-600">range</span>(n + <span class="text-orange-600">1</span>)]
     
     <span class="text-slate-505 italic"># Base cases</span>
-    <span class="text-pink-650">for</span> i <span class="text-pink-650">in</span> <span class="text-sky-600">range</span>(n + <span class="text-orange-600">1</span>):
+    <span class="text-pink-655">for</span> i <span class="text-pink-655">in</span> <span class="text-sky-600">range</span>(n + <span class="text-orange-600">1</span>):
         score[i][<span class="text-orange-600">0</span>] = i * gap
-    <span class="text-pink-650">for</span> j <span class="text-pink-650">in</span> <span class="text-sky-600">range</span>(m + <span class="text-orange-600">1</span>):
+    <span class="text-pink-655">for</span> j <span class="text-pink-655">in</span> <span class="text-sky-600">range</span>(m + <span class="text-orange-600">1</span>):
         score[<span class="text-orange-600">0</span>][j] = j * gap
         
     <span class="text-slate-505 italic"># Fill the matrix</span>
-    <span class="text-pink-650">for</span> i <span class="text-pink-650">in</span> <span class="text-sky-600">range</span>(<span class="text-orange-600">1</span>, n + <span class="text-orange-600">1</span>):
-        <span class="text-pink-650">for</span> j <span class="text-pink-650">in</span> <span class="text-sky-600">range</span>(<span class="text-orange-600">1</span>, m + <span class="text-orange-600">1</span>):
-            sub_score = match <span class="text-pink-650">if</span> seq1[i - <span class="text-orange-600">1</span>] == seq2[j - <span class="text-orange-600">1</span>] <span class="text-pink-650">else</span> mismatch
+    <span class="text-pink-655">for</span> i <span class="text-pink-655">in</span> <span class="text-sky-600">range</span>(<span class="text-orange-600">1</span>, n + <span class="text-orange-600">1</span>):
+        <span class="text-pink-655">for</span> j <span class="text-pink-655">in</span> <span class="text-sky-600">range</span>(<span class="text-orange-600">1</span>, m + <span class="text-orange-600">1</span>):
+            sub_score = match <span class="text-pink-655">if</span> seq1[i - <span class="text-orange-600">1</span>] == seq2[j - <span class="text-orange-600">1</span>] <span class="text-pink-655">else</span> mismatch
             score[i][j] = <span class="text-sky-600">max</span>(
-                score[i - <span class="text-orange-600">1</span>][j - <span class="text-orange-600">1</span>] + sub_score,  <span class="text-slate-505 italic"># Match/Mismatch</span>
-                score[i - <span class="text-orange-600">1</span>][j] + gap,           <span class="text-slate-505 italic"># Deletion</span>
-                score[i][j - <span class="text-orange-600">1</span>] + gap            <span class="text-slate-505 italic"># Insertion</span>
+                score[i - <span class="text-orange-600">1</span>][j - <span class="text-orange-600">1</span>] + sub_score,
+                score[i - <span class="text-orange-600">1</span>][j] + gap,
+                score[i][j - <span class="text-orange-600">1</span>] + gap
             )
             
-    <span class="text-slate-505 italic"># Traceback to reconstruct alignment strings</span>
+    <span class="text-slate-505 italic"># Traceback</span>
     align1, align2 = [], []
     i, j = n, m
-    <span class="text-pink-650">while</span> i > <span class="text-orange-600">0</span> <span class="text-pink-650">or</span> j > <span class="text-orange-600">0</span>:
-        <span class="text-pink-650">if</span> i > <span class="text-orange-600">0</span> <span class="text-pink-650">and</span> j > <span class="text-orange-600">0</span> <span class="text-pink-650">and</span> score[i][j] == score[i - <span class="text-orange-600">1</span>][j - <span class="text-orange-600">1</span>] + (match <span class="text-pink-650">if</span> seq1[i - <span class="text-orange-600">1</span>] == seq2[j - <span class="text-orange-600">1</span>] <span class="text-pink-650">else</span> mismatch):
+    <span class="text-pink-655">while</span> i > <span class="text-orange-600">0</span> <span class="text-pink-655">or</span> j > <span class="text-orange-600">0</span>:
+        <span class="text-pink-655">if</span> i > <span class="text-orange-600">0</span> <span class="text-pink-655">and</span> j > <span class="text-orange-600">0</span> <span class="text-pink-655">and</span> score[i][j] == score[i - <span class="text-orange-600">1</span>][j - <span class="text-orange-600">1</span>] + (match <span class="text-pink-655">if</span> seq1[i - <span class="text-orange-600">1</span>] == seq2[j - <span class="text-orange-600">1</span>] <span class="text-pink-655">else</span> mismatch):
             align1.append(seq1[i - <span class="text-orange-600">1</span>])
             align2.append(seq2[j - <span class="text-orange-600">1</span>])
             i -= <span class="text-orange-600">1</span>
             j -= <span class="text-orange-600">1</span>
-        <span class="text-pink-650">elif</span> i > <span class="text-orange-600">0</span> <span class="text-pink-650">and</span> score[i][j] == score[i - <span class="text-orange-600">1</span>][j] + gap:
+        <span class="text-pink-655">elif</span> i > <span class="text-orange-600">0</span> <span class="text-pink-655">and score[i][j] == score[i - 1][j] + gap:</span>
             align1.append(seq1[i - <span class="text-orange-600">1</span>])
             align2.append(<span class="text-teal-700">"-"</span>)
             i -= <span class="text-orange-600">1</span>
-        <span class="text-pink-650">else:</span>
+        <span class="text-pink-655">else:</span>
             align1.append(<span class="text-teal-700">"-"</span>)
             align2.append(seq2[j - <span class="text-orange-600">1</span>])
             j -= <span class="text-orange-600">1</span>
             
-    <span class="text-pink-650">return</span> <span class="text-sky-605">""</span>.join(align1[::-<span class="text-orange-600">1</span>]), <span class="text-sky-605">""</span>.join(align2[::-<span class="text-orange-600">1</span>])</pre>
+    <span class="text-pink-655">return</span> <span class="text-sky-600">""</span>.join(align1[::-<span class="text-orange-600">1</span>]), <span class="text-sky-600">""</span>.join(align2[::-<span class="text-orange-600">1</span>])</pre>
+          </div>
+
+          <h4 class="font-bold text-slate-900 text-xs mt-4 border-b border-slate-100 pb-1">5. Practice Problems</h4>
+          <div class="space-y-3">
+            <div class="bg-emerald-50 border border-emerald-100 p-3 rounded-sm">
+              <span class="text-[9px] font-bold text-emerald-600 uppercase tracking-widest block mb-1">Warm-up</span>
+              <p class="text-[11px] text-slate-700">Compute the score grid and final alignment for sequence 1 <code>"A"</code> and sequence 2 <code>"A"</code> with scoring Match = 2, Gap = -1 by hand.</p>
+            </div>
+            <div class="bg-indigo-50 border border-indigo-100 p-3 rounded-sm">
+              <span class="text-[9px] font-bold text-indigo-600 uppercase tracking-widest block mb-1">Core</span>
+              <p class="text-[11px] text-slate-700">Write a test cases suite verifying that aligning <code>"HELLOWORLD"</code> and <code>"WORLD"</code> yields the expected global alignment with appropriate gap penalties.</p>
+            </div>
+            <div class="bg-rose-50 border border-rose-100 p-3 rounded-sm">
+              <span class="text-[9px] font-bold text-rose-600 uppercase tracking-widest block mb-1">Extension</span>
+              <p class="text-[11px] text-slate-700">How would you modify the traceback logic to handle cases where there are multiple optimal alignments? Modify the algorithm to return all path variations.</p>
+            </div>
           </div>
         </div>
       </section>
