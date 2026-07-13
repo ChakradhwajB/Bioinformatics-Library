@@ -132,7 +132,12 @@ document.addEventListener("DOMContentLoaded", () => {
   // Wire up the per-page completion checkbox (on module pages)
   const checkbox = document.getElementById("page-complete-checkbox");
   if (checkbox) {
-    const pageName = window.location.pathname.split("/").pop() || "index.html";
+    // Netlify's "pretty URLs" feature strips .html from pathnames.
+    // e.g. /pages/io.html becomes /pages/io  →  pop() gives "io" not "io.html"
+    // We always normalise to include the .html suffix so it matches stored keys.
+    let pageName = window.location.pathname.split("/").pop() || "index.html";
+    if (!pageName.endsWith(".html")) pageName += ".html";
+
     checkbox.checked = window.isPageCompleted(pageName);
     checkbox.addEventListener("change", (e) => {
       window.setPageCompletion(pageName, e.target.checked);
