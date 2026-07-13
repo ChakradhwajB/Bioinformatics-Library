@@ -84,45 +84,76 @@ window.updateProgressUI = function() {
     "needleman_wunsch.html", "smith_waterman.html",
     "trie.html", "suffix_array.html"
   ];
-  
+
   // Calculate percentage
   const total = allPageIds.length;
   const done = allPageIds.filter(p => completed.includes(p)).length;
-  const percentage = Math.round((done / total) * 100);
-  
-  // Update progress bar if it exists (on homepage)
-  const bar = document.getElementById("progress-bar");
-  const text = document.getElementById("progress-text");
+  const percentage = total > 0 ? Math.round((done / total) * 100) : 0;
+
+  // Update progress bar
+  const bar      = document.getElementById("progress-bar");
+  const text     = document.getElementById("progress-text");
   const countText = document.getElementById("progress-count-text");
-  
-  if (bar) bar.style.width = `${percentage}%`;
-  if (text) text.textContent = `${percentage}%`;
-  if (countText) countText.textContent = `${done}/${total} Completed`;
-  
-  // Update homepage cards checkmarks
+
+  if (bar)       bar.style.width = `${percentage}%`;
+  if (text)      text.textContent = `${percentage}%`;
+  if (countText) countText.textContent = `${done} / ${total} Completed`;
+
+  // Update homepage card checkmarks + mini progress dots
   allPageIds.forEach(page => {
-    const checkEl = document.getElementById(`check-${page.replace('.', '-')}`);
+    // Use replaceAll so multi-dot filenames are handled correctly
+    const safeId = page.replaceAll('.', '-');
+    const isComplete = completed.includes(page);
+
+    // Checkmark icon inside the card title
+    const checkEl = document.getElementById(`check-${safeId}`);
     if (checkEl) {
-      if (completed.includes(page)) {
-        checkEl.classList.remove("hidden");
+      checkEl.classList.toggle("hidden", !isComplete);
+    }
+
+    // Mini dot in the progress tracker row
+    const dotEl = document.getElementById(`dot-${safeId}`);
+    if (dotEl) {
+      if (isComplete) {
+        dotEl.classList.remove("bg-slate-200");
+        dotEl.classList.add("bg-indigo-500");
       } else {
-        checkEl.classList.add("hidden");
+        dotEl.classList.remove("bg-indigo-500");
+        dotEl.classList.add("bg-slate-200");
       }
     }
   });
 };
 
-// Auto-init progress bar if page loaded is index.html
+// Auto-init progress on page load
 document.addEventListener("DOMContentLoaded", () => {
   window.updateProgressUI();
-  
+
+  // Wire up the per-page completion checkbox (on module pages)
   const checkbox = document.getElementById("page-complete-checkbox");
   if (checkbox) {
     const pageName = window.location.pathname.split("/").pop() || "index.html";
     checkbox.checked = window.isPageCompleted(pageName);
     checkbox.addEventListener("change", (e) => {
       window.setPageCompletion(pageName, e.target.checked);
+      window.updateProgressUI();
     });
   }
+});
+
+// Listen for localStorage changes made by OTHER pages/tabs (e.g. a module page
+// marking itself complete while index.html is open in another tab, or on
+// Netlify where navigation is a full page load and the storage event fires on
+// the returning page).
+window.addEventListener("storage", (e) => {
+  if (e.key === "bioinformatics_learning_progress") {
+    window.updateProgressUI();
+  }
+});
+
+// Also refresh when the user navigates back to index.html (pageshow covers
+// back-forward cache restores, which is what happens on Netlify static sites).
+window.addEventListener("pageshow", () => {
+  window.updateProgressUI();
 });
 
