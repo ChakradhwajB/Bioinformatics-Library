@@ -285,18 +285,23 @@
             <div class="bg-emerald-50 border border-emerald-100 p-3 rounded-sm">
               <span class="text-[9px] font-bold text-emerald-600 uppercase tracking-widest block mb-1">Warm-up</span>
               <p class="text-[11px] text-slate-700">Manually find all starting 0-indices of the motif <code>"CGC"</code> in the sequence <code>"ACGCGATCGCCG"</code>.</p>
+              <button onclick="window.loadSandboxChallenge(this)" class="mt-2 text-[9px] font-bold bg-white border border-[rgba(0,0,0,0.1)] text-slate-700 px-2.5 py-1 rounded shadow-sm hover:bg-white/50 transition-colors uppercase tracking-wider">Try in Sandbox &rarr;</button>
             </div>
             <div class="bg-indigo-50 border border-indigo-100 p-3 rounded-sm">
               <span class="text-[9px] font-bold text-indigo-600 uppercase tracking-widest block mb-1">Core</span>
               <p class="text-[11px] text-slate-700">Write a function <code>find_motif_distance(seq, motif)</code> that returns the minimum distance between any two consecutive occurrences of the motif. Return -1 if the motif appears less than twice.</p>
+              <button onclick="window.loadSandboxChallenge(this)" class="mt-2 text-[9px] font-bold bg-white border border-[rgba(0,0,0,0.1)] text-slate-700 px-2.5 py-1 rounded shadow-sm hover:bg-white/50 transition-colors uppercase tracking-wider">Try in Sandbox &rarr;</button>
             </div>
             <div class="bg-rose-50 border border-rose-100 p-3 rounded-sm">
               <span class="text-[9px] font-bold text-rose-600 uppercase tracking-widest block mb-1">Extension</span>
               <p class="text-[11px] text-slate-700">The naive string matcher takes $\mathcal{O}(n \cdot m)$ time. Research and implement the Knuth-Morris-Pratt (KMP) algorithm to achieve $\mathcal{O}(n + m)$ linear time complexity.</p>
+              <button onclick="window.loadSandboxChallenge(this)" class="mt-2 text-[9px] font-bold bg-white border border-[rgba(0,0,0,0.1)] text-slate-700 px-2.5 py-1 rounded shadow-sm hover:bg-white/50 transition-colors uppercase tracking-wider">Try in Sandbox &rarr;</button>
             </div>
           </div>
         </div>
       </section>
+      <div id="sandbox-container"></div>
+      <div id="quiz-container"></div>
     </main>
 
   </div>
@@ -320,5 +325,7 @@
       });
     }
   </script>
+  <script src="../src/quiz.js"></script>
+  <script src="../src/sandbox.js"></script>
 </body>
 </html>

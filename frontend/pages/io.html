@@ -304,18 +304,23 @@ GATA
             <div class="bg-emerald-50 border border-emerald-100 p-3 rounded-sm">
               <span class="text-[9px] font-bold text-emerald-600 uppercase tracking-widest block mb-1">Warm-up</span>
               <p class="text-[11px] text-slate-700">Manually format a valid FASTA string containing two sequences of your choice. Ensure one sequence spans at least two lines.</p>
+              <button onclick="window.loadSandboxChallenge(this)" class="mt-2 text-[9px] font-bold bg-white border border-[rgba(0,0,0,0.1)] text-slate-700 px-2.5 py-1 rounded shadow-sm hover:bg-white/50 transition-colors uppercase tracking-wider">Try in Sandbox &rarr;</button>
             </div>
             <div class="bg-indigo-50 border border-indigo-100 p-3 rounded-sm">
               <span class="text-[9px] font-bold text-indigo-600 uppercase tracking-widest block mb-1">Core</span>
               <p class="text-[11px] text-slate-700">Modify the <code>parse_fasta</code> function to count and return the total number of sequences successfully parsed without using the <code>len()</code> function on the final dictionary.</p>
+              <button onclick="window.loadSandboxChallenge(this)" class="mt-2 text-[9px] font-bold bg-white border border-[rgba(0,0,0,0.1)] text-slate-700 px-2.5 py-1 rounded shadow-sm hover:bg-white/50 transition-colors uppercase tracking-wider">Try in Sandbox &rarr;</button>
             </div>
             <div class="bg-rose-50 border border-rose-100 p-3 rounded-sm">
               <span class="text-[9px] font-bold text-rose-600 uppercase tracking-widest block mb-1">Extension</span>
               <p class="text-[11px] text-slate-700">FASTQ is another format that includes sequence quality scores. Research the FASTQ format and write a parser for it that extracts both the sequence and the quality string.</p>
+              <button onclick="window.loadSandboxChallenge(this)" class="mt-2 text-[9px] font-bold bg-white border border-[rgba(0,0,0,0.1)] text-slate-700 px-2.5 py-1 rounded shadow-sm hover:bg-white/50 transition-colors uppercase tracking-wider">Try in Sandbox &rarr;</button>
             </div>
           </div>
         </div>
       </section>
+      <div id="sandbox-container"></div>
+      <div id="quiz-container"></div>
     </main>
 
   </div>
@@ -339,5 +344,7 @@ GATA
       });
     }
   </script>
+  <script src="../src/quiz.js"></script>
+  <script src="../src/sandbox.js"></script>
 </body>
 </html>

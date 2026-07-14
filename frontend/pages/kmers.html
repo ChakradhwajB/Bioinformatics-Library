@@ -451,19 +451,24 @@ GATTACA
               <div class="bg-emerald-50 border border-emerald-100 p-3 rounded-sm">
                 <span class="text-[9px] font-bold text-emerald-600 uppercase tracking-widest block mb-1">Warm-up</span>
                 <p class="text-[11px] text-slate-700">Given the sequence <code>"ATATATA"</code>, what are all the unique 3-mers and their respective counts? Try to work it out by hand.</p>
-              </div>
+              <button onclick="window.loadSandboxChallenge(this)" class="mt-2 text-[9px] font-bold bg-white border border-[rgba(0,0,0,0.1)] text-slate-700 px-2.5 py-1 rounded shadow-sm hover:bg-white/50 transition-colors uppercase tracking-wider">Try in Sandbox &rarr;</button>
+            </div>
               <div class="bg-indigo-50 border border-indigo-100 p-3 rounded-sm">
                 <span class="text-[9px] font-bold text-indigo-600 uppercase tracking-widest block mb-1">Core</span>
                 <p class="text-[11px] text-slate-700">Write a function <code>find_most_frequent_kmers(seq, k)</code> that builds on the counter above to return a list of the k-mer(s) that appear the most times in the sequence.</p>
-              </div>
+              <button onclick="window.loadSandboxChallenge(this)" class="mt-2 text-[9px] font-bold bg-white border border-[rgba(0,0,0,0.1)] text-slate-700 px-2.5 py-1 rounded shadow-sm hover:bg-white/50 transition-colors uppercase tracking-wider">Try in Sandbox &rarr;</button>
+            </div>
               <div class="bg-rose-50 border border-rose-100 p-3 rounded-sm">
                 <span class="text-[9px] font-bold text-rose-600 uppercase tracking-widest block mb-1">Extension</span>
                 <p class="text-[11px] text-slate-700">Modify the k-mer counter to count a k-mer and its Watson-Crick reverse complement as the <em>same entity</em>. This is often necessary when analyzing unstranded DNA sequencing data.</p>
-              </div>
+              <button onclick="window.loadSandboxChallenge(this)" class="mt-2 text-[9px] font-bold bg-white border border-[rgba(0,0,0,0.1)] text-slate-700 px-2.5 py-1 rounded shadow-sm hover:bg-white/50 transition-colors uppercase tracking-wider">Try in Sandbox &rarr;</button>
+            </div>
             </div>
           </div>
         </section>
-      </main>
+        <div id="sandbox-container"></div>
+      <div id="quiz-container"></div>
+    </main>
     </div>
 
     <script src="../src/app.js"></script>
@@ -485,5 +490,7 @@ GATTACA
         });
       }
     </script>
-  </body>
+    <script src="../src/quiz.js"></script>
+  <script src="../src/sandbox.js"></script>
+</body>
 </html>

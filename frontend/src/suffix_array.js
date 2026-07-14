@@ -28,6 +28,10 @@ async function runSuffixArraySearch() {
     alert("Please enter a target sequence.");
     return;
   }
+  if (sequence.length > 50) {
+    alert("For visualization purposes, please limit the sequence to 50 characters.");
+    return;
+  }
   if (!pattern) {
     alert("Please enter a search pattern.");
     return;

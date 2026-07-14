@@ -557,21 +557,23 @@ GGCCG</textarea
             <div class="bg-emerald-50 border border-emerald-100 p-3 rounded-sm">
               <span class="text-[9px] font-bold text-emerald-600 uppercase tracking-widest block mb-1">Warm-up</span>
               <p class="text-[11px] text-slate-700">Calculate the Hamming distance between <code>ACGT</code> and <code>TGCA</code>.</p>
+              <button onclick="window.loadSandboxChallenge(this)" class="mt-2 text-[9px] font-bold bg-white border border-[rgba(0,0,0,0.1)] text-slate-700 px-2.5 py-1 rounded shadow-sm hover:bg-white/50 transition-colors uppercase tracking-wider">Try in Sandbox &rarr;</button>
             </div>
             <div class="bg-indigo-50 border border-indigo-100 p-3 rounded-sm">
               <span class="text-[9px] font-bold text-indigo-600 uppercase tracking-widest block mb-1">Core</span>
               <p class="text-[11px] text-slate-700">Manually compute the Levenshtein DP grid for <code>INT</code> vs <code>EXEC</code>. What is the final edit distance?</p>
+              <button onclick="window.loadSandboxChallenge(this)" class="mt-2 text-[9px] font-bold bg-white border border-[rgba(0,0,0,0.1)] text-slate-700 px-2.5 py-1 rounded shadow-sm hover:bg-white/50 transition-colors uppercase tracking-wider">Try in Sandbox &rarr;</button>
             </div>
             <div class="bg-rose-50 border border-rose-100 p-3 rounded-sm">
               <span class="text-[9px] font-bold text-rose-600 uppercase tracking-widest block mb-1">Extension</span>
               <p class="text-[11px] text-slate-700">The current Levenshtein space complexity is $\mathcal{O}(n \cdot m)$. Optimize the algorithm to only use $\mathcal{O}(\min(n, m))$ space by keeping only the previous row in memory.</p>
-            </div>
-          </div>
+              <button onclick="window.loadSandboxChallenge(this)" class="mt-2 text-[9px] font-bold bg-white border border-[rgba(0,0,0,0.1)] text-slate-700 px-2.5 py-1 rounded shadow-sm hover:bg-white/50 transition-colors uppercase tracking-wider">Try in Sandbox &rarr;</button>
             </div>
           </div>
         </section>
-      </main>
-    </div>
+        <div id="sandbox-container"></div>
+        <div id="quiz-container"></div>
+    </main>
 
     <script src="../src/app.js"></script>
     <script src="../src/distances.js"></script>
@@ -592,5 +594,7 @@ GGCCG</textarea
         });
       }
     </script>
-  </body>
+    <script src="../src/quiz.js"></script>
+  <script src="../src/sandbox.js"></script>
+</body>
 </html>

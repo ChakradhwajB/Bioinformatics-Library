@@ -291,18 +291,23 @@
             <div class="bg-emerald-50 border border-emerald-100 p-3 rounded-sm">
               <span class="text-[9px] font-bold text-emerald-600 uppercase tracking-widest block mb-1">Warm-up</span>
               <p class="text-[11px] text-slate-700">Draw a simple 4x4 dot plot for sequence <code>"TATA"</code> vs sequence <code>"TATA"</code>. What shape do the plotted points make?</p>
+              <button onclick="window.loadSandboxChallenge(this)" class="mt-2 text-[9px] font-bold bg-white border border-[rgba(0,0,0,0.1)] text-slate-700 px-2.5 py-1 rounded shadow-sm hover:bg-white/50 transition-colors uppercase tracking-wider">Try in Sandbox &rarr;</button>
             </div>
             <div class="bg-indigo-50 border border-indigo-100 p-3 rounded-sm">
               <span class="text-[9px] font-bold text-indigo-600 uppercase tracking-widest block mb-1">Core</span>
               <p class="text-[11px] text-slate-700">Write a function that analyzes a boolean dot plot matrix to find and return the length of the longest continuous diagonal line.</p>
+              <button onclick="window.loadSandboxChallenge(this)" class="mt-2 text-[9px] font-bold bg-white border border-[rgba(0,0,0,0.1)] text-slate-700 px-2.5 py-1 rounded shadow-sm hover:bg-white/50 transition-colors uppercase tracking-wider">Try in Sandbox &rarr;</button>
             </div>
             <div class="bg-rose-50 border border-rose-100 p-3 rounded-sm">
               <span class="text-[9px] font-bold text-rose-600 uppercase tracking-widest block mb-1">Extension</span>
               <p class="text-[11px] text-slate-700">Modify the dot plot generator algorithm to also plot reverse diagonals (bottom-left to top-right) to detect inverted repeat sequences (palindromes).</p>
+              <button onclick="window.loadSandboxChallenge(this)" class="mt-2 text-[9px] font-bold bg-white border border-[rgba(0,0,0,0.1)] text-slate-700 px-2.5 py-1 rounded shadow-sm hover:bg-white/50 transition-colors uppercase tracking-wider">Try in Sandbox &rarr;</button>
             </div>
           </div>
         </div>
       </section>
+      <div id="sandbox-container"></div>
+      <div id="quiz-container"></div>
     </main>
 
   </div>
@@ -326,5 +331,7 @@
       });
     }
   </script>
+  <script src="../src/quiz.js"></script>
+  <script src="../src/sandbox.js"></script>
 </body>
 </html>

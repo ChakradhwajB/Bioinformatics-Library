@@ -481,22 +481,29 @@ ATGCGATCGATCG</textarea
             <div class="bg-emerald-50 border border-emerald-100 p-3 rounded-sm">
               <span class="text-[9px] font-bold text-emerald-600 uppercase tracking-widest block mb-1">Warm-up</span>
               <p class="text-[11px] text-slate-700">Draw a Trie containing the words <code>"CAT"</code>, <code>"CAR"</code>, and <code>"CART"</code>.</p>
+              <button onclick="window.loadSandboxChallenge(this)" class="mt-2 text-[9px] font-bold bg-white border border-[rgba(0,0,0,0.1)] text-slate-700 px-2.5 py-1 rounded shadow-sm hover:bg-white/50 transition-colors uppercase tracking-wider">Try in Sandbox &rarr;</button>
             </div>
             <div class="bg-indigo-50 border border-indigo-100 p-3 rounded-sm">
               <span class="text-[9px] font-bold text-indigo-600 uppercase tracking-widest block mb-1">Core</span>
               <p class="text-[11px] text-slate-700">Modify the Trie insertion code so that each node also stores the number of times it has been visited. How can you use this to find the most frequent prefix?</p>
+              <button onclick="window.loadSandboxChallenge(this)" class="mt-2 text-[9px] font-bold bg-white border border-[rgba(0,0,0,0.1)] text-slate-700 px-2.5 py-1 rounded shadow-sm hover:bg-white/50 transition-colors uppercase tracking-wider">Try in Sandbox &rarr;</button>
             </div>
             <div class="bg-rose-50 border border-rose-100 p-3 rounded-sm">
               <span class="text-[9px] font-bold text-rose-600 uppercase tracking-widest block mb-1">Extension</span>
               <p class="text-[11px] text-slate-700">Implement the Aho-Corasick algorithm, which extends the Trie with failure links to achieve $\mathcal{O}(N + P + k)$ time matching.</p>
+              <button onclick="window.loadSandboxChallenge(this)" class="mt-2 text-[9px] font-bold bg-white border border-[rgba(0,0,0,0.1)] text-slate-700 px-2.5 py-1 rounded shadow-sm hover:bg-white/50 transition-colors uppercase tracking-wider">Try in Sandbox &rarr;</button>
             </div>
           </div>
           </div>
         </section>
-      </main>
+        <div id="sandbox-container"></div>
+      <div id="quiz-container"></div>
+    </main>
     </div>
 
     <script src="../src/app.js"></script>
     <script src="../src/trie.js"></script>
-  </body>
+    <script src="../src/quiz.js"></script>
+  <script src="../src/sandbox.js"></script>
+</body>
 </html>

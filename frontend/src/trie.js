@@ -33,6 +33,14 @@ async function runTrieSearch() {
     alert("Please enter a target sequence.");
     return;
   }
+  if (sequence.length > 50) {
+    alert("For visualization purposes, please limit individual sequences to 50 characters.");
+    return;
+  }
+  if (patterns.length > 20) {
+    alert("Please limit the number of patterns to 20 for performance reasons.");
+    return;
+  }
   if (patterns.length === 0) {
     alert("Please enter at least one search pattern.");
     return;
