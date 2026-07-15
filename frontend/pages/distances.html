@@ -457,16 +457,24 @@ GGCCG</textarea
         <section
           class="bg-white p-5 border border-slate-200 rounded-sm shadow-sm flex flex-col"
         >
-          <div class="flex justify-between items-center mb-3 select-none">
-            <span
-              class="text-[10px] font-bold text-slate-400 uppercase tracking-wider"
-              >Analytical Visualizer</span
-            >
-            <span
-              id="visual-helper-text"
-              class="text-[9px] font-semibold text-slate-400 bg-slate-50 px-2 py-0.5 rounded border border-slate-200"
-              >Distance Cost Matrices</span
-            >
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-3 select-none">
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Analytical Visualizer</span>
+            
+            <div class="flex items-center space-x-2">
+              <!-- Player Controls -->
+              <div id="player-controls" class="flex items-center space-x-1 bg-slate-50 border border-slate-200 p-1 rounded-sm hidden">
+                <button id="player-reset" class="px-2 py-1 text-[10px] hover:bg-slate-200 rounded-sm font-bold border border-slate-200 cursor-pointer text-slate-700">Reset</button>
+                <button id="player-prev" class="px-2 py-1 text-[10px] hover:bg-slate-200 rounded-sm font-bold border border-slate-200 cursor-pointer text-slate-700">Prev</button>
+                <button id="player-play" class="px-2.5 py-1 text-[10px] bg-slate-800 text-white hover:bg-slate-900 rounded-sm font-bold cursor-pointer">Play</button>
+                <button id="player-next" class="px-2 py-1 text-[10px] hover:bg-slate-200 rounded-sm font-bold border border-slate-200 cursor-pointer text-slate-700">Next</button>
+              </div>
+              <span id="visual-helper-text" class="text-[9px] font-semibold text-slate-400 bg-slate-50 px-2 py-0.5 rounded border border-slate-200">Distance Cost Matrices</span>
+            </div>
+          </div>
+
+          <!-- Prominent wide calculations inspector -->
+          <div id="dp-inspector" class="mb-4 text-xs font-semibold font-mono text-indigo-950 bg-indigo-50 border border-indigo-150 p-3 rounded-md w-full text-left leading-relaxed shadow-sm hidden">
+            Hover over cells or use the player to inspect DP calculations.
           </div>
 
           <div
