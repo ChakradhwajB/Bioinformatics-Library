@@ -175,7 +175,7 @@ function buildModuleNavigation(pageName) {
 
   navContainer.innerHTML = `
     <div class="w-24">${prevLink}</div>
-    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center flex-grow">Module ${current} of ${total}</div>
+    <div class="text-xs font-bold text-slate-900 uppercase tracking-wider text-center flex-grow">Module ${current} of ${total}</div>
     <div class="w-24 flex justify-end">${nextLink}</div>
   `;
 

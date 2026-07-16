@@ -103,7 +103,7 @@ function renderFastaTable() {
   container.className = "flex-grow overflow-auto bg-slate-50 p-4 border border-slate-150 rounded flex flex-col justify-start w-full";
 
   const tableWrapper = document.createElement("div");
-  tableWrapper.className = "w-full border-0 bg-transparent rounded-none overflow-x-auto";
+  tableWrapper.className = "w-full overflow-x-auto bg-white/50 backdrop-blur-sm border border-white/40 rounded-xl shadow-[0_4px_30px_rgba(0,0,0,0.02)]";
 
   const table = document.createElement("table");
   table.className = "min-w-full divide-y divide-slate-200 text-left text-xs font-mono select-none";

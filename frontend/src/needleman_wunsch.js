@@ -142,7 +142,7 @@ function renderDPMatrix(seq1, seq2, match, mismatch, gap) {
   container.innerHTML = "";
 
   const tableWrapper = document.createElement("div");
-  tableWrapper.className = "border-0 bg-transparent rounded-none overflow-x-auto w-full";
+  tableWrapper.className = "w-full overflow-x-auto bg-white/50 backdrop-blur-sm border border-white/40 rounded-xl shadow-[0_4px_30px_rgba(0,0,0,0.02)]";
 
   const table = document.createElement("table");
   table.className = "min-w-full border-collapse border-0 text-center font-mono text-[10px] select-none";

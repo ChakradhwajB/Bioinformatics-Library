@@ -178,13 +178,31 @@
       text-align: center;
       background: #fafafa;
     }
-  </style>
+  
+    /* Custom Scrollbar for all elements */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: #94a3b8;
+      border-radius: 4px;
+    }
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: #94a3b8 transparent;
+    }
+
+    </style>
 </head>
 <body class="bg-white text-slate-900 min-h-screen h-screen flex flex-col overflow-hidden">
   <div class="absolute top-0 z-[-2] h-screen w-full bg-white bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]"></div>
   
   <!-- Header Bar -->
-    <header class="glass-nav border-b border-slate-200/50 backdrop-blur-md py-3 px-6 flex flex-col md:flex-row justify-between items-center space-y-3 md:space-y-0 select-none z-50">
+    <header class="glass-nav border-b border-white/40 shadow-[0_1px_15px_rgba(0,0,0,0.02)] backdrop-blur-md py-3 px-6 flex flex-col md:flex-row justify-between items-center space-y-3 md:space-y-0 select-none z-50">
     <!-- Logo -->
     <div class="flex items-center space-x-2.5">
       <span class="font-bold text-slate-900 text-xs tracking-wider uppercase">Bioinformatics Docs</span>
@@ -217,7 +235,7 @@
         
         <!-- Search bar -->
         <div>
-          <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Search Documentation</label>
+          <label class="block text-xs font-bold text-slate-900 uppercase tracking-wider mb-2">Search Documentation</label>
           <input type="text" id="doc-search-input" class="w-full bg-white border border-slate-200 rounded-sm text-xs px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-slate-400 text-slate-850" placeholder="Filter topics..." />
         </div>
 
@@ -461,7 +479,7 @@
       } catch (error) {
         contentContainer.innerHTML = `
           <div class="p-5 bg-rose-50 border border-rose-200 text-rose-700 text-xs rounded-sm">
-            <strong>Error:</strong> Could not load documentation for <code>${docPath}</code>. Make sure the file exists and is accessible.
+            <strong>Error:</strong> Could not load documentation for <code class="font-mono text-[12px] font-bold text-indigo-600">${docPath}</code>. Make sure the file exists and is accessible.
           </div>
         `;
       }
@@ -488,5 +506,11 @@
       }
     });
   </script>
+
+  <!-- Floating Sandbox Jump -->
+  <button onclick="const m = document.querySelector('main'); m.scrollTo({ top: document.getElementById('sandbox-container').offsetTop, behavior: 'smooth' })" class="fixed bottom-6 right-8 bg-white/70 backdrop-blur-md border border-white/60 shadow-xl text-slate-700 text-[10px] font-bold uppercase tracking-wider px-4 py-2 rounded-full hover:bg-white hover:text-indigo-700 transition-all duration-300 z-50 flex items-center space-x-2 select-none group cursor-pointer">
+    <span>Jump to Sandbox</span>
+    <svg class="w-3 h-3 text-indigo-500 group-hover:-translate-y-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+  </button>
 </body>
 </html>
